@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:命名空间,对statement的信息进行分类管理 -->
+<!-- 注意：在mapper代理时，它具有特殊及重要的作用,需要和mapper接口的全限命名一致 -->
+<mapper namespace="com.qjz.declarePlatfrom.dao.SignlnDao">
+
+	<select id="login" parameterType="com.qjz.declarePlatfrom.domain.Signln" resultType="com.qjz.declarePlatfrom.domain.Signln">
+		SELECT * FROM signln
+		WHERE user_name = #{user_name} AND user_pass = #{user_pass}
+	</select>
+	
+	<select id="show" resultType="com.qjz.declarePlatfrom.domain.Signln">
+		SELECT * FROM signln
+	</select>
+	
+</mapper>

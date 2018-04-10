@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:命名空间,对statement的信息进行分类管理 -->
+<!-- 注意：在mapper代理时，它具有特殊及重要的作用,需要和mapper接口的全限命名一致 -->
+<mapper namespace="com.qjz.declarePlatfrom.dao.UserDao">
+
+	<select id="findUserByType" parameterType="java.lang.String" resultType="com.qjz.declarePlatfrom.domain.User">
+		SELECT * FROM user
+		<!-- WHERE user_type = #{user_type} -->
+		<where>
+			<if test="user_type != null and user_type != ''">
+				AND user_type = #{user_type}
+			</if> 
+		</where>
+	</select>
+	
+	<update id="updateUser" parameterType="com.qjz.declarePlatfrom.domain.User">
+		UPDATE user
+		SET user_pass = #{user_pass},
+			real_name = #{real_name},
+			user_sex = #{user_sex},
+			user_department = #{user_department},
+			user_title = #{user_title},
+			user_mailbox = #{user_mailbox},
+			user_telphone = #{user_telphone},
+			reg_date = #{reg_date},
+			user_type = #{user_type},
+			user_remark = #{user_remark}
+		WHERE user_name = #{user_name}
+	</update>
+	
+	<update id="updateSignln" parameterType="com.qjz.declarePlatfrom.domain.User">
+		UPDATE signln
+		SET user_pass = #{user_pass},
+			user_type = #{user_type}
+		WHERE user_name = #{user_name}
+	</update>
+	
+	<insert id="addUser" parameterType="com.qjz.declarePlatfrom.domain.User">
+		INSERT INTO 
+		user(user_name,
+			user_pass,
+			real_name,
+			user_sex,
+			user_department,
+			user_title,
+			user_mailbox,
+			user_telphone,
+			reg_date,
+			user_type,
+			user_remark)
+		VALUES(#{user_name},
+			#{user_pass},
+			#{real_name},
+			#{user_sex},
+			#{user_department},
+			#{user_title},
+			#{user_mailbox},
+			#{user_telphone},
+			#{reg_date},
+			#{user_type},
+			#{user_remark})
+	</insert>
+	
+	<insert id="addSignln" parameterType="com.qjz.declarePlatfrom.domain.User">
+		INSERT INTO 
+		signln(user_name,
+			user_pass,
+			user_type)
+		VALUES(#{user_name},
+			#{user_pass},
+			#{user_type})
+	</insert>
+	
+	<delete id="deleteUserByName" parameterType="java.lang.String">
+		DELETE FROM user
+		WHERE user_name = #{user_name}
+	</delete>
+	
+	<select id="findIdByName" parameterType="java.lang.String" resultType="int">
+		SELECT signln_id FROM signln WHERE user_name = #{user_name}
+	</select>
+	
+	<delete id="deleteSignlnById" parameterType="int">
+		DELETE FROM signln
+		WHERE signln_id = #{id}
+	</delete>
+	
+	<delete id="deleteUserBatchs">
+		DELETE FROM user
+		WHERE user_name IN 
+		<foreach collection="array" item="user_name" open="(" close=")" separator=",">
+			#{user_name}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteSignlnBatchs">
+		DELETE FROM signln
+		WHERE signln_id IN 
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+	
+</mapper>
