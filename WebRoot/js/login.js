@@ -40,7 +40,7 @@ $(function(){
 			$("#password").focus();
 		} else {
 			$.ajax({
-				url : "login.do",
+				url : "checklogin.do",
 				type : "post",
 				data : {
 					user_name : $("#manager").val(),
@@ -56,7 +56,7 @@ $(function(){
 					$.messager.progress("close");
 					/*此处的data指数据库中受影响的行数*/
 					if(data.data != null) {
-						location.href = "admin.do";
+						location.href = "home.do";
 					} else {
 						$.messager.alert("登录失败！","用户名或密码错误","warning",function() {
 							$("#password").select();

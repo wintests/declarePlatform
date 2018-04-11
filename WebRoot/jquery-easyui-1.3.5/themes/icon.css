@@ -56,6 +56,76 @@
 	background:url('icons/filter.png') no-repeat center center;
 }
 
+/*≈‰÷√iconµƒcss*/
+.icon-home{
+    background:url('usericons/home.png') no-repeat center center;
+}
+
+.icon-item{
+    background:url('usericons/item.png') no-repeat center center;
+}
+
+.icon-writeblog{
+    background:url('usericons/writeblog.png') no-repeat center center;
+}
+
+.icon-bkgl{
+    background:url('usericons/bkgl.png') no-repeat center center;
+}
+
+.icon-bklb{
+    background:url('usericons/bklb.png') no-repeat center center;
+}
+
+.icon-plgl{
+    background:url('usericons/plgl.png') no-repeat center center;
+}
+
+.icon-grxx{
+    background:url('usericons/grxx.png') no-repeat center center;
+}
+
+.icon-grxxxg{
+    background:url('usericons/grxxxg.png') no-repeat center center;
+}
+
+.icon-system{
+    background:url('usericons/system.png') no-repeat center center;
+}
+
+.icon-modifyPassword{
+    background:url('usericons/modifyPassword.png') no-repeat center center;
+}
+
+.icon-refresh{
+    background:url('usericons/refresh.png') no-repeat center center;
+}
+
+.icon-download{
+    background:url('usericons/download.png') no-repeat center center;
+}
+
+.icon-exit{
+    background:url('usericons/exit.png') no-repeat center center;
+}
+
+.icon-submit{
+    background:url('usericons/submit.png') no-repeat center center;
+}
+
+.icon-review{
+    background:url('usericons/review.png') no-repeat center center;
+}
+
+.icon-link{
+    background:url('usericons/link.png') no-repeat center center;
+}
+
+.icon-world{
+    background:url('usericons/world.png') no-repeat center center;
+}
+
+
 
 .icon-mini-add{
 	background:url('icons/mini_add.png') no-repeat center center;

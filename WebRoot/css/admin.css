@@ -8,9 +8,21 @@
 	float:left;
 	color:#fff;
 }
+.timeDiv {
+	width:1350px;
+	height:50px;
+	line-height:60px;
+	text-align:right;
+	font-size:15px;
+	font-weight:bold;
+	float:left;
+	color:#fff;
+}
 .logout {
 	float:right;
-	padding:30px 15px 0 0;
+	padding:20px 15px 0 0;
+	font-size:15px;
+	font-weight:bold;
 	color:#fff;
 }
 a {
