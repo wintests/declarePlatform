@@ -1,7 +1,14 @@
 package com.qjz.declarePlatfrom.domain;
 
-public class Config {
+import java.io.Serializable;
 
+public class Config implements Serializable {
+
+	/**
+	 * 系统进度控制开关
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private Integer config_id; // 编号
 	private String config_flag; // 项目进度状态
 

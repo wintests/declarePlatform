@@ -10,7 +10,12 @@ public interface UserDao {
 	/**
 	 * 根据用户类型查找用户
 	 */
-	public List<User> findUserByType(@Param("user_type")String user_type);
+	public List<User> findUserByType(@Param("user_type")String user_type, @Param("start")int start, @Param("pageSize")int pageSize);
+	
+	/**
+	 * 该用户类型下的总记录数
+	 */
+	public Long count(String user_type);
 
 	/**
 	 * 更新用户信息
@@ -52,7 +57,7 @@ public interface UserDao {
 	 * @param user_name
 	 * @return
 	 */
-	public String findIdByName(String user_name);
+	public int findIdByName(String user_name);
 	
 	/**
 	 * 根据登录表id删除
@@ -74,6 +79,8 @@ public interface UserDao {
 	 * @return 
 	 */
 	public int deleteSignlnBatchs(List<Integer> list);
+
+	
 
 
 }

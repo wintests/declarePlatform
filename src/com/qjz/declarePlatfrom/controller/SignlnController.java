@@ -51,7 +51,7 @@ public class SignlnController {
 			int user_type = Integer.parseInt(signln.getUser_type());
 			switch (user_type) {
 			case 1:
-				return "admin";
+				return "admin/admin";
 			case 2:
 				return "manager";
 			case 3:

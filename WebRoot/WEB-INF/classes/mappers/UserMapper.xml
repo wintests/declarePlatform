@@ -8,12 +8,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="findUserByType" parameterType="java.lang.String" resultType="com.qjz.declarePlatfrom.domain.User">
 		SELECT * FROM user
-		<!-- WHERE user_type = #{user_type} -->
 		<where>
 			<if test="user_type != null and user_type != ''">
 				AND user_type = #{user_type}
 			</if> 
 		</where>
+		LIMIT #{start},#{pageSize}
+	</select>
+	
+	<select id="count" parameterType="java.lang.String" resultType="java.lang.Long">
+		SELECT COUNT(*) FROM user
+		WHERE user_type = #{user_type}
 	</select>
 	
 	<update id="updateUser" parameterType="com.qjz.declarePlatfrom.domain.User">

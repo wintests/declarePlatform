@@ -1,17 +1,20 @@
 package com.qjz.declarePlatfrom.service;
 
-import java.util.List;
+import java.util.Map;
 
 import com.qjz.declarePlatfrom.domain.User;
 
 public interface UserService {
 	
 	/**
-	 * 根据用户类型查找
+	 * 根据用户类型查找(分页显示)
 	 * @param user_type
+	 * @param page
+	 * @param rows
 	 * @return
 	 */
-	public List<User> findUserByType(String user_type);
+	public Map<String, Object> findUserByType(String user_type, int currentPage,
+			int pageSize);
 
 	/**
 	 * 更新用户信息

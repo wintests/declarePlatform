@@ -60,70 +60,73 @@
 .icon-home{
     background:url('usericons/home.png') no-repeat center center;
 }
-
-.icon-item{
-    background:url('usericons/item.png') no-repeat center center;
+.icon-type{
+    background:url('usericons/type.png') no-repeat center center;
 }
-
 .icon-writeblog{
     background:url('usericons/writeblog.png') no-repeat center center;
 }
-
-.icon-bkgl{
-    background:url('usericons/bkgl.png') no-repeat center center;
-}
-
-.icon-bklb{
-    background:url('usericons/bklb.png') no-repeat center center;
-}
-
-.icon-plgl{
-    background:url('usericons/plgl.png') no-repeat center center;
-}
-
-.icon-grxx{
-    background:url('usericons/grxx.png') no-repeat center center;
-}
-
 .icon-grxxxg{
     background:url('usericons/grxxxg.png') no-repeat center center;
 }
-
-.icon-system{
-    background:url('usericons/system.png') no-repeat center center;
+.icon-sys{
+    background:url('usericons/sys.png') no-repeat center center;
 }
-
 .icon-modifyPassword{
     background:url('usericons/modifyPassword.png') no-repeat center center;
 }
-
 .icon-refresh{
     background:url('usericons/refresh.png') no-repeat center center;
 }
-
 .icon-download{
     background:url('usericons/download.png') no-repeat center center;
 }
-
 .icon-exit{
     background:url('usericons/exit.png') no-repeat center center;
 }
-
 .icon-submit{
     background:url('usericons/submit.png') no-repeat center center;
 }
-
 .icon-review{
     background:url('usericons/review.png') no-repeat center center;
 }
-
 .icon-link{
     background:url('usericons/link.png') no-repeat center center;
 }
-
 .icon-world{
     background:url('usericons/world.png') no-repeat center center;
 }
+.icon-manager{
+	background:url('usericons/manager.png') no-repeat center center;
+}
+.icon-history{
+	background:url('usericons/history.png') no-repeat center center;
+}
+.icon-control{
+	background:url('usericons/control.png') no-repeat center center;
+}
+.icon-user{
+	background:url('usericons/user.png') no-repeat center center;
+}
+.icon-find{
+	background:url('usericons/find.png') no-repeat center center;
+}
+.icon-switch{
+	background:url('usericons/switch.png') no-repeat center center;
+}
+.icon-itemprocess{
+	background:url('usericons/itemprocess.png') no-repeat center center;
+}
+.icon-item{
+	background:url('usericons/item.png') no-repeat center center;
+}
+.icon-person{
+	background:url('usericons/person.png') no-repeat center center;
+}
+.icon-list{
+	background:url('usericons/list.png') no-repeat center center;
+}
+
 
 
 
