@@ -11,11 +11,11 @@ import com.qjz.declarePlatfrom.service.ConfigService;
 public class ConfigServiceImpl implements ConfigService {
 	
 	@Resource
-	private ConfigDao configMapper;
+	private ConfigDao configDao;
 
 	@Override
 	public void updateConfig(String config_flag) {
-		configMapper.updateConfig(config_flag);
+		configDao.updateConfig(config_flag);
 	}
 
 }

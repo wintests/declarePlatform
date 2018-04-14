@@ -1,36 +1,36 @@
 $(function() {
 
-	$("#nav").tree({
-		// url : "nav.php",
-		lines : true,
-		onLoadSuccess : function(node, data) {
-			if (data) {
-				$(data).each(function(index, value) {
-					if (this.state == "close") {
-						$("#nav").tree("expandAll");
-					}
-				});
-			}
-		},
-		onClick : function(node) {
-			if (node.url) {
-				if ($("#tabs").tabs("exist", node.text)) {
-					$("#tabs").tabs("select", node.text);
-				} else {
-					$("#tabs").tabs("add", {
-						title : node.text,
-						iconCls : node.iconCls,
-						closeable : true,
-					// href : node.url + ".php",
-					});
-				}
-			}
-		}
-	});
-
-	$("#tabs").tabs({
-		fit : true,
-	});
+//	$("#nav").tree({
+//		// url : "nav.php",
+//		lines : true,
+//		onLoadSuccess : function(node, data) {
+//			if (data) {
+//				$(data).each(function(index, value) {
+//					if (this.state == "close") {
+//						$("#nav").tree("expandAll");
+//					}
+//				});
+//			}
+//		},
+//		onClick : function(node) {
+//			if (node.url) {
+//				if ($("#tabs").tabs("exist", node.text)) {
+//					$("#tabs").tabs("select", node.text);
+//				} else {
+//					$("#tabs").tabs("add", {
+//						title : node.text,
+//						iconCls : node.iconCls,
+//						closeable : true,
+//					// href : node.url + ".php",
+//					});
+//				}
+//			}
+//		}
+//	});
+//
+//	$("#tabs").tabs({
+//		fit : true,
+//	});
 });
 
 function logout() {
@@ -75,22 +75,24 @@ function openPasswordModifyDialog() {
 
 function modifyPassword() {
 	$("#fm").form("submit",{
-		url: "${pageContext.request.contextPath}/admin/blogger/modifyPassword.do",
+		url: "user/modifyPassword.do",
 		onSubmit: function() {
-			var newPassword = $("#password").val();
-			var newPassword2 = $("#password2").val();
+			var newUser_pass = $("#user_pass").val();
+			var newUser_pass2 = $("#user_pass2").val();
 			if(!$(this).form("validate")) {
 				return false; //验证不通过直接false，即没填
 			} 
-			if(newPassword != newPassword2) {
+			if(newUser_pass != newUser_pass2) {
 				$.messager.alert("系统提示", "两次密码必须填写一致");
 				return false;
 			}
 			return true;
 		}, //进行验证，通过才让提交
-		success: function(result) {
-			var result = eval("(" + result + ")"); //将json格式的result转换成js对象
-			if(result.success) {
+		success: function(data) {
+			//var data = eval("(" + data + ")"); //将json格式的data转换成js对象
+			var data = JSON.parse(data);
+			//console.log(data)
+			if(data.state) {
 				$.messager.alert("系统提示", "密码修改成功，下一次登陆生效");
 				closePasswordModifyDialog();
 			} else {
@@ -102,7 +104,7 @@ function modifyPassword() {
 }
 
 function closePasswordModifyDialog() {
-	$("#password").val(""); //保存成功后将内容置空
-	$("#password2").val("");
+	$("#user_pass").val(""); //保存成功后将内容置空
+	$("#user_pass2").val("");
 	$("#dlg").dialog("close"); //关闭对话框
 }

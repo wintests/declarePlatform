@@ -7,8 +7,8 @@
 <title>首页</title>
 	<%@include file="../head.jspf" %>
 	<%-- <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/jquery-easyui-1.3.5/themes/default/easyui.css"> --%>
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/admin.css" />
-	<script type="text/javascript" src="${pageContext.request.contextPath }/js/admin.js"></script>
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/main1.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/main1.js"></script>
 </head>
 <body class="easyui-layout">
 	<div data-options="region:'north',title:'header',split:true,noheader:true," style="height:60px;background:#666;">
@@ -27,6 +27,8 @@
 	               data-options="plain:true,iconCls:'icon-modifyPassword'" style="width: 150px;">修改密码</a>
 	        </div>
     		<div title="用户信息管理" data-options="iconCls:'icon-manager'" style="padding:10px">
+	            <a href="javascript:openTab('全部用户列表','${pageContext.request.contextPath }/user/admin/userManage.do','icon-list')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">全部用户列表</a>
 	            <a href="javascript:openTab('申报人员列表','${pageContext.request.contextPath }/user/admin/userManage.do?user_type=5','icon-list')" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">申报人员列表</a>
 	            <a href="javascript:openTab('系部管理员列表','${pageContext.request.contextPath }/user/admin/userManage.do?user_type=3','icon-list')" class="easyui-linkbutton"
@@ -71,11 +73,6 @@
 	    </div>
     </div>   
     <div data-options="region:'center'," style="overflow:hidden;">
-    	<!-- <div id="tabs">
-    		<div title="起始页" data-options="iconCls:'icon-house'" style="padding:0 10px;display:block;">
-    		欢迎来到后台管理系统
-    		</div>
-    	</div> -->
     	<div class="easyui-tabs" data-options="fit:'true',border:'false','id':'tabs'" id="tabs">
 	        <div title="首页" data-options="iconCls:'icon-home'">
 	            <div align="center" style="padding-top: 100px"><font color="red" size="10">欢迎使用</font></div>
@@ -83,26 +80,28 @@
 	    </div>
     </div>
     <div id="dlg" class="easyui-dialog" style="width:400px; height:200px; padding:10px 20px" 
-		closed="true" buttons="#dlg-buttons">
+		data-options="closed:true,buttons:'#dlg-buttons'">
 		<form id="fm" method="post">
+			<input type="hidden" name="user_name" value="${si.user_name }"/>
 			<table cellspacing="8px">
 				<tr>
 					<td>用户名</td>
 					<td>
-						<input type="text" id="user_name" name="user_name" value="${si.user_name }" readonly="readonly">
+						<%-- <input type="text" id="user_name" name="user_name" value="${si.user_name }" readonly="readonly"> --%>
+						<span>${si.user_name }</span>
 					</td>
 				</tr>
 				<tr>
 					<td>新密码</td>
 					<td>
-						<input type="password" id="password" name="password" class="easyui-validatebox" 
+						<input type="password" id="user_pass" name="user_pass" class="easyui-validatebox" 
 							 required="true" style="width:200px">
 					</td>
 				</tr>
 				<tr>
 					<td>确认新密码</td>
 					<td>
-						<input type="password" id="password2" name="password2" class="easyui-validatebox" 
+						<input type="password" id="user_pass2" name="user_pass2" class="easyui-validatebox" 
 							required="true" style="width:200px">
 					</td>
 				</tr>
@@ -110,9 +109,9 @@
 		</form>
 	</div>
 	<div id="dlg-buttons">
-		<div>
-			<a href="javascript:modifyPassword()" class="easyui-linkbutton" iconCls="icon-ok" plain="true">保存</a>
-			<a href="javascript:closePasswordModifyDialog()" class="easyui-linkbutton" iconCls="icon-cancel" plain="true">关闭</a>
+		<div align="center">
+			<a href="javascript:modifyPassword()" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">保存</a>&nbsp;&nbsp;&nbsp;
+			<a href="javascript:closePasswordModifyDialog()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true">关闭</a>
 		</div>
 	</div>
     

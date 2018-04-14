@@ -51,8 +51,7 @@ $(function(){
 						text : "正在登录中...",
 					});
 				},
-				success : function(data, response, status) {
-					console.log(data.data);
+				success : function(data) {
 					$.messager.progress("close");
 					/*此处的data指数据库中受影响的行数*/
 					if(data.data != null) {

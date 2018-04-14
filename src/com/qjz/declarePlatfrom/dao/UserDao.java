@@ -15,14 +15,14 @@ public interface UserDao {
 	/**
 	 * 该用户类型下的总记录数
 	 */
-	public Long count(String user_type);
+	public Long count(@Param("user_type")String user_type);
 
 	/**
-	 * 更新用户信息
+	 * 根据id更新用户信息
 	 * @param user
 	 * @return 
 	 */
-	public int updateUser(User user);
+	public int updateUserById(User user);
 	
 	/**
 	 * 更新登录账号信息
@@ -30,6 +30,23 @@ public interface UserDao {
 	 * @return
 	 */
 	public int updateSignln(User user);
+	
+	/**
+	 * 修改用户密码
+	 * @param user_name
+	 * @param user_pass
+	 * @return
+	 */
+	public int modifyPassword(@Param("user_name")String user_name, @Param("user_pass")String user_pass);
+
+	/**
+	 * 修改登录表密码
+	 * @param user_name
+	 * @param user_pass
+	 * @return
+	 */
+	public int modifySignlnPassword(@Param("user_name")String user_name, @Param("user_pass")String user_pass);
+
 
 	/**
 	 * 新增用户
@@ -46,41 +63,38 @@ public interface UserDao {
 	public int addSignln(User user);
 
 	/**
-	 * 根据用户名删除
+	 * 根据id删除用户
 	 * @param user_name
 	 * @return 
 	 */
-	public int deleteUserByName(String user_name);
+	public int deleteUserById(Integer id);
 	
 	/**
-	 * 根据用户名查找登录表id
+	 * 根据id查找用户名
 	 * @param user_name
 	 * @return
 	 */
-	public int findIdByName(String user_name);
+	public String findNameById(Integer id);
 	
 	/**
 	 * 根据登录表id删除
 	 * @param id
 	 * @return 
 	 */
-	public int deleteSignlnById(int id);
+	public int deleteSignlnByName(String user_name);
 
 	/**
 	 * 批量删除(user表)
 	 * @param names
 	 * @return 
 	 */
-	public int deleteUserBatchs(String[] names);
+	public int deleteUserBatchs(Integer[] ids);
 	
 	/**
 	 * 批量删除(signln表)
 	 * @param list
 	 * @return 
 	 */
-	public int deleteSignlnBatchs(List<Integer> list);
-
-	
-
+	public int deleteSignlnBatchs(List<String> list);
 
 }

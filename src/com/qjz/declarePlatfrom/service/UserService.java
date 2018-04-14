@@ -17,10 +17,17 @@ public interface UserService {
 			int pageSize);
 
 	/**
-	 * 更新用户信息
+	 * 根据id更新用户信息
 	 * @param user
 	 */
-	public void updateUser(User user);
+	public void updateUserById(User user);
+	
+	/**
+	 * 修改用户密码
+	 * @param user_name
+	 * @param user_pass
+	 */
+	public void modifyPassword(String user_name, String user_pass);
 
 	/**
 	 * 新增用户
@@ -29,15 +36,17 @@ public interface UserService {
 	public void addUser(User user);
 
 	/**
-	 * 根据用户名删除用户
+	 * 根据id删除用户
 	 * @param user_name
 	 */
-	public void deleteUserByName(String user_name);
+	public void deleteUserById(Integer user_id);
 
 	/**
 	 * 批量删除
 	 * @param names
 	 */
-	public void deleteUserBatchs(String names);
+	public void deleteUserBatchs(String idsStr);
+
+	
 
 }

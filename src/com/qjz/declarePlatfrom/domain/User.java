@@ -2,13 +2,14 @@ package com.qjz.declarePlatfrom.domain;
 
 import java.io.Serializable;
 
-public class User implements Serializable{
+public class User implements Serializable {
 
 	/**
 	 * 用户信息
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
+	private Integer user_id; // id编号
 	private String user_name; // 用户名
 	private String user_pass; // 密码
 	private String real_name; // 姓名
@@ -19,7 +20,16 @@ public class User implements Serializable{
 	private String user_telphone; // 联系电话
 	private String reg_date; // 添加时间
 	private String user_type; // 用户类型
+	private String signln_valid; // 状态
 	private String user_remark; // 备注
+
+	public Integer getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(Integer user_id) {
+		this.user_id = user_id;
+	}
 
 	public String getUser_name() {
 		return user_name;
@@ -101,6 +111,14 @@ public class User implements Serializable{
 		this.user_type = user_type;
 	}
 
+	public String getSignln_valid() {
+		return signln_valid;
+	}
+
+	public void setSignln_valid(String signln_valid) {
+		this.signln_valid = signln_valid;
+	}
+
 	public String getUser_remark() {
 		return user_remark;
 	}
@@ -111,13 +129,14 @@ public class User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [user_name=" + user_name + ", user_pass=" + user_pass
-				+ ", real_name=" + real_name + ", user_sex=" + user_sex
-				+ ", user_department=" + user_department + ", user_title="
-				+ user_title + ", user_mailbox=" + user_mailbox
-				+ ", user_telphone=" + user_telphone + ", reg_date=" + reg_date
-				+ ", user_type=" + user_type + ", user_remark=" + user_remark
-				+ "]";
+		return "User [user_id=" + user_id + ", user_name=" + user_name
+				+ ", user_pass=" + user_pass + ", real_name=" + real_name
+				+ ", user_sex=" + user_sex + ", user_department="
+				+ user_department + ", user_title=" + user_title
+				+ ", user_mailbox=" + user_mailbox + ", user_telphone="
+				+ user_telphone + ", reg_date=" + reg_date + ", user_type="
+				+ user_type + ", signln_valid=" + signln_valid
+				+ ", user_remark=" + user_remark + "]";
 	}
 
 }

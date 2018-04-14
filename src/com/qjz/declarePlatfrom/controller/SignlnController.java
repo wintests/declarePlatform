@@ -51,20 +51,20 @@ public class SignlnController {
 			int user_type = Integer.parseInt(signln.getUser_type());
 			switch (user_type) {
 			case 1:
-				return "admin/admin";
+				return "admin/main1";
 			case 2:
-				return "manager";
+				return "manager/main2";
 			case 3:
-				return "department";
+				return "department/main3";
 			case 4:
-				return "expert";
+				return "expert/main4";
 			case 5:
-				return "user";
+				return "user/main5";
 			default:
-				return "login";
+				return "redirect:login.do";
 			}
 		}
-		return "login";
+		return "redirect:login.do";
 	}
 	
 	@RequestMapping("/logout")

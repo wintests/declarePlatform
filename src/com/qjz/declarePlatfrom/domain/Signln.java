@@ -9,19 +9,10 @@ public class Signln implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private int signln_id;
-	private String user_name;
-	private String user_pass;
-	private String user_type;
-	private String signln_valid;
-
-	public int getSignln_id() {
-		return signln_id;
-	}
-
-	public void setSignln_id(int signln_id) {
-		this.signln_id = signln_id;
-	}
+	private String user_name;// 用户名
+	private String user_pass;// 密码
+	private String user_type;// 用户类型
+	private String signln_valid;// 状态
 
 	public String getUser_name() {
 		return user_name;
@@ -61,8 +52,9 @@ public class Signln implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Signln [signln_id=" + signln_id + ", user_name=" + user_name
-				+ ", user_pass=" + user_pass + ", user_type=" + user_type
-				+ ", signln_valid=" + signln_valid + "]";
+		return "Signln [user_name=" + user_name + ", user_pass=" + user_pass
+				+ ", user_type=" + user_type + ", signln_valid=" + signln_valid
+				+ "]";
 	}
+
 }
