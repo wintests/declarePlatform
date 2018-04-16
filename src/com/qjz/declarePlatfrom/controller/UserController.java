@@ -32,11 +32,10 @@ public class UserController {
 	}
 	
 	@RequestMapping("/admin/userManage")
-	public String userManage(
-			Model model,
+	public String userManage(Model model,
 			@RequestParam(value = "user_type", required = false) String user_type) {
 		model.addAttribute("user_type",user_type);
-		System.out.println(user_type);
+		//System.out.println(user_type);
 		return "admin/userManage";
 	}
 	
@@ -47,7 +46,15 @@ public class UserController {
 			//page第几页，rows每页多少行，user_type用户类型
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "rows", required = false) String rows,
-			@RequestParam(value = "user_type", required = false) String user_type) {
+			@RequestParam(value = "user_type", required = false) String user_type,
+			@RequestParam(value = "str", required = false) String str,
+			@RequestParam(value = "user_department", required = false) String user_department,
+			@RequestParam(value = "user_title", required = false) String user_title,
+			@RequestParam(value = "signln_valid", required = false) String signln_valid) {
+		User user = new User();
+		user.setUser_department(user_department);
+		user.setUser_title(user_title);
+		user.setSignln_valid(signln_valid);
 		if(user_type == null) {
 			user_type = "";
 		}
@@ -59,7 +66,7 @@ public class UserController {
 		if(rows != null) {
 			pageSize = Integer.parseInt(rows);
 		}
-		Map<String, Object> map = userManagerService.findUserByType(user_type, currentPage, pageSize);
+		Map<String, Object> map = userManagerService.findUserByType(user_type, str, user, currentPage, pageSize);
 		return map;
 	}
 	
@@ -86,7 +93,7 @@ public class UserController {
 		/*因前台有两个相同name的input(用户名)，所以将会以数组形式组成新的user_name传到后台
 		 * 其中一个用户名为hidden，另一个为文本框，在添加用户时一个为空，另一个为输入的用户名
 		 * 传到后台的形式为：,XXX，因此需要对其进行处理*/
-//		System.out.println(user.getUser_name().substring(1));
+		//System.out.println(user.getUser_name().substring(1));
 		user.setUser_name(user.getUser_name().substring(1));
 		userManagerService.addUser(user);
 		return new JsonResult();
@@ -105,6 +112,22 @@ public class UserController {
 	@ResponseBody
 	public JsonResult deleteUserBatchs(String idsStr) {
 		userManagerService.deleteUserBatchs(idsStr);
+		return new JsonResult();
+	}
+	
+	//更改用户状态
+	@RequestMapping("/changeUserStatus")
+	@ResponseBody
+	public JsonResult changeUserStatus(Integer user_id, String signln_valid) {
+		userManagerService.changeUserStatus(user_id, signln_valid);
+		return new JsonResult();
+	}
+	
+	//批量更改用户状态
+	@RequestMapping("/changeUserStatusBatchs")
+	@ResponseBody
+	public JsonResult changeUserStatusBatchs(String idsStr, String signln_valid) {
+		userManagerService.changeUserStatusBatchs(idsStr, signln_valid);
 		return new JsonResult();
 	}
 	

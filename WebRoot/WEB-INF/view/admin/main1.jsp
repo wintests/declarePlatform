@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>首页</title>
 	<%@include file="../head.jspf" %>
-	<%-- <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/jquery-easyui-1.3.5/themes/default/easyui.css"> --%>
+	<%-- <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/default/easyui.css"> --%>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/main1.css" />
 	<script type="text/javascript" src="${pageContext.request.contextPath }/js/main1.js"></script>
 </head>

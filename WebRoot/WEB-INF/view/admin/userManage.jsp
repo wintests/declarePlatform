@@ -8,7 +8,20 @@
 	<%@include file="../head.jspf"%>
 	<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/js/userManage.js"></script> --%>
 	<style type="text/css">
-		a{text-decoration:none;}
+		a{
+			text-decoration:none;
+		}
+		
+		/* #searchBox{
+		    margin-top: 16px;
+		    background: #fff8f8;
+		    padding: 4px;
+		    font-size: 14px;
+		    width: 500px;
+		} */
+		.datagrid-row:nth-child(2n){
+		    background:#EFEEEC;
+		}
 	</style>
 </head>
 	<script type="text/javascript">
@@ -17,8 +30,7 @@
 			$('#dg').datagrid(
 			{
 				//请求数据的url
-				url : '../../user/findUserByType.do?user_type='
-						+ '${user_type}',
+				url : '../../user/findUserByType.do?user_type=' + '${user_type}',
 				title : '当前列表',
 				rownumbers : true,
 				height : 805,
@@ -46,7 +58,8 @@
 		 	        }
 		 	    }, */
 				//上方工具条 添加 修改 删除 刷新按钮
-				toolbar : [
+				toolbar : '#toolbar',
+				/* [
 				{
 					iconCls : 'icon-add', //图标
 					text : '添加', //名称
@@ -131,11 +144,17 @@
 					handler : function() {
 						$("#dg").datagrid("reload");
 					}
-				} ],
+				} ], */
 				//同列属性，但是这些列将会冻结在左侧,z大小不会改变，当宽度大于250时，会显示滚动条，但是冻结的列不在滚动条内
 				frozenColumns : [ [ 
 					{field : 'ck', checkbox : true}, //复选框
 				] ],
+				onLoadSuccess: function (data) {
+		            if (data.total == 0) {
+		            	$.messager.alert("提示框","未查询到相关数据！", "info");
+		            }
+		        },
+				
 				columns : [ [ 
 					{field : 'user_id',title : 'id编号',align : 'center',width : 100,hidden:true}, 
 					{field : 'user_name',title : '用户名',align : 'center',width : 100}, 
@@ -154,7 +173,153 @@
 				] ],
 			});
 		});
-	
+		
+		function addUser() { //回调函数
+			document.getElementById("user_name").disabled = false;
+			$("#fm").form("reset");
+			//打开对话框并且设置标题
+			$("#dlg").dialog("open").dialog("setTitle", "添加用户");
+			//将url设置为添加
+			url = "${pageContext.request.contextPath }/user/addUser.do";
+		}
+		
+		function editUser() {
+			//获取选中要修改的行
+			var selectedRows = $("#dg").datagrid("getSelections");
+			//console.log(selectedRows)
+			//确保被选中行只能为一行
+			if (selectedRows.length != 1) {
+				$.messager.alert("系统提示","请选择一个要修改的用户");
+				return;
+			}
+			//获取选中行user_name
+			var row = selectedRows[0];
+			console.log(row);
+			//打开对话框并且设置标题
+			$("#dlg").dialog("open").dialog("setTitle", "修改用户信息");
+			//将数组回显对话框中
+			$("#fm").form("load", row);//会自动识别name属性，将row中对应的数据，填充到form表单对应的name属性中
+			document.getElementById("user_name").disabled = true;
+			url = "${pageContext.request.contextPath }/user/updateUser.do";
+		}
+		
+		function removeUser() {
+			var selectedRows = $("#dg").datagrid("getSelections");
+			//判断是否有选择的行
+			if (selectedRows.length == 0) {
+				$.messager.alert("系统提示","请选择要删除的数据");
+				return;
+			}
+			//定义选中 选中user_name数组
+			var ids = [];
+			//循环遍历将选中行的id push进入数组
+			for ( var i = 0; i < selectedRows.length; i++) {
+				ids.push(selectedRows[i].user_id);
+			}
+			//提示是否确认删除
+			$.messager.confirm("系统提示","您确定要删除选中的<font color=red>" + selectedRows.length + "</font>条数据么？",
+			function(flag) {
+				if (flag) {
+					$.post("${pageContext.request.contextPath }/user/deleteUserBatchs.do",
+					{
+						idsStr : ids.join(","),
+					},
+					function(data) {
+						if (data) {
+							$.messager.alert("系统提示","数据删除成功！");
+							$("#dg").datagrid("unselectAll");
+							$("#dg").datagrid("reload");
+						} else {
+							$.messager.alert("系统提示","数据删除失败！");
+						}
+					},"json");
+				} else {
+					$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
+				}
+			});
+		}
+		
+		function enabledBatchs() {
+			var selectedRows = $("#dg").datagrid("getSelections");
+			//判断是否有选择的行
+			if (selectedRows.length == 0) {
+				$.messager.alert("系统提示","请选择需要启用的用户");
+				return;
+			}
+			//定义选中 选中user_name数组
+			var ids = [];
+			//循环遍历将选中行的id push进入数组
+			for ( var i = 0; i < selectedRows.length; i++) {
+				ids.push(selectedRows[i].user_id);
+			}
+			//提示是否确认删除
+			$.messager.confirm("系统提示","您确定要批量启用选中的<font color=red>" + selectedRows.length + "</font>个用户么？",
+			function(flag) {
+				var signln_valid = "2";
+				changeStatusBatchs(flag, ids, signln_valid);
+			});
+		}
+		
+		function disabledBatchs() {
+			var selectedRows = $("#dg").datagrid("getSelections");
+			//判断是否有选择的行
+			if (selectedRows.length == 0) {
+				$.messager.alert("系统提示","请选择需要禁用的用户");
+				return;
+			}
+			//定义选中 选中user_name数组
+			var ids = [];
+			//循环遍历将选中行的id push进入数组
+			for ( var i = 0; i < selectedRows.length; i++) {
+				ids.push(selectedRows[i].user_id);
+			}
+			//提示是否确认删除
+			$.messager.confirm("系统提示","您确定要批量禁用选中的<font color=red>" + selectedRows.length + "</font>个用户么？",
+			function(flag) {
+				var signln_valid = "1";
+				changeStatusBatchs(flag, ids, signln_valid);
+			});
+		}
+		
+		function changeStatusBatchs(r, ids, signln_valid) {
+			if (r) {
+				$.post("${pageContext.request.contextPath }/user/changeUserStatusBatchs.do",
+				{
+					idsStr : ids.join(","),
+					signln_valid : signln_valid
+				},
+				function(data) {
+					if (data) {
+						$.messager.alert("系统提示","更改状态成功！");
+						$("#dg").datagrid("unselectAll");
+						$("#dg").datagrid("reload");
+					} else {
+						$.messager.alert("系统提示","更改状态失败！");
+					}
+				},"json");
+			} else {
+				$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
+			}
+		}
+		
+		function reload() {
+			$("#dg").datagrid("reload");
+		}
+		
+		function searchUser() {
+			var str = $("#searchBox").val();
+			var user_department = $("#department").combobox("getValue");
+			var user_title = $("#title").combobox("getValue");
+			var signln_valid = $("#valid").combobox("getValue");
+    		
+			$("#dg").datagrid("load",{
+				str : str,
+				user_department : user_department,
+				user_title : user_title,
+				signln_valid : signln_valid
+			});
+		}
+
 		//定义全局url，用于修改和添加操作
 		var url;
 		// 添加或者修改用户
@@ -211,20 +376,63 @@
 		
 		function signln_validFormatter(value,row,index) {
 			if(value == 1) {
-				return "<a href='#'><font color='red'>禁用</font></a>";
+				return "<a href='javascript:void(0);' onclick='changeValid("+index+")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/mini_edit.png'/><font color='red'>禁用</font></a>";
+			} else if(value == 2){
+				return "<a href='javascript:void(0);' onclick='changeValid("+index+")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/mini_edit.png'/><font color='green'>正常</font></a>";
 			} else {
-				return "<a href='#'><font color='green'>正常</font></a>";
+				return "";
 			}
 		}
 		
 		function optionFormatter(value, row, index) {
 			return [
-	            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.5/themes/icons/pencil.png' title='修改'/>修改</a>&nbsp;&nbsp;&nbsp;",  
-	            "<a href='javascript:void(0);' onclick='destory(" + row.user_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.5/themes/icons/cancel.png' title='删除'/>删除</a>",
+	            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png' title='修改'/>修改</a>&nbsp;&nbsp;&nbsp;",  
+	            "<a href='javascript:void(0);' onclick='destory(" + row.user_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png' title='删除'/>删除</a>",
 	        ].join("");
 		}
 		
+		function changeValid(index) {
+			//点击修改前需要将之前选中的行取消掉，然后才能得到当前选中行
+			$("#dg").datagrid("unselectAll");
+			$("#dg").datagrid("selectRow",index);
+			var row = $("#dg").datagrid("getSelected");
+			if(row.signln_valid == "1") {
+				$.messager.confirm("更改用户状态", "是否启用用户：<font color=red>" + row.user_name + "</font>？", function(r){
+					var signln_valid = "2";
+					changeStatus(r, row.user_id, signln_valid);
+				});
+			} else {
+				$.messager.confirm("更改用户状态", "是否禁用用户：<font color=red>" + row.user_name + "</font>？", function(r){
+					var signln_valid = "1";
+					changeStatus(r, row.user_id, signln_valid);
+				});
+			}
+		}
+		
+		function changeStatus(r, user_id, signln_valid) {
+			if (r) {
+				$.post("${pageContext.request.contextPath }/user/changeUserStatus.do",
+				{
+					user_id : user_id,
+					signln_valid : signln_valid
+				},
+				function(data) {
+					if (data) {
+						$.messager.alert("系统提示","更改状态成功！");
+						$("#dg").datagrid("unselectAll");
+						$("#dg").datagrid("reload");
+					} else {
+						$.messager.alert("系统提示","更改状态失败！");
+					}
+				},"json");
+			} else {
+				$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
+			}
+		}
+		
 		 function modify(index){
+		 	//点击修改前需要将之前选中的行取消掉，然后才能得到当前选中行
+			$("#dg").datagrid("unselectAll");
 			$("#dg").datagrid("selectRow",index);
 			var row = $("#dg").datagrid("getSelected");
 			//console.log(row);
@@ -264,7 +472,44 @@
 		
 	</script>
 	<body>
+		<div id="toolbar" style="padding:5px;">
+			<!-- 工具栏 -->
+			<div>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" href="javascript:addUser();">添加</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" href="javascript:editUser();">修改</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" href="javascript:removeUser();">批量删除</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-enabled',plain:true" href="javascript:enabledBatchs();">批量启用</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-disabled',plain:true" href="javascript:disabledBatchs();">批量禁用</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<span>按条件查询：</span>&nbsp;&nbsp;
+				<select id="department" name="user_department" class="easyui-combobox" style="width:150px;">
+					<option value="">-----请选择所属系部-----</option>
+					<option value="计算机系">计算机系</option>
+					<option value="软件工程系">软件工程系</option>
+					<option value="信息安全系">信息安全系</option>
+					<option value="网络工程系">网络工程系</option>
+				</select>
+				<select id="title" name="user_title" class="easyui-combobox" style="width:150px;">
+					<option value="">-----请选择教师职称-----</option>
+					<option value="教授">教授</option>
+					<option value="副教授">副教授</option>
+					<option value="研究员">研究员</option>
+					<option value="副研究员">副研究员</option>
+					<option value="讲师">讲师</option>
+					<option value="助教">助教</option>
+				</select>
+				<select id="valid" name="signln_valid" class="easyui-combobox" style="width:150px;">
+					<option value="">-----请选择用户状态-----</option>
+					<option value="2">正常</option>
+					<option value="1">禁用</option>
+				</select>
+				<input type="text" id="searchBox" name="str" placeholder="按用户名或真实姓名查找" size="20" onkeydown="if(event.keyCode==13) searchUser()"/>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true," href="javascript:searchUser();">查询</a>
+			</div>
+		</div>
+		
 		<table id="dg"></table>
+		
 		<div id="dlg" class="easyui-dialog"
 			style="width:500px; height:480px; padding:10px 20px"
 			data-options="closed:true,buttons:'#dlg-buttons'">
@@ -346,6 +591,7 @@
 						<td>
 							<select id="user_type" name="user_type" class="easyui-combobox" style="width:100px;">
 								<option value="">-----请选择-----</option>
+								<option value="1">系统管理员</option>
 								<option value="2">项目管理员</option>
 								<option value="3">系部管理员</option>
 								<option value="4">评审专家</option>

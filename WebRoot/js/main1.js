@@ -37,8 +37,8 @@ function logout() {
 	/*
 	 * $.messager.defaults = { ok : "是", cancel : "否", };
 	 */
-
 	$.messager.confirm("操作提示", "是否退出当前用户", function(flag) {
+		console.log(flag);
 		if (flag) {
 			location.href = "logout.do";
 		}

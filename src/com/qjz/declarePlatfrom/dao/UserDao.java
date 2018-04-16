@@ -10,12 +10,12 @@ public interface UserDao {
 	/**
 	 * 根据用户类型查找用户
 	 */
-	public List<User> findUserByType(@Param("user_type")String user_type, @Param("start")int start, @Param("pageSize")int pageSize);
+	public List<User> findUserByType(@Param("user_type")String user_type, @Param("str")String str, @Param("user")User user, @Param("start")int start, @Param("pageSize")int pageSize);
 	
 	/**
 	 * 该用户类型下的总记录数
 	 */
-	public Long count(@Param("user_type")String user_type);
+	public Long count(@Param("user_type")String user_type, @Param("str")String str, @Param("user")User user);
 
 	/**
 	 * 根据id更新用户信息
@@ -96,5 +96,37 @@ public interface UserDao {
 	 * @return 
 	 */
 	public int deleteSignlnBatchs(List<String> list);
+
+	/**
+	 * 更改用户状态
+	 * @param user_id
+	 * @param signln_valid
+	 * @return
+	 */
+	public int changeUserStatus(@Param("user_id")Integer user_id, @Param("signln_valid")String signln_valid);
+
+	/**
+	 * 更改用户状态(登录表)
+	 * @param user_name
+	 * @param signln_valid
+	 * @return
+	 */
+	public int changeSignlnStatus(@Param("user_name")String user_name, @Param("signln_valid")String signln_valid);
+
+	/**
+	 * 批量更改用户状态
+	 * @param ids
+	 * @param signln_valid
+	 * @return
+	 */
+	public int changeUserStatusBatchs(@Param("array")Integer[] array, @Param("signln_valid")String signln_valid);
+
+	/**
+	 * 批量更改用户状态(登录表)
+	 * @param list
+	 * @param signln_valid
+	 * @return
+	 */
+	public int changeSignlnStatusBatchs(@Param("list")List<String> list, @Param("signln_valid")String signln_valid);
 
 }

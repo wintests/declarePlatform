@@ -22,16 +22,20 @@ public class UserServiceImpl implements UserService {
 	private UserDao userManageDao;
 
 	@Override
-	public Map<String, Object> findUserByType(String user_type, int currentPage,
+	public Map<String, Object> findUserByType(String user_type, String str, User user, int currentPage,
 			int pageSize) {
 		//定义分页pageBean
 		PageBean pageBean = new PageBean(currentPage, pageSize);
 		//得到总记录数
-		Long total = userManageDao.count(user_type);
+		Long total = userManageDao.count(user_type, str, user);
 		//得到该用户类型下的所有数据
-		List<User> list = userManageDao.findUserByType(user_type,pageBean.getStart(),pageBean.getPageSize());
-		if(list.size() == 0) {
-			throw new RuntimeException("未查询到相关数据");
+		List<User> list = userManageDao.findUserByType(user_type, str, user, pageBean.getStart(),pageBean.getPageSize());
+		try {
+			if(list.size() == 0) {
+				throw new RuntimeException("未查询到相关数据");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("total", total);
@@ -98,6 +102,37 @@ public class UserServiceImpl implements UserService {
 		int j = userManageDao.deleteSignlnBatchs(list);
 		if(i == 0 || j == 0) {
 			throw new RuntimeException("删除失败！");
+		}
+	}
+
+	@Override
+	@Transactional
+	public void changeUserStatus(Integer user_id, String signln_valid) {
+		String user_name = userManageDao.findNameById(user_id);
+		int i = userManageDao.changeUserStatus(user_id, signln_valid);
+		int j = userManageDao.changeSignlnStatus(user_name, signln_valid);
+		if(i == 0 || j == 0) {
+			throw new RuntimeException("更改用户状态失败！");
+		}
+	}
+
+	@Override
+	@Transactional
+	public void changeUserStatusBatchs(String idsStr, String signln_valid) {
+		String[] idArray = idsStr.split(",");
+		Integer[] ids = new Integer[idArray.length];
+		for(int i = 0; i < idArray.length; i++) {
+			ids[i] = Integer.parseInt(idArray[i]);
+		}
+		List<String> list = new ArrayList<String>();
+		for (Integer integer : ids) {
+			String user_name = userManageDao.findNameById(integer);
+			list.add(user_name);
+		}
+		int i = userManageDao.changeUserStatusBatchs(ids, signln_valid);
+		int j = userManageDao.changeSignlnStatusBatchs(list, signln_valid);
+		if(i == 0 || j == 0) {
+			throw new RuntimeException("批量更改用户状态失败！");
 		}
 	}
 

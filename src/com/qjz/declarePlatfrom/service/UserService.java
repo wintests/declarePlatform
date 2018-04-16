@@ -13,7 +13,7 @@ public interface UserService {
 	 * @param rows
 	 * @return
 	 */
-	public Map<String, Object> findUserByType(String user_type, int currentPage,
+	public Map<String, Object> findUserByType(String user_type, String str, User user, int currentPage,
 			int pageSize);
 
 	/**
@@ -46,6 +46,20 @@ public interface UserService {
 	 * @param names
 	 */
 	public void deleteUserBatchs(String idsStr);
+
+	/**
+	 * 更改用户状态
+	 * @param user_id
+	 * @param signln_valid
+	 */
+	public void changeUserStatus(Integer user_id, String signln_valid);
+
+	/**
+	 * 批量更改用户状态
+	 * @param idsStr
+	 * @param signln_valid
+	 */
+	public void changeUserStatusBatchs(String idsStr, String signln_valid);
 
 	
 

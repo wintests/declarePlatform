@@ -12,6 +12,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="user_type != null and user_type != ''">
 				AND user_type = #{user_type}
 			</if> 
+			<if test="str != null and str != ''">
+				AND (user_name LIKE '%${str}%' OR real_name LIKE '%${str}%')
+			</if>
+			<if test="user != null">
+				<if test="user.user_department != null and user.user_department != ''">
+					AND user_department = #{user.user_department}
+				</if> 
+				<if test="user.user_title != null and user.user_title != ''">
+					AND user_title = #{user.user_title}
+				</if> 
+				<if test="user.signln_valid != null and user.signln_valid != ''">
+					AND signln_valid = #{user.signln_valid}
+				</if> 
+			</if>
 		</where>
 		LIMIT #{start},#{pageSize}
 	</select>
@@ -21,7 +35,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<where>
 			<if test="user_type != null and user_type != ''">
 				AND user_type = #{user_type}
-			</if> 
+			</if>
+			<if test="str != null and str != ''">
+				AND (user_name LIKE '%${str}%' OR real_name LIKE '%${str}%')
+			</if>
+			<if test="user != null">
+				<if test="user.user_department != null and user.user_department != ''">
+					AND user_department = #{user.user_department}
+				</if> 
+				<if test="user.user_title != null and user.user_title != ''">
+					AND user_title = #{user.user_title}
+				</if> 
+				<if test="user.signln_valid != null and user.signln_valid != ''">
+					AND signln_valid = #{user.signln_valid}
+				</if> 
+			</if>
 		</where>
 	</select>
 	
@@ -132,5 +160,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{user_name}
 		</foreach>
 	</delete>
+	
+	<update id="changeUserStatus">
+		UPDATE user
+		SET signln_valid = #{signln_valid}
+		WHERE user_id = #{user_id}
+	</update>
+	
+	<update id="changeSignlnStatus">
+		UPDATE signln
+		SET signln_valid = #{signln_valid}
+		WHERE user_name = #{user_name}
+	</update>
+	
+	<update id="changeUserStatusBatchs">
+		UPDATE user
+		SET signln_valid = #{signln_valid}
+		WHERE user_id IN 
+		<foreach collection="array" item="user_id" open="(" close=")" separator=",">
+			#{user_id}
+		</foreach>
+	</update>
+	
+	<update id="changeSignlnStatusBatchs">
+		UPDATE signln
+		SET signln_valid = #{signln_valid}
+		WHERE user_name IN 
+		<foreach collection="list" item="user_name" open="(" close=")" separator=",">
+			#{user_name}
+		</foreach>
+	</update>
 	
 </mapper>
