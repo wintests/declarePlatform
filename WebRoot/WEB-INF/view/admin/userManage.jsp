@@ -7,25 +7,47 @@
 <title>用户管理界面</title>
 	<%@include file="../head.jspf"%>
 	<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/js/userManage.js"></script> --%>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/easyuiExtension.js"></script>
 	<style type="text/css">
 		a{
 			text-decoration:none;
 		}
 		
-		/* #searchBox{
-		    margin-top: 16px;
+		#searchBox{
 		    background: #fff8f8;
-		    padding: 4px;
-		    font-size: 14px;
-		    width: 500px;
-		} */
-		.datagrid-row:nth-child(2n){
-		    background:#EFEEEC;
+		    font-size: 12px;
+		    width: 180px;
 		}
+		
 	</style>
 </head>
 	<script type="text/javascript">
 		$(function() {
+		
+			//扩展 dateBox
+			$.extend(  
+			    $.fn.datagrid.defaults.editors, {  
+			        datebox: {  
+			            init: function (container, options) {  
+			                var input = $('<input type="text">').appendTo(container);  
+			                input.datebox(options);
+			                return input;  
+			            },  
+			            destroy: function (target) {  
+			                $(target).datebox('destroy');  
+			            },  
+			            getValue: function (target) {  
+			                return $(target).datebox('getValue');  
+			            },  
+			            setValue: function (target, value) {  
+			                $(target).datebox('setValue', formatDatebox(value));  
+			            },  
+			            resize: function (target, width) {  
+			                $(target).datebox('resize', width);  
+			            }  
+			        }
+			    });
+		
 			//datagrid初始化
 			$('#dg').datagrid(
 			{
@@ -165,7 +187,7 @@
 					{field : 'user_title',title : '职称',align : 'center',width : 100}, 
 					{field : 'user_mailbox',title : '电子邮箱',align : 'center',width : 100}, 
 					{field : 'user_telphone',title : '联系电话',align : 'center',width : 100}, 
-					{field : 'reg_date',title : '添加时间',align : 'center',width : 100}, 
+					{field : 'reg_date',title : '添加时间',align : 'center',width : 100, formatter : reg_dateFormatter, parser : reg_dateParser, editor : "datebox"}, 
 					{field : 'user_type',title : '用户类型',align : 'center',width : 100,formatter : user_typeFormatter}, 
 					{field : 'signln_valid',title : '状态',align : 'center',width : 100,formatter : signln_validFormatter}, 
 					{field : 'user_remark',title : '备注',align : 'center',width : 100}, 
@@ -194,7 +216,7 @@
 			}
 			//获取选中行user_name
 			var row = selectedRows[0];
-			console.log(row);
+			row.reg_date = reg_dateFormatter(row.reg_date);
 			//打开对话框并且设置标题
 			$("#dlg").dialog("open").dialog("setTitle", "修改用户信息");
 			//将数组回显对话框中
@@ -360,6 +382,33 @@
 			}
 		}
 		
+		function reg_dateFormatter(value){
+            var date = new Date(value);
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            if(month < 10) {
+            	month =  "0" + month;
+            }
+            var day = date.getDate();
+            if(day < 10) {
+            	day =  "0" + day;
+            }
+            return year + '-' + month + '-' + day;
+        }
+        
+        function reg_dateParser(s) {
+        	if (!s) return new Date();  
+            var ss = (s.split('-'));  
+            var y = parseInt(ss[0],10);  
+            var m = parseInt(ss[1],10);  
+            var d = parseInt(ss[2],10);  
+            if (!isNaN(y) && !isNaN(m) && !isNaN(d)){  
+                return new Date(y,m-1,d);  
+            } else {  
+                return new Date();  
+            }  
+        }
+		
 		function user_typeFormatter(value,row,index) {
 			if(value == 2) {
 				return "项目管理员";
@@ -435,10 +484,27 @@
 			$("#dg").datagrid("unselectAll");
 			$("#dg").datagrid("selectRow",index);
 			var row = $("#dg").datagrid("getSelected");
-			//console.log(row);
+			//将时间格式化，因为当前数据的实际格式为JSON序列化的形式，而并非"yyyy-MM-dd"，只有格式化之后，数据才能够正确回填到form表格
+			row.reg_date = reg_dateFormatter(row.reg_date);
 			if(row) {
 				$("#dlg").dialog("open").dialog("setTitle", "修改用户信息");
 				$("#fm").form("load", row);
+				/* $("#fm").form("load", {
+					user_id : row.user_id,
+					user_name : row.user_name,
+					user_pass : row.user_pass,
+					real_name : row.real_name,
+					user_sex : row.user_sex,
+					user_department : row.user_department,
+					user_title : row.user_title,
+					user_mailbox : row.user_mailbox,
+					user_department : row.user_department,
+					user_telphone : row.user_telphone,
+					reg_date : reg_dateFormatter(row.reg_date),
+					user_type : row.user_type,
+					user_remark : row.user_remark,
+					signln_valid : row.signln_valid
+				}); */
 				document.getElementById("user_name").disabled = true;
 				url = "${pageContext.request.contextPath }/user/updateUser.do";
 			}
@@ -448,6 +514,8 @@
 		 	//获取选中行的数据(用来获取user_name属性值)
 			$("#dg").datagrid("selectRow",index);
 			var row = $("#dg").datagrid("getSelected");
+			//row.reg_date = reg_dateFormatter(row.reg_date);
+			console.log(row);
 			//提示是否确认删除
 			$.messager.confirm("系统提示","您是否确定要删除用户：<font color=red>" + row.user_name + "</font>？",
 			function(flag) {

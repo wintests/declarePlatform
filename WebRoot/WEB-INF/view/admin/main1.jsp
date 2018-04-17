@@ -39,8 +39,8 @@
 	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">项目管理员列表</a>
 	        </div>
 	        <div title="申报控制开关" data-options="iconCls:'icon-control'" style="padding: 10px">
-	            <a href="#" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-switch'" style="width: 150px">控制开关管理</a>
+	            <a href="javascript:openTab('申报控制管理','${pageContext.request.contextPath }/configSwitch.do','icon-switch')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-switch'" style="width: 150px">申报控制管理</a>
 	        </div>
 	        <div title="项目信息管理" data-options="iconCls:'icon-item'" style="padding:10px;">
 	            <a href="javascript:openTab('项目类别管理','${pageContext.request.contextPath }/user/admin/TypeManage.do','icon-type')" class="easyui-linkbutton"
@@ -67,7 +67,7 @@
 	               data-options="plain:true,iconCls:'icon-link'" style="width: 150px">更改皮肤</a>
 	            <a href="javascript:openPasswordModifyDialog();" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-modifyPassword'" style="width: 150px;">修改密码</a>
-	            <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-exit'"
+	            <a href="javascript:logout();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-exit'"
 	               style="width: 150px;">安全退出</a>
 	        </div>
 	    </div>

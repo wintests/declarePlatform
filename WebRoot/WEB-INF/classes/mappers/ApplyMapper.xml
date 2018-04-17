@@ -4,20 +4,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace:命名空间,对statement的信息进行分类管理 -->
 <!-- 注意：在mapper代理时，它具有特殊及重要的作用,需要和mapper接口的全限命名一致 -->
-<mapper namespace="com.qjz.declarePlatfrom.dao.ConfigDao">
+<mapper namespace="com.qjz.declarePlatfrom.dao.ApplyDao">
 	
-	<select id="show" resultType="com.qjz.declarePlatfrom.domain.Config">
-		SELECT * FROM config
+	<select id="listApply" resultType="com.qjz.declarePlatfrom.domain.Apply">
+		SELECT * FROM apply
 	</select>
 	
 	<select id="count" resultType="java.lang.Long">
-		SELECT count(*) FROM config
+		SELECT count(*) FROM apply
 	</select>
-	
-	<update id="updateConfig" parameterType="com.qjz.declarePlatfrom.domain.Config">
-		UPDATE config
-		SET config_flag = #{config_flag}
-		WHERE config_id = #{config_id}
-	</update>
 	
 </mapper>

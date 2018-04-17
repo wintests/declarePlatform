@@ -35,7 +35,6 @@ public class UserController {
 	public String userManage(Model model,
 			@RequestParam(value = "user_type", required = false) String user_type) {
 		model.addAttribute("user_type",user_type);
-		//System.out.println(user_type);
 		return "admin/userManage";
 	}
 	
@@ -74,6 +73,7 @@ public class UserController {
 	@RequestMapping("/updateUser")
 	@ResponseBody
 	public JsonResult updateUser(User user) {
+		System.out.println("更新：" + user);
 		userManagerService.updateUserById(user);
 		return new JsonResult();
 	}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Datagrid-Dateformat Demo</title>
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="http://www.jeasyui.com/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="easyuiExtension.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var testDataStr = "[{id:1,name:'苹果',price:5,date:'\/Date(1419264000000)\/',date2:'\/Date(1419264000000)\/'},{id:2,name:'香蕉',price:3,date:'/Date(1419564000000)/',date2:'/Date(1419564000000)/'} "
+            + ",{id:3,name:'雪梨',price:3,date:'/Date(1419864000000)/',date2:'/Date(1419864000000)/'},{id:4,name:'葡萄',price:8,date:'\/Date(1417264000000)\/',date2:'\/Date(1417264000000)\/'}]";
+			
+            var testData = eval(testDataStr);
+
+            $('#dg').datagrid({
+                data: testData,
+                width: 600,
+                height: 350,
+                columns: [[
+                        { title: '编号', field: 'id', width: 80 },
+                        { title: '名称', field: 'name', width: 100,editor:'text' },
+                        { title: '单价', field: 'price', width: 80 ,editor:'text'},
+                        { title: '进货日期', field: 'date', width: 120, editor: 'datebox', formatter:formatDatebox},
+                        { title: '进货日期(带时间)', field: 'date2', width: 150, editor: 'datetimebox', formatter: formatDateBoxFull}
+                        ]],
+                onClickRow: function (rIndex, rData) {
+                 
+                    var preIndex = $(this).data('PreIndex');
+                    if (preIndex != undefined && preIndex > -1) {
+                        $(this).datagrid('endEdit', preIndex);
+                    }
+
+                    $(this).datagrid('beginEdit', rIndex);
+                    $(this).data('PreIndex', rIndex);
+                }
+            });
+
+
+        }); 
+    </script>
+</head>
+<body>
+    <h2>Datagrid-Dateformat Demo</h2>
+    <div id="dg">
+    </div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.qjz.declarePlatfrom.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class User implements Serializable {
 
@@ -18,7 +19,7 @@ public class User implements Serializable {
 	private String user_title; // 职称
 	private String user_mailbox; // 电子邮箱
 	private String user_telphone; // 联系电话
-	private String reg_date; // 添加时间
+	private Date reg_date; // 添加时间
 	private String user_type; // 用户类型
 	private String signln_valid; // 状态
 	private String user_remark; // 备注
@@ -95,11 +96,11 @@ public class User implements Serializable {
 		this.user_telphone = user_telphone;
 	}
 
-	public String getReg_date() {
+	public Date getReg_date() {
 		return reg_date;
 	}
 
-	public void setReg_date(String reg_date) {
+	public void setReg_date(Date reg_date) {
 		this.reg_date = reg_date;
 	}
 
