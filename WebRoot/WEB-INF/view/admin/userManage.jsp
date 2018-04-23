@@ -7,7 +7,7 @@
 <title>用户管理界面</title>
 	<%@include file="../head.jspf"%>
 	<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/js/userManage.js"></script> --%>
-	<script type="text/javascript" src="${pageContext.request.contextPath }/js/easyuiExtension.js"></script>
+	<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/js/Combobox.js"></script> --%>
 	<style type="text/css">
 		a{
 			text-decoration:none;
@@ -537,6 +537,26 @@
 				}
 			});
 		};
+		
+		/* function loadType() {
+			//alert(1);
+			$.ajax({
+			    type: "POST",
+			    url: '../../itemType/list.do',
+			    dataType: "json",
+			    success: function(data) {
+			        $('#itemType_name').combobox({
+			            data: data.data,
+			            valueField: 'itemType_id',
+			            textField: 'itemType_name',
+			            onSelect : function(record) {
+							alert("选择一个时触发");
+							console.log(record);
+						},
+			        });
+			    }
+			});
+		} */
 		
 	</script>
 	<body>
