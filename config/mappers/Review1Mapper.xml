@@ -6,8 +6,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 注意：在mapper代理时，它具有特殊及重要的作用,需要和mapper接口的全限命名一致 -->
 <mapper namespace="com.qjz.declarePlatfrom.dao.Review1Dao">
 
-	<select id="listReview1">
+	<select id="listReview1" resultType="com.qjz.declarePlatfrom.domain.Review1">
 		SELECT * FROM review1
+		LIMIT #{start},#{pageSize}
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		SELECT COUNT(*) FROM review1
 	</select>
 	
 	<insert id="addReview1" parameterType="int">
@@ -15,11 +20,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		VALUES(#{item_id})
 	</insert>
 	
+	<insert id="addReview1Batchs">
+		INSERT INTO review1(item_id)
+		VALUES
+		<foreach collection="array" item="item_id" separator=",">
+			(#{item_id})
+		</foreach>
+	</insert>
+	
 	<update id="updateReview1" parameterType="com.qjz.declarePlatfrom.domain.Review1">
 		UPDATE review1
 		SET review1_status = #{review1_status},
 			review1_user = #{review1_user},
-			review1_time = CURTIME(),
+			review1_time = NOW(),
 			review1_remark = #{review1_remark}
 		WHERE review1_id = #{review1_id}
 	</update>

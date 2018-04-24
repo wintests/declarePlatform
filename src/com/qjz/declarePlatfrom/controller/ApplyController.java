@@ -1,11 +1,12 @@
 package com.qjz.declarePlatfrom.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qjz.declarePlatfrom.domain.Apply;
@@ -22,9 +23,15 @@ public class ApplyController {
 	//显示所有申报项目
 	@RequestMapping("/listApply")
 	@ResponseBody
-	public JsonResult listApply() {
-		List<Apply> list = applyService.listApply();
-		return new JsonResult(list);
+	public Map<String, Object> listApply(
+			//page第几页，rows每页多少行，item_name申报项目名称
+			@RequestParam(value = "page", required = false) String page,
+			@RequestParam(value = "rows", required = false) String rows,
+			@RequestParam(value = "item_name", required = false) String item_name) {
+		int currentPage = Integer.parseInt(page);
+		int pageSize = Integer.parseInt(rows);
+		Map<String, Object> map = applyService.listApply(item_name, currentPage, pageSize);
+		return map;
 	}
 	
 	//更新申报信息
@@ -63,7 +70,7 @@ public class ApplyController {
 	@RequestMapping("/submitApply")
 	@ResponseBody
 	public JsonResult submitApply(Integer item_id, String item_submit) {
-		applyService.submitApply(item_id,item_submit);
+		applyService.submitApply(item_id, item_submit);
 		return new JsonResult();
 	}
 	

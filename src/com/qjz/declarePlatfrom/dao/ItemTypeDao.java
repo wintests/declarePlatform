@@ -10,7 +10,7 @@ public interface ItemTypeDao {
 	
 	public List<ItemType> listItemType(@Param("itemType_name")String itemType_name, @Param("start")int start, @Param("pageSize")int pageSize);
 
-	public Long count(String itemType_name);
+	public Long count(@Param("itemType_name")String itemType_name);
 	
 	public int updateItemType(ItemType itemType);
 

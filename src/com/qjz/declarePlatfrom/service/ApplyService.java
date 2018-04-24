@@ -1,6 +1,6 @@
 package com.qjz.declarePlatfrom.service;
 
-import java.util.List;
+import java.util.Map;
 
 import com.qjz.declarePlatfrom.domain.Apply;
 
@@ -8,9 +8,12 @@ public interface ApplyService {
 	
 	/**
 	 * 显示所有申报项目列表
+	 * @param pageSize 
+	 * @param currentPage 
+	 * @param item_name 
 	 * @return
 	 */
-	public List<Apply> listApply();
+	public Map<String, Object> listApply(String item_name, int currentPage, int pageSize);
 
 	/**
 	 * 更新申报项目信息
@@ -40,6 +43,7 @@ public interface ApplyService {
 	 * 更改提交状态（未提交->已提交）
 	 * @param item_id
 	 * @param item_submit
+	 * @param item_status 
 	 */
 	public void submitApply(Integer item_id, String item_submit);
 
@@ -47,6 +51,7 @@ public interface ApplyService {
 	 * 批量提交
 	 * @param idsStr
 	 * @param item_submit
+	 * @param item_status 
 	 */
 	public void submitApplyBatchs(String idsStr, String item_submit);
 

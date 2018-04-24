@@ -8,10 +8,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="listApply" resultType="com.qjz.declarePlatfrom.domain.Apply">
 		SELECT * FROM apply
+		<where>
+			<if test="item_name != null and item_name != ''">
+				AND item_name LIKE '%${item_name}%'
+			</if>
+		</where>
+		LIMIT #{start},#{pageSize}
 	</select>
 	
 	<select id="count" resultType="java.lang.Long">
 		SELECT count(*) FROM apply
+		<where>
+			<if test="item_name != null and item_name != ''">
+				AND item_name LIKE '%${item_name}%'
+			</if>
+		</where>
 	</select>
 	
 	<update id="updateApply" parameterType="com.qjz.declarePlatfrom.domain.Apply">
@@ -38,8 +49,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			item_starttime,
 			item_deadline,
 			item_submit,
-			apply_time,
-			item_status,
 			item_description)
 		VALUES(#{item_name},
 			#{item_type},
@@ -48,8 +57,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{item_starttime},
 			#{item_deadline},
 			#{item_submit},
-			#{apply_time},
-			#{item_status},
 			#{item_description})
 	</insert>
 	
@@ -68,17 +75,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<update id="submitApply">
 		UPDATE apply
-		SET item_submit = #{item_submit}
+		SET item_submit = #{item_submit},
+			apply_time = NOW()
 		WHERE item_id = #{item_id}
 	</update>
 	
 	<update id="submitApplyBatchs">
 		UPDATE apply
-		SET item_submit = #{item_submit}
+		SET item_submit = #{item_submit},
+			apply_time = NOW()
 		WHERE item_id IN
 		<foreach collection="array" item="item_id" open="(" close=")" separator=",">
 			#{item_id}
 		</foreach>
+	</update>
+	
+	<update id="changeStatus">
+		UPDATE apply
+		SET item_status = #{item_status}
+		WHERE item_id = #{item_id}
 	</update>
 	
 </mapper>
