@@ -9,12 +9,13 @@
 	<button id="ok">点击进行测试</button>
 	<script>
 	$("#ok").click(function(){
-		$.post("http://localhost:8080/declarePlatfrom/apply/submitApply.do",{
+		$.post("http://localhost:8080/declarePlatform/apply/listApply.do",{
 			/* "user_name":"girl","user_pass":"333333","real_name":"girl","user_sex":"女",
 			"user_department":"材料科学系","user_title":"讲师","user_mailbox":"hzh@126.com","user_telphone":"10000","reg_date":"1997-04-26","user_type":"2","user_remark":"faf" */
 			/* "idsStr":"27,28,29","signln_valid":"2" */
 			/* "item_name":"申报6","item_type":"科学研究","item_user":"8888","item_department":"计算机系","item_starttime":"2010-01-01","item_deadline":"2017-12-31","item_submit":"1","item_description":"申报6" */
-			"item_id":7,"item_submit":"2","item_status":"1"
+			/* "item_id":7,"item_submit":"2","item_status":"1" */
+			"page":"2","rows":"2"
 		},function(data){
 			console.log(data);
 		});

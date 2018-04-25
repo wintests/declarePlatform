@@ -17,7 +17,7 @@
 		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 	
 	<!-- 扫描注解 -->
-	<context:component-scan base-package="com.qjz.declarePlatfrom">
+	<context:component-scan base-package="com.qjz.declarePlatform">
 		<!-- 
 			注意：Spring容器优先加载由ServletContextListener（对应applicationContext.xml）产生的父容器，
 				而SpringMVC（对应springmvc.xml）产生的是子容器。 子容器Controller进行扫描装配时装配的@Service注解的实例是没有经过事务加强处理，

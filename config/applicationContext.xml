@@ -17,7 +17,7 @@
 		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 		
 	<!-- 扫描注解 -->
-	<context:component-scan base-package="com.qjz.declarePlatfrom"></context:component-scan>	
+	<context:component-scan base-package="com.qjz.declarePlatform"></context:component-scan>	
 		
 	<!-- spring配置文件，分3步 -->
 	<!-- 第一步，配置数据源 -->
@@ -46,7 +46,7 @@
 		* 接口的方法名必须和映射Statement的id一致
 	 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.qjz.declarePlatfrom.dao"></property>
+		<property name="basePackage" value="com.qjz.declarePlatform.dao"></property>
 		<!-- 默认不需要配置SqlSessionFactory(只有一个SqlSessionFactory时)，单独配置也可以 -->
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
@@ -77,7 +77,7 @@
 	<!-- aop切面编程 -->
 	<!-- 配置拦截service层 -->
 	<aop:config>
-		<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.qjz.declarePlatfrom.service.*.*(..))"/>
+		<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.qjz.declarePlatform.service.*.*(..))"/>
 	</aop:config>
 	
 </beans>

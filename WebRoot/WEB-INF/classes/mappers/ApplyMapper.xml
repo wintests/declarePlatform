@@ -4,9 +4,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace:命名空间,对statement的信息进行分类管理 -->
 <!-- 注意：在mapper代理时，它具有特殊及重要的作用,需要和mapper接口的全限命名一致 -->
-<mapper namespace="com.qjz.declarePlatfrom.dao.ApplyDao">
+<mapper namespace="com.qjz.declarePlatform.dao.ApplyDao">
 	
-	<select id="listApply" resultType="com.qjz.declarePlatfrom.domain.Apply">
+	<select id="listApply" resultType="com.qjz.declarePlatform.domain.Apply">
 		SELECT * FROM apply
 		<where>
 			<if test="item_name != null and item_name != ''">
@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</where>
 	</select>
 	
-	<update id="updateApply" parameterType="com.qjz.declarePlatfrom.domain.Apply">
+	<update id="updateApply" parameterType="com.qjz.declarePlatform.domain.Apply">
 		UPDATE apply
 		SET item_name = #{item_name},
 			item_type = #{item_type},
@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE item_id = #{item_id},
 	</update>
 	
-	<insert id="addApply" parameterType="com.qjz.declarePlatfrom.domain.Apply">
+	<insert id="addApply" parameterType="com.qjz.declarePlatform.domain.Apply">
 		INSERT INTO
 		apply(item_name,
 			item_type,

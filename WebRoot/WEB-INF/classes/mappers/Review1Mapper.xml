@@ -4,9 +4,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace:命名空间,对statement的信息进行分类管理 -->
 <!-- 注意：在mapper代理时，它具有特殊及重要的作用,需要和mapper接口的全限命名一致 -->
-<mapper namespace="com.qjz.declarePlatfrom.dao.Review1Dao">
+<mapper namespace="com.qjz.declarePlatform.dao.Review1Dao">
 
-	<select id="listReview1" resultType="com.qjz.declarePlatfrom.domain.Review1">
+	<select id="listReview1" resultType="com.qjz.declarePlatform.domain.Review1">
 		SELECT * FROM review1
 		LIMIT #{start},#{pageSize}
 	</select>
@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</foreach>
 	</insert>
 	
-	<update id="updateReview1" parameterType="com.qjz.declarePlatfrom.domain.Review1">
+	<update id="updateReview1" parameterType="com.qjz.declarePlatform.domain.Review1">
 		UPDATE review1
 		SET review1_status = #{review1_status},
 			review1_user = #{review1_user},

@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	
 	<!-- 自定义别名 -->
 	<typeAliases>
-		<package name="com.qjz.declarePlatfrom.domain"/>
+		<package name="com.qjz.declarePlatform.domain"/>
 	</typeAliases>
 	
 	<!-- 配置mapper

@@ -4,9 +4,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace:命名空间,对statement的信息进行分类管理 -->
 <!-- 注意：在mapper代理时，它具有特殊及重要的作用,需要和mapper接口的全限命名一致 -->
-<mapper namespace="com.qjz.declarePlatfrom.dao.UserDao">
+<mapper namespace="com.qjz.declarePlatform.dao.UserDao">
 
-	<select id="findUserByType" parameterType="java.lang.String" resultType="com.qjz.declarePlatfrom.domain.User">
+	<select id="findUserByType" parameterType="java.lang.String" resultType="com.qjz.declarePlatform.domain.User">
 		SELECT * FROM user
 		<where>
 			<if test="user_type != null and user_type != ''">
@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</where>
 	</select>
 	
-	<update id="updateUserById" parameterType="com.qjz.declarePlatfrom.domain.User">
+	<update id="updateUserById" parameterType="com.qjz.declarePlatform.domain.User">
 		UPDATE user
 		SET user_name = #{user_name},
 			user_pass = #{user_pass},
@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE user_name = #{user_name}
 	</update>
 	
-	<update id="updateSignln" parameterType="com.qjz.declarePlatfrom.domain.User">
+	<update id="updateSignln" parameterType="com.qjz.declarePlatform.domain.User">
 		UPDATE signln
 		SET user_pass = #{user_pass},
 			user_type = #{user_type},
@@ -90,7 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE user_name = #{user_name}
 	</update>
 	
-	<insert id="addUser" parameterType="com.qjz.declarePlatfrom.domain.User">
+	<insert id="addUser" parameterType="com.qjz.declarePlatform.domain.User">
 		INSERT INTO 
 		user(user_name,
 			user_pass,
@@ -118,7 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{user_remark})
 	</insert>
 	
-	<insert id="addSignln" parameterType="com.qjz.declarePlatfrom.domain.User">
+	<insert id="addSignln" parameterType="com.qjz.declarePlatform.domain.User">
 		INSERT INTO 
 		signln(user_name,
 			user_pass,

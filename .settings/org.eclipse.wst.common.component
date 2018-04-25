@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="declarePlatfrom">
+    <wb-module deploy-name="declarePlatform">
         <wb-resource deploy-path="/" source-path="/WebRoot"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/config"/>
-        <property name="context-root" value="/declarePlatfrom"/>
-        <property name="java-output-path" value="/declarePlatfrom/WebRoot/WEB-INF/classes"/>
+        <property name="java-output-path" value="/declarePlatform/WebRoot/WEB-INF/classes"/>
+        <property name="context-root" value="/declarePlatform"/>
     </wb-module>
 </project-modules>
