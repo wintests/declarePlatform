@@ -14,4 +14,6 @@ public interface ItemTypeService {
 
 	public void deleteItemType(Integer itemType_id);
 
+	public void deleteItemTypeBatchs(String idsStr);
+
 }

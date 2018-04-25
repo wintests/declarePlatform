@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.qjz.declarePlatform.dao.ApplyDao;
 import com.qjz.declarePlatform.dao.Review1Dao;
@@ -38,6 +39,7 @@ public class Review1ServiceImpl implements Review1Service{
 	}
 
 	@Override
+	@Transactional
 	public void addReview1(Integer item_id) {
 		int i = review1Dao.addReview1(item_id);
 		if(i == 0) {
@@ -46,6 +48,7 @@ public class Review1ServiceImpl implements Review1Service{
 	}
 	
 	@Override
+	@Transactional
 	public void addReview1Batchs(String idsStr) {
 		String[] idArray = idsStr.split(",");
 		Integer[] ids = new Integer[idArray.length];
@@ -59,13 +62,19 @@ public class Review1ServiceImpl implements Review1Service{
 	}
 
 	@Override
+	@Transactional
 	public void updateReview1(Review1 review1) {
 		String review1_status = review1.getReview1_status();
 		int i = review1Dao.updateReview1(review1);
 		String item_status = "1";
-		if(review1_status == "2") {		//审核通过
+		/**
+		 * 这里用equals来做比较，equals仅要求内容相同，不管是否是同一引用对象
+		 * 如果用 == 的话，不仅要求内容相同，并且引用对象也要相同，而String为引用数据类型，
+		 * 如review1_status的内容为"2"，但review1_status=="2"返回的是false
+		 */
+		if("2".equals(review1_status)) {		//审核通过
 			item_status = "2";
-		} else if(review1_status == "3") {
+		} else if("3".equals(review1_status)) {
 			item_status = "5";
 		}
 		int j = applyDao.changeStatus(review1.getItem_id(), item_status);

@@ -18,4 +18,6 @@ public interface ItemTypeDao {
 
 	public int deleteItemType(Integer itemType_id);
 
+	public int deleteItemTypeBatchs(@Param("ids")Integer[] ids);
+
 }

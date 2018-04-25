@@ -45,4 +45,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE itemType_id = #{itemType_id}
 	</delete>
 	
+	<delete id="deleteItemTypeBatchs">
+		DELETE FROM itemType
+		WHERE itemType_id IN
+		<foreach collection="ids" item="itemType_id" open="(" close=")" separator=",">
+			#{itemType_id}
+		</foreach>
+	</delete>
+	
 </mapper>

@@ -7,10 +7,13 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.qjz.declarePlatform.dao.ApplyDao;
+import com.qjz.declarePlatform.dao.PublicityDao;
 import com.qjz.declarePlatform.dao.Review2Dao;
 import com.qjz.declarePlatform.domain.PageBean;
+import com.qjz.declarePlatform.domain.Publicity;
 import com.qjz.declarePlatform.domain.Review2;
 import com.qjz.declarePlatform.service.Review2Service;
 
@@ -22,6 +25,9 @@ public class Review2ServiceImpl implements Review2Service {
 	
 	@Resource(name="applyDao")
 	private ApplyDao applyDao;
+	
+	@Resource(name="publicityDao")
+	private PublicityDao publicityDao;
 
 	@Override
 	public Map<String, Object> listReview2(int currentPage, int pageSize) {
@@ -45,6 +51,7 @@ public class Review2ServiceImpl implements Review2Service {
 	}
 
 	@Override
+	@Transactional
 	public void addReview2(Integer item_id, String review2_user) {
 		int i = review2Dao.addReview2(item_id, review2_user);
 		if(i == 0) {
@@ -53,9 +60,20 @@ public class Review2ServiceImpl implements Review2Service {
 	}
 
 	@Override
+	@Transactional
 	public void updateReview2(Review2 review2) {
 		int i = review2Dao.updateReview2(review2);
+		String review2_status = review2.getReview2_status();
 		String item_status = "2";
+		if("2".equals(review2_status)) {
+			item_status = "3";
+			Publicity publicity = publicityDao.getPublicity(review2.getItem_id());
+			int k = publicityDao.addPublicity(review2.getItem_id(), publicity.getItem_user(), 
+					publicity.getReview1_user(), publicity.getReview2_user(), publicity.getReview2_score());
+			if(k == 0) {
+				throw new RuntimeException("添加到项目立项列表失败");
+			}
+		}
 		int j = applyDao.changeStatus(review2.getItem_id(), item_status);
 		if(i == 0 || j == 0) {
 			throw new RuntimeException("专家评审项目信息失败");

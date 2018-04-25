@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:命名空间,对statement的信息进行分类管理 -->
+<!-- 注意：在mapper代理时，它具有特殊及重要的作用,需要和mapper接口的全限命名一致 -->
+<mapper namespace="com.qjz.declarePlatform.dao.PublicityDao">
+	
+	<select id="listPublicity" resultType="com.qjz.declarePlatform.domain.Publicity">
+		SELECT * FROM publicity
+		LIMIT #{start},#{pageSize}
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		SELECT COUNT(*) FROM publicity
+	</select>
+	
+	<select id="getPublicity" resultType="com.qjz.declarePlatform.domain.Publicity">
+		SELECT item_user, review1_user, review2_user, review2_score
+		FROM apply, review1, review2
+		WHERE apply.item_id = review1.item_id
+		AND apply.item_id = review2.item_id
+		AND apply.item_id = #{item_id}
+	</select>
+	
+	<insert id="addPublicity">
+		INSERT INTO
+		publicity(item_id,
+			item_user,
+			review1_user,
+			review2_user,
+			review2_score)
+		VALUES(#{item_id},
+			#{item_user},
+			#{review1_user},
+			#{review2_user},
+			#{review2_score})
+	</insert>
+	
+	<update id="updatePublicity" parameterType="com.qjz.declarePlatform.domain.Publicity">
+		UPDATE publicity
+		SET publicity_status = #{publicity_status},
+			publicity_grade = #{publicity_grade},
+			publicity_time = NOW(),
+			publicity_remark = #{publicity_remark}
+		WHERE publicity_id = #{publicity_id}
+	</update>
+	
+</mapper>

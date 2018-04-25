@@ -26,9 +26,9 @@ public class UserController {
 		return "admin/modifyInfo";
 	}
 	
-	@RequestMapping("/admin/TypeManage")
+	@RequestMapping("/admin/itemType")
 	public String TypeManage() {
-		return "admin/TypeManage";
+		return "admin/itemTypeManage";
 	}
 	
 	@RequestMapping("/admin/userManage")

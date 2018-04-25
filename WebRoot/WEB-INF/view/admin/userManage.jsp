@@ -563,9 +563,9 @@
 		<div id="toolbar" style="padding:5px;">
 			<!-- 工具栏 -->
 			<div>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" href="javascript:addUser();">添加</a>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" href="javascript:editUser();">修改</a>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" href="javascript:removeUser();">批量删除</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-user_add',plain:true" href="javascript:addUser();">新增用户</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-user_edit',plain:true" href="javascript:editUser();">修改用户</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-user_delete',plain:true" href="javascript:removeUser();">批量删除</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-enabled',plain:true" href="javascript:enabledBatchs();">批量启用</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-disabled',plain:true" href="javascript:disabledBatchs();">批量禁用</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

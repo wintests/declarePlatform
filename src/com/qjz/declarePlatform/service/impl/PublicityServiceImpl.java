@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.qjz.declarePlatform.dao.ApplyDao;
 import com.qjz.declarePlatform.dao.PublicityDao;
@@ -45,6 +46,7 @@ public class PublicityServiceImpl implements PublicityService {
 	}
 
 	@Override
+	@Transactional
 	public void addPublicity(Integer item_id) {
 		Publicity publicity = publicityDao.getPublicity(item_id);
 		int i = publicityDao.addPublicity(publicity.getItem_id(), publicity.getItem_user(), publicity.getReview1_user(), publicity.getReview2_user(), publicity.getReview2_score());
@@ -54,18 +56,22 @@ public class PublicityServiceImpl implements PublicityService {
 	}
 
 	@Override
+	@Transactional
 	public void updatePublicity(Publicity publicity) {
 		String publicity_status = publicity.getPublicity_status();
-		int i = publicityDao.updatePublicity(publicity);
 		String item_status = "3";
-		if(publicity_status == "2") {	//立项通过
+		if("2".equals(publicity_status)) {	//立项通过
+			int i = publicityDao.updatePublicity(publicity);
+			if(i == 0) {
+				throw new RuntimeException("立项失败");
+			}
 			item_status = "4";
-		} else if(publicity_status == "3") {
+		} else if("3".equals(publicity_status)) {
 			item_status = "5";
 		}
 		int j = applyDao.changeStatus(publicity.getItem_id(), item_status);
-		if(i == 0 || j == 0) {
-			throw new RuntimeException("更新立项项目信息失败");
+		if(j == 0) {
+			throw new RuntimeException("更新项目状态失败");
 		}
 	}
 

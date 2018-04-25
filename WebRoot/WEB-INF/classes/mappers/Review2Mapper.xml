@@ -16,8 +16,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="addReview2">
-		INSERT INTO review2(item_id, review2_user)
-		VALUES(#{item_id}, #{review2_user})
+		INSERT INTO
+		review2(item_id, 
+			review2_user)
+		VALUES(#{item_id}, 
+			#{review2_user})
 	</insert>
 	
 	<update id="updateReview2" parameterType="com.qjz.declarePlatform.domain.Review2">

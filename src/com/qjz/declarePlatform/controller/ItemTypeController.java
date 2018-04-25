@@ -57,5 +57,13 @@ public class ItemTypeController {
 		itemTypeService.deleteItemType(itemType_id);
 		return new JsonResult();
 	}
+	
+	//批量删除分类
+	@RequestMapping("/deleteItemTypeBatchs")
+	@ResponseBody
+	public JsonResult deleteItemTypeBatchs(String idsStr) {
+		itemTypeService.deleteItemTypeBatchs(idsStr);
+		return new JsonResult();
+	}
 
 }

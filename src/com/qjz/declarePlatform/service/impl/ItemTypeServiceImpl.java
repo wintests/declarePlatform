@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.qjz.declarePlatform.dao.ItemTypeDao;
 import com.qjz.declarePlatform.domain.ItemType;
@@ -41,6 +42,7 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 	}
 
 	@Override
+	@Transactional
 	public void updateItemType(ItemType itemType) {
 		int i = itemTypeDao.updateItemType(itemType);
 		if(i == 0) {
@@ -49,6 +51,7 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 	}
 
 	@Override
+	@Transactional
 	public void addItemType(ItemType itemType) {
 		int i = itemTypeDao.addItemType(itemType);
 		if(i == 0) {
@@ -57,10 +60,24 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteItemType(Integer itemType_id) {
 		int i = itemTypeDao.deleteItemType(itemType_id);
 		if(i == 0) {
 			throw new RuntimeException("删除分类失败！");
+		}
+	}
+
+	@Override
+	public void deleteItemTypeBatchs(String idsStr) {
+		String[] idArray = idsStr.split(",");
+		Integer[] ids = new Integer[idArray.length];
+		for (int i = 0; i < idArray.length; i++) {
+			ids[i] = Integer.parseInt(idArray[i]);
+		}
+		int i = itemTypeDao.deleteItemTypeBatchs(ids);
+		if(i == 0) {
+			throw new RuntimeException("批量删除分类失败！");
 		}
 	}
 

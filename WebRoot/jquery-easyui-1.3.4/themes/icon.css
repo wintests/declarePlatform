@@ -130,6 +130,28 @@
 .icon-enabled{
 	background:url('usericons/enabled.png') no-repeat center center;
 }
+.icon-user_add{
+	background:url('usericons/user_add.png') no-repeat center center;
+}
+.icon-user_edit{
+	background:url('usericons/user_edit.png') no-repeat center center;
+}
+.icon-user_delete{
+	background:url('usericons/user_delete.png') no-repeat center center;
+}
+.icon-category_add{
+	background:url('usericons/category_add.png') no-repeat center center;
+}
+.icon-category_edit{
+	background:url('usericons/category_edit.png') no-repeat center center;
+}
+.icon-category_delete{
+	background:url('usericons/category_delete.png') no-repeat center center;
+}
+.icon-category_refresh{
+	background:url('usericons/category_refresh.png') no-repeat center center;
+}
+
 
 
 .icon-mini-add{

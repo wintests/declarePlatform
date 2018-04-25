@@ -43,7 +43,7 @@
 	               data-options="plain:true,iconCls:'icon-switch'" style="width: 150px">申报控制管理</a>
 	        </div>
 	        <div title="项目信息管理" data-options="iconCls:'icon-item'" style="padding:10px;">
-	            <a href="javascript:openTab('项目类别管理','${pageContext.request.contextPath }/user/admin/TypeManage.do','icon-type')" class="easyui-linkbutton"
+	            <a href="javascript:openTab('项目类别管理','${pageContext.request.contextPath }/user/admin/itemType.do','icon-type')" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-type'" style="width: 150px;">项目类型管理</a>
 	               <a href="#" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-find'" style="width: 150px;">当前申报查询</a>
