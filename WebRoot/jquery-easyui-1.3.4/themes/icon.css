@@ -151,6 +151,21 @@
 .icon-category_refresh{
 	background:url('usericons/category_refresh.png') no-repeat center center;
 }
+.icon-user_control{
+	background:url('usericons/user_control.png') no-repeat center center;
+}
+.icon-user_manager{
+	background:url('usericons/user_manager.png') no-repeat center center;
+}
+.icon-item_add{
+	background:url('usericons/item_add.png') no-repeat center center;
+}
+.icon-item_edit{
+	background:url('usericons/item_edit.png') no-repeat center center;
+}
+.icon-item_delete{
+	background:url('usericons/item_delete.png') no-repeat center center;
+}
 
 
 

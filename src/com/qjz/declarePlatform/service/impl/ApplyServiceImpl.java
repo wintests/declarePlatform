@@ -28,14 +28,14 @@ public class ApplyServiceImpl implements ApplyService {
 	private Review1Dao review1Dao;
 
 	@Override
-	public Map<String, Object> listApply(String item_name, int currentPage,
+	public Map<String, Object> listApply(String item_submit, String item_status, Apply apply, String str, int currentPage,
 			int pageSize) {
 		//定义分页PageBean
 		PageBean pageBean = new PageBean(currentPage, pageSize);
 		//总记录数
-		Long total = applyDao.count(item_name);
+		Long total = applyDao.count(item_submit, item_status, apply, str);
 		//得到查询出来的数据
-		List<Apply> list = applyDao.listApply(item_name, pageBean.getStart(), pageBean.getPageSize());
+		List<Apply> list = applyDao.listApply(item_submit, item_status, apply, str, pageBean.getStart(), pageBean.getPageSize());
 		try {
 			if(list.size() == 0) {
 				throw new RuntimeException("未查询到相关数据");

@@ -6,7 +6,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>首页</title>
 	<%@include file="../head.jspf" %>
-	<%-- <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/default/easyui.css"> --%>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/main.css" />
 	<script type="text/javascript" src="${pageContext.request.contextPath }/js/main.js"></script>
 </head>
@@ -26,7 +25,7 @@
 	            <a href="javascript:openPasswordModifyDialog();" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-modifyPassword'" style="width: 150px;">修改密码</a>
 	        </div>
-    		<div title="用户信息管理" data-options="iconCls:'icon-user_manager'" style="padding:10px">
+    		<div title="用户信息管理" data-options="iconCls:'icon-manager'" style="padding:10px">
 	            <a href="javascript:openTab('全部用户列表','${pageContext.request.contextPath }/user/admin/userManage.do','icon-list')" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">全部用户列表</a>
 	            <a href="javascript:openTab('申报人员列表','${pageContext.request.contextPath }/user/admin/userManage.do?user_type=5','icon-list')" class="easyui-linkbutton"

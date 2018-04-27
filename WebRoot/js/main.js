@@ -60,11 +60,11 @@ function openTab(text,url,icon) {
         //如果不存在 则新建一个
     	//alert(url)
         $("#tabs").tabs('add',{
-            title:text,
-            closable:true,      //是否允许选项卡摺叠。
-            iconCls:icon,    //显示图标
+            title : text,
+            closable : true,   //是否允许选项卡摺叠。
+            iconCls : icon,    //显示图标
             //url 远程加载所打开的url
-            content:"<iframe frameborder=0 scrolling='auto' style='width:100%;height:100%' src='"+url+"'></iframe>"
+            content:"<iframe frameborder=0 scrolling='auto' style='width:100%;height:100%' src='" + url + "'></iframe>"
         });
     }
 }

@@ -19,6 +19,12 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 	
 	@Resource
 	private ItemTypeDao itemTypeDao;
+	
+	@Override
+	public List<ItemType> list() {
+		List<ItemType> list = itemTypeDao.list();
+		return list;
+	}
 
 	@Override
 	public Map<String, Object> listItemType(String itemType_name, int currentPage, int pageSize) {
@@ -80,5 +86,7 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 			throw new RuntimeException("批量删除分类失败！");
 		}
 	}
+
+	
 
 }

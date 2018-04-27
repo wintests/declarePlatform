@@ -8,6 +8,8 @@ import com.qjz.declarePlatform.domain.ItemType;
 
 public interface ItemTypeDao {
 	
+	public List<ItemType> list();
+	
 	public List<ItemType> listItemType(@Param("itemType_name")String itemType_name, @Param("start")int start, @Param("pageSize")int pageSize);
 
 	public Long count(@Param("itemType_name")String itemType_name);
@@ -19,5 +21,6 @@ public interface ItemTypeDao {
 	public int deleteItemType(Integer itemType_id);
 
 	public int deleteItemTypeBatchs(@Param("ids")Integer[] ids);
+
 
 }

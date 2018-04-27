@@ -383,17 +383,19 @@
 		}
 		
 		function reg_dateFormatter(value){
-            var date = new Date(value);
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            if(month < 10) {
-            	month =  "0" + month;
-            }
-            var day = date.getDate();
-            if(day < 10) {
-            	day =  "0" + day;
-            }
-            return year + '-' + month + '-' + day;
+			if(value != null) {
+	            var date = new Date(value);
+	            var year = date.getFullYear();
+	            var month = date.getMonth() + 1;
+	            if(month < 10) {
+	            	month =  "0" + month;
+	            }
+	            var day = date.getDate();
+	            if(day < 10) {
+	            	day =  "0" + day;
+	            }
+	            return year + '-' + month + '-' + day;
+			}
         }
         
         function reg_dateParser(s) {

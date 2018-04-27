@@ -3,10 +3,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">z
 <title>首页</title>
 	<%@include file="../head.jspf" %>
-	<%-- <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/default/easyui.css"> --%>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/main.css" />
 	<script type="text/javascript" src="${pageContext.request.contextPath }/js/main.js"></script>
 </head>
@@ -17,8 +16,7 @@
 		<div class="logout">您好，<font color="#95B8E7">${si.user_name }</font> &nbsp;| &nbsp;<a href="javascript:logout();"><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/usericons/logout.png'/>&nbsp;退出用户</a></div>
 	</div>   
     <div data-options="region:'south',title:'footer',split:true,noheader:true," style="height:35px;line-height:30px;text-align:center;">&copy;2018  计算机与信息安全学院.</div>   
-    <div data-options="region:'west',title:'导航菜单',split:true,iconCls:'icon-world'," style="width:160px;padding:10px;">
-    	<!-- <ul id="nav"></ul> -->
+    <div data-options="region:'west',title:'导航菜单',split:true,iconCls:'icon-world'," style="width:160px;padding:10px;text-align:center;">
     	<div class="easyui-accordion" data-options="fit:false,border:false,animate:true">
     		<div title="个人信息中心" data-options="selected:true,iconCls:'icon-user_control'" style="padding:10px;">
 	            <a href="javascript:openTab('修改个人信息','${pageContext.request.contextPath }/user/admin/modifyInfo.do','icon-person')" class="easyui-linkbutton"
@@ -26,7 +24,7 @@
 	            <a href="javascript:openPasswordModifyDialog();" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-modifyPassword'" style="width: 150px;">修改密码</a>
 	        </div>
-    		<div title="用户信息管理" data-options="iconCls:'icon-user_manager'" style="padding:10px">
+    		<div title="用户信息管理" data-options="iconCls:'icon-manager'" style="padding:10px">
 	            <a href="javascript:openTab('全部用户列表','${pageContext.request.contextPath }/user/admin/userManage.do','icon-list')" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">全部用户列表</a>
 	            <a href="javascript:openTab('申报人员列表','${pageContext.request.contextPath }/user/admin/userManage.do?user_type=5','icon-list')" class="easyui-linkbutton"

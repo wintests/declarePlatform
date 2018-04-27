@@ -10,19 +10,25 @@ public interface ApplyDao {
 	
 	/**
 	 * 显示所有申报项目
-	 * @param pageSize 
-	 * @param start 
-	 * @param item_name 
+	 * @param item_submit
+	 * @param item_status
+	 * @param apply
+	 * @param str
+	 * @param start
+	 * @param pageSize
 	 * @return
 	 */
-	public List<Apply> listApply(@Param("item_name")String item_name, @Param("start")int start, @Param("pageSize")int pageSize);
+	public List<Apply> listApply(@Param("item_submit")String item_submit, @Param("item_status")String item_status, @Param("apply")Apply apply, @Param("str")String str, @Param("start")int start, @Param("pageSize")int pageSize);
 	
 	/**
 	 * 申报项目总数
-	 * @param item_name 
+	 * @param item_submit
+	 * @param item_status
+	 * @param apply
+	 * @param str
 	 * @return
 	 */
-	public Long count(@Param("item_name")String item_name);
+	public Long count(@Param("item_submit")String item_submit, @Param("item_status")String item_status, @Param("apply")Apply apply, @Param("str")String str);
 
 	/**
 	 * 更新项目信息

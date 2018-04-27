@@ -1,10 +1,12 @@
 package com.qjz.declarePlatform.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +21,14 @@ public class ItemTypeController {
 	
 	@Resource
 	private ItemTypeService itemTypeService;
+	
+	@RequestMapping("/list")
+	@ResponseBody
+	public List<ItemType> list(Model model) {
+		List<ItemType> list = itemTypeService.list();
+		model.addAttribute("itemType",list);
+		return list;
+	}
 	
 	//显示所有分类
 	@RequestMapping("/listItemType")

@@ -1,10 +1,13 @@
 package com.qjz.declarePlatform.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.qjz.declarePlatform.domain.ItemType;
 
 public interface ItemTypeService {
+	
+	public List<ItemType> list();
 	
 	public Map<String, Object> listItemType(String itemType_name, int currentPage, int pageSize);
 
@@ -15,5 +18,6 @@ public interface ItemTypeService {
 	public void deleteItemType(Integer itemType_id);
 
 	public void deleteItemTypeBatchs(String idsStr);
+
 
 }

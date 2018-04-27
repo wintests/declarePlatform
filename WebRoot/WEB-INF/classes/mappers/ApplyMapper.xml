@@ -9,18 +9,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="listApply" resultType="com.qjz.declarePlatform.domain.Apply">
 		SELECT * FROM apply
 		<where>
-			<if test="item_name != null and item_name != ''">
-				AND item_name LIKE '%${item_name}%'
+			<if test="item_submit != null and item_submit != ''">
+				AND item_submit = #{item_submit}
+			</if>
+			<if test="item_status != null and item_status != ''">
+				AND item_status = #{item_status}
+			</if>
+			<if test="str != null and str != ''">
+				AND (item_name LIKE '%${str}%' OR item_user LIKE '%${str}%')
+			</if>
+			<if test="apply != null">
+				<if test="apply.user_department != null and apply.user_department != ''">
+					AND user_department = #{apply.user_department}
+				</if>
+				<if test="apply.item_type != null and apply.item_type != ''">
+					AND item_type = #{apply.item_type}
+				</if>
 			</if>
 		</where>
+		ORDER BY apply_time ASC
 		LIMIT #{start},#{pageSize}
 	</select>
 	
 	<select id="count" resultType="java.lang.Long">
 		SELECT count(*) FROM apply
 		<where>
-			<if test="item_name != null and item_name != ''">
-				AND item_name LIKE '%${item_name}%'
+			<if test="item_submit != null and item_submit != ''">
+				AND item_submit = #{item_submit}
+			</if>
+			<if test="item_status != null and item_status != ''">
+				AND item_status = #{item_status}
+			</if>
+			<if test="str != null and str != ''">
+				AND (item_name LIKE '%${str}%' OR item_user LIKE '%${str}%')
+			</if>
+			<if test="apply != null">
+				<if test="apply.user_department != null and apply.user_department != ''">
+					AND user_department = #{apply.user_department}
+				</if>
+				<if test="apply.item_type != null and apply.item_type != ''">
+					AND item_type = #{apply.item_type}
+				</if>
 			</if>
 		</where>
 	</select>
@@ -30,14 +59,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SET item_name = #{item_name},
 			item_type = #{item_type},
 			item_user = #{item_user},
-			item_department = #{item_department},
+			user_department = #{user_department},
 			item_starttime = #{item_starttime},
 			item_deadline = #{item_deadline},
-			item_submit = #{item_submit},
-			apply_time = #{apply_time},
-			item_status = #{item_status},
 			item_description = #{item_description}
-		WHERE item_id = #{item_id},
+		WHERE item_id = #{item_id}
 	</update>
 	
 	<insert id="addApply" parameterType="com.qjz.declarePlatform.domain.Apply">
@@ -45,18 +71,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		apply(item_name,
 			item_type,
 			item_user,
-			item_department,
+			user_department,
 			item_starttime,
 			item_deadline,
-			item_submit,
 			item_description)
 		VALUES(#{item_name},
 			#{item_type},
 			#{item_user},
-			#{item_department},
+			#{user_department},
 			#{item_starttime},
 			#{item_deadline},
-			#{item_submit},
 			#{item_description})
 	</insert>
 	

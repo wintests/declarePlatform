@@ -53,13 +53,13 @@ public class SignlnController {
 			case 1:
 				return "admin/main1";
 			case 2:
-				return "manager/main2";
+				return "itemManager/main2";
 			case 3:
 				return "department/main3";
 			case 4:
 				return "expert/main4";
 			case 5:
-				return "user/main5";
+				return "reporter/main5";
 			default:
 				return "redirect:login.do";
 			}

@@ -10,10 +10,12 @@ public interface ApplyService {
 	 * 显示所有申报项目列表
 	 * @param pageSize 
 	 * @param currentPage 
-	 * @param item_name 
+	 * @param str 
+	 * @param item_submit 
+	 * @param apply 
 	 * @return
 	 */
-	public Map<String, Object> listApply(String item_name, int currentPage, int pageSize);
+	public Map<String, Object> listApply(String item_submit, String item_status, Apply apply, String str, int currentPage, int pageSize);
 
 	/**
 	 * 更新申报项目信息
