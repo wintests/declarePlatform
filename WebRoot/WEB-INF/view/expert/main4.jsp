@@ -17,7 +17,6 @@
 	</div>   
     <div data-options="region:'south',title:'footer',split:true,noheader:true," style="height:35px;line-height:30px;text-align:center;">&copy;2018  计算机与信息安全学院.</div>   
     <div data-options="region:'west',title:'导航菜单',split:true,iconCls:'icon-world'," style="width:160px;padding:10px;">
-    	<!-- <ul id="nav"></ul> -->
     	<div class="easyui-accordion" data-options="fit:false,border:false,animate:true">
     		<div title="个人信息中心" data-options="selected:true,iconCls:'icon-user_control'" style="padding:10px;">
 	            <a href="javascript:openTab('修改个人信息','${pageContext.request.contextPath }/user/admin/modifyInfo.do','icon-person')" class="easyui-linkbutton"
@@ -25,49 +24,15 @@
 	            <a href="javascript:openPasswordModifyDialog();" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-modifyPassword'" style="width: 150px;">修改密码</a>
 	        </div>
-    		<div title="用户信息管理" data-options="iconCls:'icon-manager'" style="padding:10px">
-	            <a href="javascript:openTab('全部用户列表','${pageContext.request.contextPath }/user/admin/userManage.do','icon-list')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">全部用户列表</a>
-	            <a href="javascript:openTab('申报人员列表','${pageContext.request.contextPath }/user/admin/userManage.do?user_type=5','icon-list')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">申报人员列表</a>
-	            <a href="javascript:openTab('系部管理员列表','${pageContext.request.contextPath }/user/admin/userManage.do?user_type=3','icon-list')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">系部管理员列表</a>
-	            <a href="javascript:openTab('评审专家列表','${pageContext.request.contextPath }/user/admin/userManage.do?user_type=4','icon-list')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">评审专家列表</a>
-	            <a href="javascript:openTab('项目管理员列表','${pageContext.request.contextPath }/user/admin/userManage.do?user_type=2','icon-list')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">项目管理员列表</a>
-	        </div>
-	        <div title="申报控制开关" data-options="iconCls:'icon-control'" style="padding: 10px">
-	            <a href="javascript:openTab('申报控制管理','${pageContext.request.contextPath }/configSwitch.do','icon-switch')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-switch'" style="width: 150px">申报控制管理</a>
-	        </div>
-	        <div title="项目信息管理" data-options="iconCls:'icon-item'" style="padding:10px;">
-	            <a href="javascript:openTab('项目类别管理','${pageContext.request.contextPath }/user/admin/itemType.do','icon-type')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-type'" style="width: 150px;">项目类型管理</a>
-	               <a href="#" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-find'" style="width: 150px;">当前申报查询</a>
-	            <a href="#" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-history'" style="width: 150px;">历史申报查询</a>
-	        </div>
-	        <div title="申报流程管理" data-options="iconCls:'icon-itemprocess'" style="padding:10px">
-	        	<a href="#" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">已申报项目列表</a>
-	            <a href="#" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">待审核推荐列表</a>
-	            <a href="#" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">待专家评审列表</a>
-	            <a href="#" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">待终审立项列表</a>
-	            <a href="#" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">已公示立项列表</a>
-	        </div>
-	        <div title="系统设置管理" data-options="iconCls:'icon-sys'" style="padding:10px">
-	            <a href="#" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-link'" style="width: 150px">更改皮肤</a>
-	            <a href="javascript:openPasswordModifyDialog();" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-modifyPassword'" style="width: 150px;">修改密码</a>
-	            <a href="javascript:logout();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-exit'"
-	               style="width: 150px;">安全退出</a>
+    		<div title="我的评审管理" data-options="iconCls:'icon-sys'" style="padding:10px">
+	            <a href="javascript:openTab('查看评审指南','${pageContext.request.contextPath }/apply/reporter/guide.do','icon-list')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">查看申报指南</a>
+	            <a href="javascript:openTab('评审项目列表','${pageContext.request.contextPath }/review2/expert/review2Manage.do','icon-list')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">评审项目列表</a>
+	            <a href="javascript:openTab('待评审的项目','${pageContext.request.contextPath }/review2/expert/review2Manage.do?review2_status=1','icon-list')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">待评审的项目</a>
+	            <a href="javascript:openTab('我的评审记录','${pageContext.request.contextPath }/review2/expert/review2Manage.do?review2_status=2','icon-list')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-list'" style="width: 150px;">我的评审记录</a>
 	        </div>
 	    </div>
     </div>   

@@ -25,13 +25,17 @@ public class PublicityServiceImpl implements PublicityService {
 	private ApplyDao applyDao;
 
 	@Override
-	public Map<String, Object> listPublicity(int currentPage, int pageSize) {
+	public Map<String, Object> listPublicity(String publicity_status, int currentPage, int pageSize) {
+		//review1_status可能为1(未审核)，也可能是"2,3"(已审核，包括审核通过和审核不通过)
+		String[] status = publicity_status.split(",");
+		if(publicity_status == "")
+			status = null;
 		//定义分页PageBean
 		PageBean pageBean = new PageBean(currentPage, pageSize);
 		//总记录数
-		Long total = publicityDao.count();
+		Long total = publicityDao.count(status);
 		//得到查询的数据
-		List<Publicity> list = publicityDao.listPublicity(pageBean.getStart(), pageBean.getPageSize());
+		List<Map<String, Object>> list = publicityDao.listPublicity(status, pageBean.getStart(), pageBean.getPageSize());
 		try {
 			if(list.size() == 0) {
 				throw new RuntimeException("未查询到相关数据");
@@ -59,15 +63,15 @@ public class PublicityServiceImpl implements PublicityService {
 	@Transactional
 	public void updatePublicity(Publicity publicity) {
 		String publicity_status = publicity.getPublicity_status();
-		String item_status = "3";
+		String item_status = "4";
 		if("2".equals(publicity_status)) {	//立项通过
 			int i = publicityDao.updatePublicity(publicity);
 			if(i == 0) {
 				throw new RuntimeException("立项失败");
 			}
-			item_status = "4";
-		} else if("3".equals(publicity_status)) {
 			item_status = "5";
+		} else if("3".equals(publicity_status)) {
+			item_status = "6";
 		}
 		int j = applyDao.changeStatus(publicity.getItem_id(), item_status);
 		if(j == 0) {

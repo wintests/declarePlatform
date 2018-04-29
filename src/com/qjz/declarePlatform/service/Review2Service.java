@@ -8,11 +8,13 @@ public interface Review2Service {
 	
 	/**
 	 * 显示专家评审列表
+	 * @param review2_user 
+	 * @param review2_status 
 	 * @param currentPage
 	 * @param pageSize
 	 * @return
 	 */
-	public Map<String, Object> listReview2(int currentPage, int pageSize);
+	public Map<String, Object> listReview2(String review2_user, String review2_status, int currentPage, int pageSize);
 
 	/**
 	 * 新增专家评审项目

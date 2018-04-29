@@ -20,6 +20,12 @@ public class UserServiceImpl implements UserService {
 	
 	@Resource
 	private UserDao userManageDao;
+	
+	@Override
+	public List<User> listExpert() {
+		List<User> list = userManageDao.listExpert();
+		return list;
+	}
 
 	@Override
 	public Map<String, Object> findUserByType(String user_type, String str, User user, int currentPage,

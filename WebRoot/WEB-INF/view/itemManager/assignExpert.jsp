@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>用户管理界面</title>
+<title>分配评审专家</title>
 	<%@include file="../head.jspf"%>
 	<style type="text/css">
 		a{
@@ -26,7 +26,7 @@
 			$('#dg').datagrid(
 			{
 				//请求数据的url
-				url : '../../apply/listApply.do?item_submit=' + '${item_submit}' + '&item_status=' + '${item_status}',
+				url : '../../review1/listReview1.do?review1_status=2',
 				title : '当前列表',
 				rownumbers : true,
 				height : 805,
@@ -66,18 +66,15 @@
 		            	$.messager.alert("提示框","未查询到相关数据！", "info");
 		            }
 		        },
-				columns : [ [ 
+				columns : [ [
 					{field : 'item_id',title : '项目编号',align : 'center',width : 100, hidden : true}, 
 					{field : 'item_name',title : '项目名称',align : 'center',width : 100}, 
 					{field : 'item_type',title : '项目类别',align : 'center',width : 100},
 					{field : 'item_user',title : '项目申报人',align : 'center',width : 100}, 
 					{field : 'user_department',title : '所属系部',align : 'center',width : 100}, 
-					{field : 'item_starttime',title : '开始日期',align : 'center',width : 100, formatter : dateFormatter}, 
-					{field : 'item_deadline',title : '截止日期',align : 'center',width : 100, formatter : dateFormatter}, 
-					{field : 'item_submit',title : '提交状态',align : 'center',width : 100, formatter : item_submitFormatter}, 
-					{field : 'apply_time',title : '提交时间',align : 'center',width : 100, formatter : datetimeFormatter}, 
-					{field : 'item_status',title : '当前状态',align : 'center',width : 100, formatter : item_statusFormatter}, 
-					{field : 'item_description',title : '项目描述',align : 'center',width : 100}, 
+					{field : 'apply_time',title : '系部审核时间',align : 'center',width : 100, formatter : datetimeFormatter}, 
+					{field : 'review1_remark',title : '备注',align : 'center',width : 100}, 
+					{field : 'item_status',title : '分配专家状态',align : 'center',width : 100, formatter : item_statusFormatter}, 
 					{field : 'option',title : '操作',align : 'center',width : 100,formatter : optionFormatter}, 
 				] ],
 			});
@@ -198,10 +195,6 @@
 			var str = $("#searchBox").val();
 			var user_department = $("#department").combobox("getValue");
 			var item_type = $("#type").combobox("getValue");
-			
-			if(item_type === "-----请选择项目类别-----") {
-				item_type = "";
-			}
     		
 			$("#dg").datagrid("load",{
 				str : str,
@@ -214,7 +207,7 @@
 		var url;
 		// 添加或者修改用户
 		function saveDialog() {
-			$("#fm").form("submit", {
+			$("#fm2").form("submit", {
 				url : url,
 				onSubmit : function() {
 					return $(this).form("validate");
@@ -223,8 +216,8 @@
 					var data = JSON.parse(data);
 					if (data.state) {
 						$.messager.alert("系统提示", "保存成功");
-						$("#fm").form("reset");
-						$("#dlg").dialog("close"); //关闭对话框
+						$("#fm2").form("reset");
+						$("#dlg2").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
@@ -236,8 +229,8 @@
 		}
 	
 		function closeDialog() {
-			$("#fm").form("reset");
-			$("#dlg").dialog("close"); //关闭对话框
+			$("#fm2").form("reset");
+			$("#dlg2").dialog("close"); //关闭对话框
 			$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 		}
 		
@@ -296,38 +289,23 @@
         }
         
 		function item_statusFormatter(value,row,index) {
-			if(value === "1") {
-				return "<font color='purple'>等待系部审核⋯⋯</font>";
-			} else if(value === "2" || value ==="3") {
-				return "<font color='purple'>等待专家评审⋯⋯</font>";
-			} else if(value === "4"){
-				return "<font color='purple'>等待立项审查⋯⋯</font>";
-			} else if(value === "5"){
-				return "<font color='green'>已批准立项</font>";
-			} else if(value === "6"){
-				return "<font color='red'>本次申报失败</font>";
-			} else {
-				return "";
+			if(value === "2") {
+				return "<font color='red'>未分配</font>";
+			} else if(value === "3" || value === "4" || value === "5" || value === "6") {
+				return "<font color='green'>已分配</font>";
 			}
 		}
 		
 		function optionFormatter(value, row, index) {
-			var array = [];
-			if(row.item_submit === "1") {
-				array.push(row.item_submit);
-			}
-			if(array.length != 0) {
-				$("#editApply").show();
+			if(row.item_status === "2") {
 				return [
-		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png' title='修改'/>修改</a>&nbsp;&nbsp;&nbsp;",  
-		            "<a href='javascript:void(0);' onclick='destory(" + row.item_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png' title='删除'/>删除</a>",
+		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png'/>分配评审专家</a>&nbsp;&nbsp;&nbsp;",  
+		            "<a href='javascript:void(0);' onclick='destory(" + row.item_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png'/>删除</a>",
 		        ].join("");
 			} else {
-				$("#editApply").hide();
-				$("#submitBatchs").hide();
 				return [
-		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png' title='查看详细'/>查看详细</a>&nbsp;&nbsp;&nbsp;",  
-		            "<a href='javascript:void(0);' onclick='destory(" + row.item_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png' title='删除'/>删除</a>",
+		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png'/>查看详细</a>&nbsp;&nbsp;&nbsp;",  
+		            "<a href='javascript:void(0);' onclick='destory(" + row.item_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png'/>删除</a>",
 		        ].join("");
 			}
 		}
@@ -371,14 +349,12 @@
 			$("#dg").datagrid("unselectAll");
 			$("#dg").datagrid("selectRow",index);
 			var row = $("#dg").datagrid("getSelected");
-			//将时间格式化，因为当前数据的实际格式为JSON序列化的形式，而并非"yyyy-MM-dd"，只有格式化之后，数据才能够正确回填到form表格
-			row.item_starttime = dateFormatter(row.item_starttime);
-			row.item_deadline = dateFormatter(row.item_deadline);
+			//console.log(row);
 			if(row) {
-				$("#dlg").dialog("open").dialog("setTitle", "编辑项目申报书");
-				$("#fm").form("load", row);
+				$("#dlg2").dialog("open").dialog("setTitle", "分配评审专家");
+				$("#fm2").form("load", row);
 				//document.getElementById("user_name").disabled = true;
-				url = "${pageContext.request.contextPath }/apply/updateApply.do";
+				url = "${pageContext.request.contextPath }/review2/addReview2.do";
 			}
 		};
 		
@@ -512,6 +488,54 @@
 						<td>项目描述</td>
 						<td>
 							<input type="text" id="item_description" name="item_description" class="easyui-validatebox" required="true">&nbsp;
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		
+		<div id="dlg2" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="closed:true,buttons:'#dlg-buttons'">
+			<form id="fm2" method="POST">
+				<input type="hidden" id="item_id" name="item_id"/>
+				<table cellspacing="8px">
+					<tr>
+						<td>项目名称</td>
+						<td>
+							<input type="text" id="item_name" name="item_name" class="easyui-validatebox" required="true">
+						</td>
+					</tr>
+					<tr>
+						<td>项目类别</td>
+						<td>
+							<select id="item_type" class="easyui-combobox" name="item_type" style="width:150px;" data-options="valueField:'itemType_name',textField:'itemType_name',url:'../../itemType/list.do'" > 
+								<!-- <option value="">-----请选择项目类别-----</option> -->
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>项目申报人</td>
+						<td>
+							<input type="text" id="item_user" name="item_user" class="easyui-validatebox" required="true">&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>所属系部</td>
+						<td>
+							<select id="user_department" name="user_department" class="easyui-combobox" style="width:100px;">
+								<option value="">-----请选择-----</option>
+								<option value="计算机系">计算机系</option>
+								<option value="软件工程系">软件工程系</option>
+								<option value="信息安全系">信息安全系</option>
+								<option value="网络工程系">网络工程系</option>
+							</select> &nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td><h3>选择评审专家</h3></td>
+						<td>
+							<select id="review2_user" class="easyui-combobox" name="review2_user" style="width:150px;" data-options="valueField:'user_name',textField:'user_name',url:'../../user/listExpert.do'" > 
+								<!-- <option value="">-----请选择项目类别-----</option> -->
+							</select>
 						</td>
 					</tr>
 				</table>

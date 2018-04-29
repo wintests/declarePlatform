@@ -8,11 +8,14 @@ public interface Review1Service {
 	
 	/**
 	 * 显示系部审核列表
-	 * @param pageSize 
-	 * @param currentPage 
+	 * @param review1_status
+	 * @param item_type
+	 * @param str
+	 * @param currentPage
+	 * @param pageSize
 	 * @return
 	 */
-	public Map<String, Object> listReview1(int currentPage, int pageSize);
+	public Map<String, Object> listReview1(String review1_status, String item_type, String str, int currentPage, int pageSize);
 
 	/**
 	 * 新增审核项目
@@ -31,6 +34,5 @@ public interface Review1Service {
 	 * @param review1
 	 */
 	public void updateReview1(Review1 review1);
-
 
 }

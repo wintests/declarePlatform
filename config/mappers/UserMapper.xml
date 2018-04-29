@@ -6,6 +6,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 注意：在mapper代理时，它具有特殊及重要的作用,需要和mapper接口的全限命名一致 -->
 <mapper namespace="com.qjz.declarePlatform.dao.UserDao">
 
+	<select id="listExpert" resultType="com.qjz.declarePlatform.domain.User">
+		SELECT * FROM user
+		WHERE user_type = '4'
+	</select>
+
 	<select id="findUserByType" parameterType="java.lang.String" resultType="com.qjz.declarePlatform.domain.User">
 		SELECT * FROM user
 		<where>

@@ -8,11 +8,12 @@ public interface PublicityService {
 	
 	/**
 	 * 显示立项列表
+	 * @param publicity_status 
 	 * @param pageSize 
 	 * @param currentPage 
 	 * @return
 	 */
-	public Map<String, Object> listPublicity(int currentPage, int pageSize);
+	public Map<String, Object> listPublicity(String publicity_status, int currentPage, int pageSize);
 
 	/**
 	 * 添加立项项目

@@ -25,13 +25,22 @@ public class Review1ServiceImpl implements Review1Service{
 	private ApplyDao applyDao;
 
 	@Override
-	public Map<String, Object> listReview1(int currentPage, int pageSize) {
+	public Map<String, Object> listReview1(String review1_status, String item_type, String str, int currentPage, int pageSize) {
+		//review1_status可能为1(未审核)，也可能是"2,3"(已审核，包括审核通过和审核不通过)
+		String[] status = review1_status.split(",");
+//		List<String> status = new ArrayList<String>();
+//		for (String s : array) {
+//			status.add(s);
+//		}
+		if(review1_status == "")
+			status = null;
 		//定义分页pageBean
 		PageBean pageBean = new PageBean(currentPage, pageSize);
 		//总记录数
-		Long total = review1Dao.count();
-		//得到查询的数据
-		List<Review1> list = review1Dao.listReview1(pageBean.getStart(), pageBean.getPageSize());
+		Long total = review1Dao.count(status, item_type, str);
+		//得到查询的数据(多表查询)
+		List<Map<String, Object>> list = review1Dao.listReview1(status, item_type, str, pageBean.getStart(), pageBean.getPageSize());
+		//System.out.println(list);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("total", total);
 		map.put("rows", list);
@@ -75,7 +84,7 @@ public class Review1ServiceImpl implements Review1Service{
 		if("2".equals(review1_status)) {		//审核通过
 			item_status = "2";
 		} else if("3".equals(review1_status)) {
-			item_status = "5";
+			item_status = "6";
 		}
 		int j = applyDao.changeStatus(review1.getItem_id(), item_status);
 		if(i == 0 || j == 0) {

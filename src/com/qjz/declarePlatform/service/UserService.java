@@ -1,10 +1,17 @@
 package com.qjz.declarePlatform.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.qjz.declarePlatform.domain.User;
 
 public interface UserService {
+	
+	/**
+	 * 显示评审专家信息
+	 * @return
+	 */
+	public List<User> listExpert();
 	
 	/**
 	 * 根据用户类型查找(分页显示)
@@ -60,7 +67,5 @@ public interface UserService {
 	 * @param signln_valid
 	 */
 	public void changeUserStatusBatchs(String idsStr, String signln_valid);
-
-	
 
 }

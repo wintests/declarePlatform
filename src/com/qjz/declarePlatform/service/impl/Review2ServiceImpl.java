@@ -30,13 +30,13 @@ public class Review2ServiceImpl implements Review2Service {
 	private PublicityDao publicityDao;
 
 	@Override
-	public Map<String, Object> listReview2(int currentPage, int pageSize) {
+	public Map<String, Object> listReview2(String review2_user, String review2_status, int currentPage, int pageSize) {
 		//定义分页pageBean
 		PageBean pageBean = new PageBean(currentPage, pageSize);
 		//总记录数
-		Long total = review2Dao.count();
+		Long total = review2Dao.count(review2_user, review2_status);
 		//得到查询的数据
-		List<Review2> list = review2Dao.listReview2(pageBean.getStart(), pageBean.getPageSize());
+		List<Map<String, Object>> list = review2Dao.listReview2(review2_user, review2_status, pageBean.getStart(), pageBean.getPageSize());
 		try {
 			if(list.size() == 0) {
 				throw new RuntimeException("未查询到相关数据");
@@ -54,19 +54,23 @@ public class Review2ServiceImpl implements Review2Service {
 	@Transactional
 	public void addReview2(Integer item_id, String review2_user) {
 		int i = review2Dao.addReview2(item_id, review2_user);
-		if(i == 0) {
-			throw new RuntimeException("添加专家评审项目失败");
+		String item_status = "3";
+		int j = applyDao.changeStatus(item_id, item_status);
+		if(i == 0 || j == 0) {
+			throw new RuntimeException("分配专家评审项目失败");
 		}
 	}
 
 	@Override
 	@Transactional
 	public void updateReview2(Review2 review2) {
+		review2.setReview2_status("2");
+		System.out.println("状态：" + review2);
 		int i = review2Dao.updateReview2(review2);
 		String review2_status = review2.getReview2_status();
-		String item_status = "2";
+		String item_status = "3";
 		if("2".equals(review2_status)) {
-			item_status = "3";
+			item_status = "4";
 			Publicity publicity = publicityDao.getPublicity(review2.getItem_id());
 			int k = publicityDao.addPublicity(review2.getItem_id(), publicity.getItem_user(), 
 					publicity.getReview1_user(), publicity.getReview2_user(), publicity.getReview2_score());

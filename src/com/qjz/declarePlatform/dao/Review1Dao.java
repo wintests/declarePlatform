@@ -1,6 +1,7 @@
 package com.qjz.declarePlatform.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -10,17 +11,23 @@ public interface Review1Dao {
 	
 	/**
 	 * 显示系部审核列表
+	 * @param status 
+	 * @param str 
+	 * @param item_type 
 	 * @param pageSize 
 	 * @param start 
 	 * @return
 	 */
-	public List<Review1> listReview1(@Param("start")int start, @Param("pageSize")int pageSize);
+	public List<Map<String, Object>> listReview1(@Param("status")String[] status, @Param("item_type")String item_type, @Param("str")String str, @Param("start")int start, @Param("pageSize")int pageSize);
 	
 	/**
 	 * 得到总记录数
+	 * @param status 
+	 * @param str 
+	 * @param item_type 
 	 * @return
 	 */
-	public Long count();
+	public Long count(@Param("status")String[] status, @Param("item_type")String item_type, @Param("str")String str);
 
 	/**
 	 * 新增审核项目

@@ -1,6 +1,7 @@
 package com.qjz.declarePlatform.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -10,17 +11,19 @@ public interface PublicityDao {
 	
 	/**
 	 * 显示立项列表
+	 * @param status 
 	 * @param pageSize 
 	 * @param start 
 	 * @return
 	 */
-	public List<Publicity> listPublicity(@Param("start")int start, @Param("pageSize")int pageSize);
+	public List<Map<String, Object>> listPublicity(@Param("status")String[] status, @Param("start")int start, @Param("pageSize")int pageSize);
 	
 	/**
 	 * 总记录数
+	 * @param status 
 	 * @return
 	 */
-	public Long count();
+	public Long count(@Param("status")String[] status);
 
 	/**
 	 * 添加立项列表时，根据id得到其他表的基本信息

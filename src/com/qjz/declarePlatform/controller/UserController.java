@@ -1,5 +1,6 @@
 package com.qjz.declarePlatform.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -38,6 +39,13 @@ public class UserController {
 		return "admin/userManage";
 	}
 	
+	@RequestMapping("/listExpert")
+	@ResponseBody
+	public List<User> listExpert() {
+		List<User> list = userManagerService.listExpert();
+		return list;
+	}
+	
 	//分页查询用户
 	@RequestMapping("/findUserByType")
 	@ResponseBody
@@ -73,7 +81,6 @@ public class UserController {
 	@RequestMapping("/updateUser")
 	@ResponseBody
 	public JsonResult updateUser(User user) {
-		System.out.println("更新：" + user);
 		userManagerService.updateUserById(user);
 		return new JsonResult();
 	}

@@ -6,13 +6,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 注意：在mapper代理时，它具有特殊及重要的作用,需要和mapper接口的全限命名一致 -->
 <mapper namespace="com.qjz.declarePlatform.dao.PublicityDao">
 	
-	<select id="listPublicity" resultType="com.qjz.declarePlatform.domain.Publicity">
-		SELECT * FROM publicity
+	<select id="listPublicity" resultType="java.util.Map">
+		SELECT apply.*, publicity.*, user.*
+		FROM apply, publicity, user
+		WHERE apply.item_id = publicity.item_id
+		AND user.user_name = publicity.item_user
+		<if test="status != null">
+			AND publicity.publicity_status IN 
+			<foreach collection="status" item="publicity_status" open="(" close=")" separator=",">
+				#{publicity_status}
+			</foreach>
+		</if>
 		LIMIT #{start},#{pageSize}
 	</select>
 	
 	<select id="count" resultType="java.lang.Long">
-		SELECT COUNT(*) FROM publicity
+		SELECT COUNT(*)
+		FROM apply, publicity, user
+		WHERE apply.item_id = publicity.item_id
+		AND user.user_name = publicity.item_user
+		<if test="status != null">
+			AND publicity.publicity_status IN 
+			<foreach collection="status" item="publicity_status" open="(" close=")" separator=",">
+				#{publicity_status}
+			</foreach>
+		</if>
 	</select>
 	
 	<select id="getPublicity" resultType="com.qjz.declarePlatform.domain.Publicity">

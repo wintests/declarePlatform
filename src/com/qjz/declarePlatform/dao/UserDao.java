@@ -7,6 +7,13 @@ import org.apache.ibatis.annotations.Param;
 import com.qjz.declarePlatform.domain.User;
 
 public interface UserDao {
+	
+	/**
+	 * 显示评审专家信息
+	 * @return
+	 */
+	public List<User> listExpert();
+	
 	/**
 	 * 根据用户类型查找用户
 	 */
