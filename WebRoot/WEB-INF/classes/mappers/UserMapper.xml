@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="listExpert" resultType="com.qjz.declarePlatform.domain.User">
 		SELECT * FROM user
 		WHERE user_type = '4'
+		AND signln_valid = '2'
 	</select>
 
 	<select id="findUserByType" parameterType="java.lang.String" resultType="com.qjz.declarePlatform.domain.User">

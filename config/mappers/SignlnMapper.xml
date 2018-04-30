@@ -15,4 +15,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM signln
 	</select>
 	
+	<select id="getUserByName" resultType="com.qjz.declarePlatform.domain.User">
+		SELECT * FROM user
+		WHERE user_name = #{user_name}
+	</select>
+	
 </mapper>

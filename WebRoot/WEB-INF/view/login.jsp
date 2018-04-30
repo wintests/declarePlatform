@@ -65,12 +65,21 @@
 							});
 						},
 						success : function(data) {
+							//console.log(data);
+							//console.log(data.data);
+							//console.log(data.data.signln_valid);
 							$.messager.progress("close");
 							/*此处的data指数据库中受影响的行数*/
 							if(data.data != null) {
-								location.href = "home.do";
+								if(data.data.signln_valid != "1") {
+									location.href = "home.do";
+								} else {
+									$.messager.alert("登录失败！","该用户已被禁用，请联系相关人员处理！","warning",function() {
+										$("#password").select();
+									});
+								}
 							} else {
-								$.messager.alert("登录失败！","用户名或密码错误","warning",function() {
+								$.messager.alert("登录失败！","用户名或密码错误","error",function() {
 									$("#password").select();
 								});
 							}

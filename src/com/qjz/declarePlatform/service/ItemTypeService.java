@@ -19,5 +19,9 @@ public interface ItemTypeService {
 
 	public void deleteItemTypeBatchs(String idsStr);
 
+	public void addCount(Integer item_id);
+
+	public void addCountBatchs(String idsStr);
+
 
 }

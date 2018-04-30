@@ -9,13 +9,14 @@ public interface Review1Service {
 	/**
 	 * 显示系部审核列表
 	 * @param review1_status
+	 * @param user_department
 	 * @param item_type
 	 * @param str
 	 * @param currentPage
 	 * @param pageSize
 	 * @return
 	 */
-	public Map<String, Object> listReview1(String review1_status, String item_type, String str, int currentPage, int pageSize);
+	public Map<String, Object> listReview1(String review1_status, String user_department, String item_type, String str, int currentPage, int pageSize);
 
 	/**
 	 * 新增审核项目

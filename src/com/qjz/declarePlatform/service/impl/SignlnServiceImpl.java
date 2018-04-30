@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.qjz.declarePlatform.dao.SignlnDao;
 import com.qjz.declarePlatform.domain.Signln;
+import com.qjz.declarePlatform.domain.User;
 import com.qjz.declarePlatform.service.SignlnService;
 
 @Service
@@ -26,6 +27,12 @@ public class SignlnServiceImpl implements SignlnService {
 	public List<Signln> show() {
 		List<Signln> list = signlnDao.show();
 		return list;
+	}
+
+	@Override
+	public User getUserByName(String user_name) {
+		User user = signlnDao.getUserByName(user_name);
+		return user;
 	}
 
 }

@@ -3,6 +3,7 @@ package com.qjz.declarePlatform.service;
 import java.util.List;
 
 import com.qjz.declarePlatform.domain.Signln;
+import com.qjz.declarePlatform.domain.User;
 
 public interface SignlnService {
 	
@@ -18,5 +19,12 @@ public interface SignlnService {
 	 * @return
 	 */
 	public List<Signln> show();
+
+	/**
+	 * 通过用户名获取对应User对象
+	 * @param user_name
+	 * @return
+	 */
+	public User getUserByName(String user_name);
 
 }

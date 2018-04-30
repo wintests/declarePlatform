@@ -15,6 +15,7 @@ public class Apply implements Serializable {
 	private String item_type; // 项目类别
 	private String item_user; // 项目申报人
 	private String user_department; // 所属系部
+	private String apply_year;	// 申报年份
 	private Date item_starttime; // 项目开始时间
 	private Date item_deadline; // 项目截止时间
 	private String item_submit; // 提交状态
@@ -87,15 +88,22 @@ public class Apply implements Serializable {
 	public void setItem_description(String item_description) {
 		this.item_description = item_description;
 	}
+	public String getApply_year() {
+		return apply_year;
+	}
+	public void setApply_year(String apply_year) {
+		this.apply_year = apply_year;
+	}
 	@Override
 	public String toString() {
 		return "Apply [item_id=" + item_id + ", item_name=" + item_name
 				+ ", item_type=" + item_type + ", item_user=" + item_user
-				+ ", user_department=" + user_department + ", item_starttime="
-				+ item_starttime + ", item_deadline=" + item_deadline
-				+ ", item_submit=" + item_submit + ", apply_time=" + apply_time
-				+ ", item_status=" + item_status + ", item_description="
-				+ item_description + "]";
+				+ ", user_department=" + user_department + ", apply_year="
+				+ apply_year + ", item_starttime=" + item_starttime
+				+ ", item_deadline=" + item_deadline + ", item_submit="
+				+ item_submit + ", apply_time=" + apply_time + ", item_status="
+				+ item_status + ", item_description=" + item_description + "]";
 	}
+	
 
 }

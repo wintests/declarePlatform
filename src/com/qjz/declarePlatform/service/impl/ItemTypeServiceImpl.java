@@ -75,6 +75,7 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteItemTypeBatchs(String idsStr) {
 		String[] idArray = idsStr.split(",");
 		Integer[] ids = new Integer[idArray.length];
@@ -85,6 +86,30 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 		if(i == 0) {
 			throw new RuntimeException("批量删除分类失败！");
 		}
+	}
+
+	@Override
+	@Transactional
+	public void addCount(Integer item_id) {
+		int i = itemTypeDao.addCount(item_id);
+		if(i == 0) {
+			throw new RuntimeException("更新项目数量失败！");
+		}
+	}
+
+	@Override
+	@Transactional
+	public void addCountBatchs(String idsStr) {
+		String[] idArray = idsStr.split(",");
+		Integer[] ids = new Integer[idArray.length];
+		for (int i = 0; i < idArray.length; i++) {
+			ids[i] = Integer.parseInt(idArray[i]);
+		}
+		int i = itemTypeDao.addCountBatchs(ids);
+		if(i == 0) {
+			throw new RuntimeException("批量更新项目数量失败！");
+		}
+		
 	}
 
 	

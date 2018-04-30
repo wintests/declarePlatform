@@ -1,3 +1,5 @@
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
@@ -26,7 +28,7 @@
 			$('#dg').datagrid(
 			{
 				//请求数据的url
-				url : '../../apply/listApply.do?item_submit=' + '${item_submit}' + '&item_status=' + '${item_status}',
+				url : '../../apply/listApply.do?item_submit=' + '${apply.item_submit}' + '&item_status=' + '${apply.item_status}' + '&item_user=' + '${apply.item_user}',
 				title : '当前列表',
 				rownumbers : true,
 				height : 805,
@@ -61,6 +63,8 @@
 	            		if(array.length == 0) {
 	            			$("#dg").datagrid("hideColumn", "apply_time");
 	            			$("#dg").datagrid("hideColumn", "item_status");
+	            		} else {
+	            			//$("#dg").datagrid("hideColumn", "item_submit");
 	            		}
 		            } else {
 		            	$.messager.alert("提示框","未查询到相关数据！", "info");
@@ -71,7 +75,8 @@
 					{field : 'item_name',title : '项目名称',align : 'center',width : 100}, 
 					{field : 'item_type',title : '项目类别',align : 'center',width : 100},
 					{field : 'item_user',title : '项目申报人',align : 'center',width : 100}, 
-					{field : 'user_department',title : '所属系部',align : 'center',width : 100}, 
+					{field : 'user_department',title : '所属系部',align : 'center',width : 100},
+					{field : 'apply_year',title : '申报年份',align : 'center',width : 100},
 					{field : 'item_starttime',title : '开始日期',align : 'center',width : 100, formatter : dateFormatter}, 
 					{field : 'item_deadline',title : '截止日期',align : 'center',width : 100, formatter : dateFormatter}, 
 					{field : 'item_submit',title : '提交状态',align : 'center',width : 100, formatter : item_submitFormatter}, 
@@ -196,7 +201,7 @@
 		
 		function search() {
 			var str = $("#searchBox").val();
-			var user_department = $("#department").combobox("getValue");
+			var apply_year = $("#year").combobox("getValue");
 			var item_type = $("#type").combobox("getValue");
 			
 			if(item_type === "-----请选择项目类别-----") {
@@ -205,7 +210,7 @@
     		
 			$("#dg").datagrid("load",{
 				str : str,
-				user_department : user_department,
+				apply_year : apply_year,
 				item_type : item_type,
 			});
 		}
@@ -222,13 +227,13 @@
 				success : function(data) {
 					var data = JSON.parse(data);
 					if (data.state) {
-						$.messager.alert("系统提示", "保存成功");
+						$.messager.alert("系统提示", "保存成功", "info");
 						$("#fm").form("reset");
 						$("#dlg").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "保存失败");
+						$.messager.alert("系统提示", "保存失败", "info");
 						return;
 					}
 				}
@@ -325,9 +330,9 @@
 			} else {
 				$("#editApply").hide();
 				$("#submitBatchs").hide();
+				$("#removeApply").hide();
 				return [
 		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png' title='查看详细'/>查看详细</a>&nbsp;&nbsp;&nbsp;",  
-		            "<a href='javascript:void(0);' onclick='destory(" + row.item_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png' title='删除'/>删除</a>",
 		        ].join("");
 			}
 		}
@@ -434,23 +439,32 @@
 	</script>
 	
 	<body onload="loadType();">
+	
+		<%
+			Calendar calendar=Calendar.getInstance(); 
+    		int year=calendar.get(Calendar.YEAR); 
+			request.getSession().setAttribute("year", year);
+		 %>
+	
 		<div id="toolbar" style="padding:5px;">
 			<!-- 工具栏 -->
 			<div>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-item_add',plain:true" href="javascript:addApply();">新增申报</a>
 				<a id="editApply" class="easyui-linkbutton" data-options="iconCls:'icon-item_edit',plain:true" href="javascript:editApply();">修改项目申报书</a>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-item_delete',plain:true" href="javascript:removeApply();">批量删除</a>
+				<a id="removeApply" class="easyui-linkbutton" data-options="iconCls:'icon-item_delete',plain:true" href="javascript:removeApply();">批量删除</a>
 				<a id="submitBatchs" class="easyui-linkbutton" data-options="iconCls:'icon-enabled',plain:true" href="javascript:submitBatchs();">批量提交</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<span>按条件查询：</span>&nbsp;&nbsp;
-				<select id="department" name="user_department" class="easyui-combobox" style="width:150px;">
-					<option value="">-----请选择所属系部-----</option>
-					<option value="计算机系">计算机系</option>
-					<option value="软件工程系">软件工程系</option>
-					<option value="信息安全系">信息安全系</option>
-					<option value="网络工程系">网络工程系</option>
+				<select id="year" name="apply_year" class="easyui-combobox" style="width:125px;">
+					<option value="">-----请选择年份-----</option>
+					<option value="${year }">${year }</option>
+					<option value="${year-1 }">${year-1 }</option>
+					<option value="${year-2 }">${year-2 }</option>
+					<option value="${year-3 }">${year-3 }</option>
+					<option value="${year-4 }">${year-4 }</option>
+					<option value="${year-5 }">${year-5 }</option>
 				</select>
-				<select id="type" name="item_type" class="easyui-combobox" style="width:150px;" >
+				<select id="type" name="item_type" class="easyu1i-combobox" style="width:150px;" >
 					<!-- <option value="">-----请选择项目类别-----</option> -->
 				</select>
 				<input type="text" id="searchBox" name="str" placeholder="按项目名称或申报人查找" size="20" onkeydown="if(event.keyCode==13) search()"/>
@@ -481,7 +495,7 @@
 					<tr>
 						<td>项目申报人</td>
 						<td>
-							<input type="text" id="item_user" name="item_user" class="easyui-validatebox" required="true">&nbsp;
+							<input type="text" id="item_user" name="item_user" value="${user.user_name }">&nbsp;
 						</td>
 					</tr>
 					<tr>
@@ -511,7 +525,7 @@
 					<tr>
 						<td>项目描述</td>
 						<td>
-							<input type="text" id="item_description" name="item_description" class="easyui-validatebox" required="true">&nbsp;
+							<input type="text" id="item_description" name="item_description" class="easyui-textbox" required="true">&nbsp;
 						</td>
 					</tr>
 				</table>

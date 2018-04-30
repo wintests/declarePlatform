@@ -7,13 +7,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.qjz.declarePlatform.dao.Review1Dao">
 
 	<select id="listReview1" resultType="java.util.Map">
-		SELECT review1.*, apply.* FROM review1, apply
+		SELECT review1.*, apply.*, user.* 
+		FROM review1, apply, user
 		WHERE apply.item_id = review1.item_id
+		AND user.real_name = apply.item_user
 		<if test="status != null">
 			AND review1.review1_status IN 
 			<foreach collection="status" item="review1_status" open="(" close=")" separator=",">
 				#{review1_status}
 			</foreach>
+		</if>
+		<if test="user_department != null and user_department != ''">
+			AND apply.user_department = #{user_department}
 		</if>
 		<if test="item_type != null and item_type != ''">
 			AND apply.item_type = #{item_type}
@@ -25,13 +30,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="count" resultType="java.lang.Long">
-		SELECT COUNT(DISTINCT review1.review1_id) FROM review1,apply
+		SELECT COUNT(DISTINCT review1.review1_id) 
+		FROM review1, apply, user
 		WHERE apply.item_id = review1.item_id
+		AND user.real_name = apply.item_user
 		<if test="status != null">
 			AND review1.review1_status IN 
 			<foreach collection="status" item="review1_status" open="(" close=")" separator=",">
 				#{review1_status}
 			</foreach>
+		</if>
+		<if test="user_department != null and user_department != ''">
+			AND apply.user_department = #{user_department}
 		</if>
 		<if test="item_type != null and item_type != ''">
 			AND apply.item_type = #{item_type}
@@ -58,6 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		UPDATE review1
 		SET review1_status = #{review1_status},
 			review1_user = #{review1_user},
+			review1_operator = #{review1_operator},
 			review1_time = NOW(),
 			review1_remark = #{review1_remark}
 		WHERE review1_id = #{review1_id}

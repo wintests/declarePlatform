@@ -11,7 +11,6 @@
 		a{
 			text-decoration:none;
 		}
-		
 		#searchBox{
 		    background: #fff8f8;
 		    font-size: 12px;
@@ -43,7 +42,7 @@
 				//每页显示记录数项目
 				pageList : [ 3, 5, 10, 15, 20 ],
 				//指定id为标识字段，在删除，更新的时候有用，如果配置此字段，在翻页时，换页不会影响选中的项
-				idField : 'item_id',
+				idField : 'review1_id',
 				striped : true,	//隔行换色
 				//上方工具条 添加 修改 删除 刷新按钮
 				toolbar : '#toolbar',
@@ -70,8 +69,10 @@
 					{field : 'item_id',title : '项目编号',align : 'center',width : 100, hidden : true}, 
 					{field : 'item_name',title : '项目名称',align : 'center',width : 100}, 
 					{field : 'item_type',title : '项目类别',align : 'center',width : 100},
-					{field : 'item_user',title : '项目申报人',align : 'center',width : 100}, 
-					{field : 'user_department',title : '所属系部',align : 'center',width : 100}, 
+					{field : 'item_user',title : '项目申报人',align : 'center',width : 100},
+					{field : 'user_title',title : '职称',align : 'center',width : 100},
+					{field : 'user_department',title : '所属系部',align : 'center',width : 100},
+					{field : 'apply_year',title : '申报年份',align : 'center',width : 100},
 					{field : 'apply_time',title : '系部审核时间',align : 'center',width : 100, formatter : datetimeFormatter}, 
 					{field : 'review1_remark',title : '备注',align : 'center',width : 100}, 
 					{field : 'item_status',title : '分配专家状态',align : 'center',width : 100, formatter : item_statusFormatter}, 
@@ -79,15 +80,6 @@
 				] ],
 			});
 		});
-		
-		function addApply() { //回调函数
-			//document.getElementById("user_name").disabled = false;
-			$("#fm").form("reset");
-			//打开对话框并且设置标题
-			$("#dlg").dialog("open").dialog("setTitle", "新增申报项目书");
-			//将url设置为添加
-			url = "${pageContext.request.contextPath }/apply/addApply.do";
-		}
 		
 		function editApply() {
 			//获取选中要修改的行
@@ -109,84 +101,6 @@
 			url = "${pageContext.request.contextPath }/apply/updateApply.do";
 		}
 		
-		function removeApply() {
-			var selectedRows = $("#dg").datagrid("getSelections");
-			//判断是否有选择的行
-			if (selectedRows.length == 0) {
-				$.messager.alert("系统提示","请选择要删除的数据");
-				return;
-			}
-			//定义选中 选中item_id数组
-			var ids = [];
-			//循环遍历将选中行的id push进入数组
-			for ( var i = 0; i < selectedRows.length; i++) {
-				ids.push(selectedRows[i].item_id);
-			}
-			//提示是否确认删除
-			$.messager.confirm("系统提示","您确定要删除选中的<font color=red>" + selectedRows.length + "</font>条数据么？",
-			function(flag) {
-				if (flag) {
-					$.post("${pageContext.request.contextPath }/apply/deleteApplyBatchs.do",
-					{
-						idsStr : ids.join(","),		//将ids数组中的所有元素转换一个字符串，传到后台
-					},
-					function(data) {
-						if (data) {
-							$.messager.alert("系统提示","批量删除成功！");
-							$("#dg").datagrid("unselectAll");
-							$("#dg").datagrid("reload");
-						} else {
-							$.messager.alert("系统提示","批量删除失败！");
-						}
-					},"json");
-				} else {
-					$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
-				}
-			});
-		}
-		
-		function submitBatchs() {
-			var selectedRows = $("#dg").datagrid("getSelections");
-			//判断是否有选择的行
-			if (selectedRows.length == 0) {
-				$.messager.alert("系统提示","请选择需要提交的项目申报书");
-				return;
-			}
-			//定义选中 选中item_id数组
-			var ids = [];
-			//循环遍历将选中行的id push进入数组
-			for ( var i = 0; i < selectedRows.length; i++) {
-				ids.push(selectedRows[i].item_id);
-			}
-			//提示是否确认删除
-			$.messager.confirm("系统提示","您确定要提交选中的<font color=red>" + selectedRows.length + "</font>个申报项目么？",
-			function(flag) {
-				var item_submit = "2";
-				changeStatusBatchs(flag, ids, item_submit);
-			});
-		}
-		
-		function changeStatusBatchs(r, ids, item_submit) {
-			if (r) {
-				$.post("${pageContext.request.contextPath }/apply/submitApplyBatchs.do",
-				{
-					idsStr : ids.join(","),
-					item_submit : item_submit
-				},
-				function(data) {
-					if (data) {
-						$.messager.alert("系统提示","批量提交成功！");
-						$("#dg").datagrid("unselectAll");
-						$("#dg").datagrid("reload");
-					} else {
-						$.messager.alert("系统提示","批量提交失败！");
-					}
-				},"json");
-			} else {
-				$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
-			}
-		}
-		
 		function reload() {
 			$("#dg").datagrid("reload");
 		}
@@ -202,6 +116,19 @@
 				item_type : item_type,
 			});
 		}
+		
+		function modify(index){
+		 	//点击修改前需要将之前选中的行取消掉，然后才能得到当前选中行
+			$("#dg").datagrid("unselectAll");
+			$("#dg").datagrid("selectRow",index);
+			var row = $("#dg").datagrid("getSelected");
+			console.log(row);
+			if(row) {
+				$("#dlg2").dialog("open").dialog("setTitle", "分配评审专家");
+				$("#fm2").form("load", row);
+				url = "${pageContext.request.contextPath }/review2/addReview2.do";
+			}
+		};
 
 		//定义全局url，用于修改和添加操作
 		var url;
@@ -215,13 +142,13 @@
 				success : function(data) {
 					var data = JSON.parse(data);
 					if (data.state) {
-						$.messager.alert("系统提示", "保存成功");
+						$.messager.alert("系统提示", "分配专家成功");
 						$("#fm2").form("reset");
 						$("#dlg2").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "保存失败");
+						$.messager.alert("系统提示", "分配专家失败");
 						return;
 					}
 				}
@@ -232,16 +159,6 @@
 			$("#fm2").form("reset");
 			$("#dlg2").dialog("close"); //关闭对话框
 			$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
-		}
-		
-		function item_submitFormatter(value,row,index) {
-			if(value == 1) {
-				return "<a href='javascript:void(0);' onclick='changeSubmit("+index+")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/mini_edit.png'/><font color='red'>未提交</font></a>";
-			} else if(value == 2){
-				return "<font color='green'>已提交</font>";
-			} else {
-				return "";
-			}
 		}
 		
 		function dateFormatter(value){
@@ -300,89 +217,13 @@
 			if(row.item_status === "2") {
 				return [
 		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png'/>分配评审专家</a>&nbsp;&nbsp;&nbsp;",  
-		            "<a href='javascript:void(0);' onclick='destory(" + row.item_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png'/>删除</a>",
 		        ].join("");
 			} else {
 				return [
 		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png'/>查看详细</a>&nbsp;&nbsp;&nbsp;",  
-		            "<a href='javascript:void(0);' onclick='destory(" + row.item_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png'/>删除</a>",
 		        ].join("");
 			}
 		}
-		
-		function changeSubmit(index) {
-			//点击修改前需要将之前选中的行取消掉，然后才能得到当前选中行
-			$("#dg").datagrid("unselectAll");
-			$("#dg").datagrid("selectRow",index);
-			var row = $("#dg").datagrid("getSelected");
-			if(row.item_submit === "1") {
-				$.messager.confirm("更改提交状态", "是否提交项目申报书：<font color=red>" + row.item_name + "</font>？", function(r){
-					var item_submit = "2";
-					changeStatus(r, row.item_id, item_submit);
-				});
-			}
-		}
-		
-		function changeStatus(r, item_id, item_submit) {
-			if (r) {
-				$.post("${pageContext.request.contextPath }/apply/submitApply.do",
-				{
-					item_id : item_id,
-					item_submit : item_submit
-				},
-				function(data) {
-					if (data) {
-						$.messager.alert("系统提示","申报书提交成功！");
-						$("#dg").datagrid("unselectAll");
-						$("#dg").datagrid("reload");
-					} else {
-						$.messager.alert("系统提示","申报书提交失败！");
-					}
-				},"json");
-			} else {
-				$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
-			}
-		}
-		
-		 function modify(index){
-		 	//点击修改前需要将之前选中的行取消掉，然后才能得到当前选中行
-			$("#dg").datagrid("unselectAll");
-			$("#dg").datagrid("selectRow",index);
-			var row = $("#dg").datagrid("getSelected");
-			//console.log(row);
-			if(row) {
-				$("#dlg2").dialog("open").dialog("setTitle", "分配评审专家");
-				$("#fm2").form("load", row);
-				//document.getElementById("user_name").disabled = true;
-				url = "${pageContext.request.contextPath }/review2/addReview2.do";
-			}
-		};
-		
-		 function destory(item_id,index) {
-		 	//获取选中行的数据(用来获取user_name属性值)
-			$("#dg").datagrid("selectRow",index);
-			var row = $("#dg").datagrid("getSelected");
-			//提示是否确认删除
-			$.messager.confirm("系统提示","您是否确定要删除申报项目：<font color=red>" + row.item_name + "</font>？",
-			function(flag) {
-				if (flag) {
-					$.post("${pageContext.request.contextPath }/apply/deleteApplyById.do",
-					{
-						item_id : item_id,
-					},
-					function(data) {
-						if (data) {
-							$.messager.alert("系统提示","删除成功！");
-							$("#dg").datagrid("reload");
-						} else {
-							$.messager.alert("系统提示","删除失败！");
-						}
-					},"json");
-				} else {
-					$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
-				}
-			});
-		};
 		
 		function loadType() {
 			$.ajax({
@@ -413,10 +254,6 @@
 		<div id="toolbar" style="padding:5px;">
 			<!-- 工具栏 -->
 			<div>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-item_add',plain:true" href="javascript:addApply();">新增申报</a>
-				<a id="editApply" class="easyui-linkbutton" data-options="iconCls:'icon-item_edit',plain:true" href="javascript:editApply();">修改项目申报书</a>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-item_delete',plain:true" href="javascript:removeApply();">批量删除</a>
-				<a id="submitBatchs" class="easyui-linkbutton" data-options="iconCls:'icon-enabled',plain:true" href="javascript:submitBatchs();">批量提交</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<span>按条件查询：</span>&nbsp;&nbsp;
 				<select id="department" name="user_department" class="easyui-combobox" style="width:150px;">
@@ -533,7 +370,7 @@
 					<tr>
 						<td><h3>选择评审专家</h3></td>
 						<td>
-							<select id="review2_user" class="easyui-combobox" name="review2_user" style="width:150px;" data-options="valueField:'user_name',textField:'user_name',url:'../../user/listExpert.do'" > 
+							<select id="review2_user" class="easyui-combobox" name="review2_user" style="width:150px;" data-options="valueField:'real_name',textField:'real_name',url:'../../user/listExpert.do'" > 
 								<!-- <option value="">-----请选择项目类别-----</option> -->
 							</select>
 						</td>

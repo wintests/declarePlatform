@@ -19,11 +19,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND (item_name LIKE '%${str}%' OR item_user LIKE '%${str}%')
 			</if>
 			<if test="apply != null">
-				<if test="apply.user_department != null and apply.user_department != ''">
-					AND user_department = #{apply.user_department}
+				<if test="apply.apply_year != null and apply.apply_year != ''">
+					AND apply_year = #{apply.apply_year}
 				</if>
 				<if test="apply.item_type != null and apply.item_type != ''">
 					AND item_type = #{apply.item_type}
+				</if>
+				<if test="apply.item_user != null and apply.item_user != ''">
+					AND item_user = #{apply.item_user}
 				</if>
 			</if>
 		</where>
@@ -44,11 +47,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND (item_name LIKE '%${str}%' OR item_user LIKE '%${str}%')
 			</if>
 			<if test="apply != null">
-				<if test="apply.user_department != null and apply.user_department != ''">
-					AND user_department = #{apply.user_department}
+				<if test="apply.apply_year != null and apply.apply_year != ''">
+					AND apply_year = #{apply.apply_year}
 				</if>
 				<if test="apply.item_type != null and apply.item_type != ''">
 					AND item_type = #{apply.item_type}
+				</if>
+				<if test="apply.item_user != null and apply.item_user != ''">
+					AND item_user = #{apply.item_user}
 				</if>
 			</if>
 		</where>
@@ -60,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			item_type = #{item_type},
 			item_user = #{item_user},
 			user_department = #{user_department},
+			apply_year = YEAR(NOW()),
 			item_starttime = #{item_starttime},
 			item_deadline = #{item_deadline},
 			item_description = #{item_description}
@@ -72,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			item_type,
 			item_user,
 			user_department,
+			apply_year,
 			item_starttime,
 			item_deadline,
 			item_description)
@@ -79,6 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{item_type},
 			#{item_user},
 			#{user_department},
+			YEAR(NOW()),
 			#{item_starttime},
 			#{item_deadline},
 			#{item_description})

@@ -22,5 +22,9 @@ public interface ItemTypeDao {
 
 	public int deleteItemTypeBatchs(@Param("ids")Integer[] ids);
 
+	public int addCount(Integer item_id);
+
+	public int addCountBatchs(@Param("ids")Integer[] ids);
+
 
 }

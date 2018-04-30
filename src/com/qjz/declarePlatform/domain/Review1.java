@@ -14,6 +14,7 @@ public class Review1 implements Serializable{
 	private Integer item_id;// 项目编号
 	private String review1_status;// 审核状态
 	private String review1_user;// 审核单位
+	private String review1_operator; //操作人员
 	private Date review1_time;// 审核时间
 	private String review1_remark;// 备注
 
@@ -65,12 +66,21 @@ public class Review1 implements Serializable{
 		this.review1_remark = review1_remark;
 	}
 
+	public String getReview1_operator() {
+		return review1_operator;
+	}
+
+	public void setReview1_operator(String review1_operator) {
+		this.review1_operator = review1_operator;
+	}
+
 	@Override
 	public String toString() {
 		return "Review1 [review1_id=" + review1_id + ", item_id=" + item_id
 				+ ", review1_status=" + review1_status + ", review1_user="
-				+ review1_user + ", review1_time=" + review1_time
-				+ ", review1_remark=" + review1_remark + "]";
+				+ review1_user + ", review1_operator=" + review1_operator
+				+ ", review1_time=" + review1_time + ", review1_remark="
+				+ review1_remark + "]";
 	}
 
 }

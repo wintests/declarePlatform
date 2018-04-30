@@ -75,5 +75,21 @@ public class ItemTypeController {
 		itemTypeService.deleteItemTypeBatchs(idsStr);
 		return new JsonResult();
 	}
+	
+	//更新该类型下的项目数量
+	@RequestMapping("/addCount")
+	@ResponseBody
+	public JsonResult addCount(Integer item_id) {
+		itemTypeService.addCount(item_id);
+		return new JsonResult();
+	}
+	
+	//批量更新该类型下的项目数量
+	@RequestMapping("/addCountBatchs")
+	@ResponseBody
+	public JsonResult addCountBatchs(String idsStr) {
+		itemTypeService.addCountBatchs(idsStr);
+		return new JsonResult();
+	}
 
 }

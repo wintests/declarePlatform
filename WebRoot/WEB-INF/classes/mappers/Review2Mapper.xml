@@ -7,11 +7,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.qjz.declarePlatform.dao.Review2Dao">
 
 	<select id="listReview2" resultType="java.util.Map">
-		SELECT apply.*, review1.*, review2.*,user.*
+		SELECT apply.*, review1.*, review2.*, user.*
 		FROM review2, review1, apply, user
 		WHERE apply.item_id = review2.item_id
 		AND review1.item_id = review2.item_id
-		AND user.user_name = apply.item_user
+		AND user.real_name = apply.item_user
 		<if test="review2_user != null and review2_user != ''">
 			AND review2_user = #{review2_user}
 		</if>
@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM review2, review1, apply, user
 		WHERE apply.item_id = review2.item_id
 		AND review1.item_id = review2.item_id
-		AND user.user_name = apply.item_user
+		AND user.real_name = apply.item_user
 		<if test="review2_user != null and review2_user != ''">
 			AND review2_user = #{review2_user}
 		</if>

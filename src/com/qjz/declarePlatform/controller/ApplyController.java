@@ -3,14 +3,15 @@ package com.qjz.declarePlatform.controller;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qjz.declarePlatform.domain.Apply;
+import com.qjz.declarePlatform.domain.User;
 import com.qjz.declarePlatform.service.ApplyService;
 import com.qjz.declarePlatform.util.JsonResult;
 
@@ -21,12 +22,22 @@ public class ApplyController {
 	@Resource
 	private ApplyService applyService;
 	
+	//跳转到页面
 	@RequestMapping("/reporter/applyManage")
-	public String applyManage(Model model,
+	public String applyManage(HttpServletRequest request,
 			@RequestParam(value = "item_submit", required = false) String item_submit,
 			@RequestParam(value = "item_status", required = false) String item_status) {
-		model.addAttribute("item_submit",item_submit);
-		model.addAttribute("item_status",item_status);
+		Apply apply = new Apply();
+		apply.setItem_submit(item_submit);
+		apply.setItem_status(item_status);
+		User user = (User) request.getSession().getAttribute("user");
+		if(user != null) {
+			if("5".equals(user.getUser_type())) {
+				String item_user = user.getReal_name();
+				apply.setItem_user(item_user);
+			}
+		}
+		request.setAttribute("apply", apply);
 		return "reporter/applyManage";
 	}
 	
@@ -38,16 +49,18 @@ public class ApplyController {
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "rows", required = false) String rows,
 			@RequestParam(value = "item_submit", required = false) String item_submit,
+			@RequestParam(value = "item_user", required = false) String item_user,
 			@RequestParam(value = "item_status", required = false) String item_status,
-			@RequestParam(value = "user_department", required = false) String user_department,
+			@RequestParam(value = "apply_year", required = false) String apply_year,
 			@RequestParam(value = "item_type", required = false) String item_type,
 			@RequestParam(value = "str", required = false) String str) {
 //		int currentPage = Integer.parseInt(page);
 //		int pageSize = Integer.parseInt(rows);
 		
 		Apply apply = new Apply();
-		apply.setUser_department(user_department);
+		apply.setApply_year(apply_year);
 		apply.setItem_type(item_type);
+		apply.setItem_user(item_user);
 		
 		if(item_submit == null || item_status == null) {
 			item_submit = "";

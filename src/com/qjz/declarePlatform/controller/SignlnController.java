@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qjz.declarePlatform.domain.Signln;
+import com.qjz.declarePlatform.domain.User;
 import com.qjz.declarePlatform.service.SignlnService;
 import com.qjz.declarePlatform.util.JsonResult;
 
@@ -24,7 +25,12 @@ public class SignlnController {
 	public JsonResult login(HttpServletRequest request, Signln signln) {
 		Signln si = signlnService.login(signln);
 		//将user对象保存到session中，session默认保存时间为30min
-		request.getSession().setAttribute("si", si);
+		//request.getSession().setAttribute("si", si);
+		if(si != null) {
+			User user = signlnService.getUserByName(si.getUser_name());
+			request.getSession().setAttribute("user", user);
+			return new JsonResult(user);
+		}
 		return new JsonResult(si);
 	}
 	
@@ -37,18 +43,21 @@ public class SignlnController {
 	
 	@RequestMapping("/login")
 	public String login(HttpServletRequest request) {
-		if(request.getSession().getAttribute("si") != null) {
-			return "redirect:home.do";
+		User user = (User) request.getSession().getAttribute("user");
+		if(user != null) {
+			if(user.getSignln_valid() == "2") {
+				return "redirect:home.do";
+			}
 		}
 		return "login";
 	}
 	
 	@RequestMapping("/home")
 	public String home(HttpServletRequest request) {
-		Signln signln = (Signln) request.getSession().getAttribute("si");
-		request.getSession().setAttribute("si", signln);
-		if(signln != null) {
-			int user_type = Integer.parseInt(signln.getUser_type());
+		User user = (User) request.getSession().getAttribute("user");
+		request.getSession().setAttribute("user", user);
+		if(user != null) {
+			int user_type = Integer.parseInt(user.getUser_type());
 			switch (user_type) {
 			case 1:
 				return "admin/main1";

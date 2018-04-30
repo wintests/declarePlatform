@@ -25,7 +25,7 @@ public class Review1ServiceImpl implements Review1Service{
 	private ApplyDao applyDao;
 
 	@Override
-	public Map<String, Object> listReview1(String review1_status, String item_type, String str, int currentPage, int pageSize) {
+	public Map<String, Object> listReview1(String review1_status, String user_department, String item_type, String str, int currentPage, int pageSize) {
 		//review1_status可能为1(未审核)，也可能是"2,3"(已审核，包括审核通过和审核不通过)
 		String[] status = review1_status.split(",");
 //		List<String> status = new ArrayList<String>();
@@ -37,9 +37,9 @@ public class Review1ServiceImpl implements Review1Service{
 		//定义分页pageBean
 		PageBean pageBean = new PageBean(currentPage, pageSize);
 		//总记录数
-		Long total = review1Dao.count(status, item_type, str);
+		Long total = review1Dao.count(status, user_department, item_type, str);
 		//得到查询的数据(多表查询)
-		List<Map<String, Object>> list = review1Dao.listReview1(status, item_type, str, pageBean.getStart(), pageBean.getPageSize());
+		List<Map<String, Object>> list = review1Dao.listReview1(status, user_department, item_type, str, pageBean.getStart(), pageBean.getPageSize());
 		//System.out.println(list);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("total", total);

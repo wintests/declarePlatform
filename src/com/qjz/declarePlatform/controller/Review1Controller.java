@@ -3,14 +3,15 @@ package com.qjz.declarePlatform.controller;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qjz.declarePlatform.domain.Review1;
+import com.qjz.declarePlatform.domain.User;
 import com.qjz.declarePlatform.service.Review1Service;
 import com.qjz.declarePlatform.util.JsonResult;
 
@@ -22,16 +23,21 @@ public class Review1Controller {
 	private Review1Service review1Service;
 	
 	@RequestMapping("/department/review1Manage")
-	public String review1Manage(Model model,
+	public String review1Manage(HttpServletRequest request,
 			@RequestParam(value = "review1_status", required = false) String review1_status) {
-		//System.out.println("状态1为：" + review1_status);
 //		String[] status = review1_status.split(",");
 //		List<String> list = new ArrayList<String>();
 //		for (String string : status) {
 //			list.add(string);
 //		}
-//		System.out.println("状态1为：" + list);
-		model.addAttribute("review1_status", review1_status);
+		request.setAttribute("review1_status", review1_status);
+		User user = (User) request.getSession().getAttribute("user");
+		if(user != null) {
+			if("3".equals(user.getUser_type())) {
+				String user_department = user.getUser_department();
+				request.setAttribute("user_department", user_department);
+			}
+		}
 		return "department/review1Manage";
 	}
 	
@@ -43,6 +49,7 @@ public class Review1Controller {
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "rows", required = false) String rows,
 			@RequestParam(value = "review1_status", required = false) String review1_status,
+			@RequestParam(value = "user_department", required = false) String user_department,
 			@RequestParam(value = "item_type", required = false) String item_type,
 			@RequestParam(value = "str", required = false) String str) {
 		
@@ -52,7 +59,7 @@ public class Review1Controller {
 		
 		int currentPage = Integer.parseInt(page);
 		int pageSize = Integer.parseInt(rows);
-		Map<String, Object> map = review1Service.listReview1(review1_status, item_type, str, currentPage, pageSize);
+		Map<String, Object> map = review1Service.listReview1(review1_status, user_department, item_type, str, currentPage, pageSize);
 		return map;
 	}
 	

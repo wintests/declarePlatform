@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.qjz.declarePlatform.dao.ApplyDao;
+import com.qjz.declarePlatform.dao.ItemTypeDao;
 import com.qjz.declarePlatform.dao.Review1Dao;
 import com.qjz.declarePlatform.domain.Apply;
 import com.qjz.declarePlatform.domain.PageBean;
@@ -19,13 +20,16 @@ import com.qjz.declarePlatform.service.ApplyService;
 public class ApplyServiceImpl implements ApplyService {
 	
 	/**
-	 * 这里需要写两个@Resource注解，因为一个注解只对应一个变量
+	 * 这里需要写多个@Resource注解，因为一个注解只对应一个变量
 	 */
 	@Resource(name="applyDao")
 	private ApplyDao applyDao;
 	
 	@Resource(name="review1Dao")
 	private Review1Dao review1Dao;
+	
+	@Resource(name="itemTypeDao")
+	private ItemTypeDao itemTypeDao;
 
 	@Override
 	public Map<String, Object> listApply(String item_submit, String item_status, Apply apply, String str, int currentPage,
@@ -101,6 +105,10 @@ public class ApplyServiceImpl implements ApplyService {
 			if(j == 0 || k == 0) {
 				throw new RuntimeException("添加到系部审核列表失败！");
 			}
+			int m = itemTypeDao.addCount(item_id);
+			if(m == 0) {
+				throw new RuntimeException("更新项目数量失败！");
+			}
 		} else {
 			throw new RuntimeException("提交项目申报书失败！");
 		}
@@ -123,6 +131,10 @@ public class ApplyServiceImpl implements ApplyService {
 			}
 			if(j == 0) {
 				throw new RuntimeException("批量添加到系部审核列表失败！");
+			}
+			int k = itemTypeDao.addCountBatchs(ids);
+			if(k == 0) {
+				throw new RuntimeException("批量更新项目数量失败！");
 			}
 		} else {
 			throw new RuntimeException("批量提交项目申报书失败！");

@@ -65,7 +65,7 @@ public class Review2ServiceImpl implements Review2Service {
 	@Transactional
 	public void updateReview2(Review2 review2) {
 		review2.setReview2_status("2");
-		System.out.println("状态：" + review2);
+		//System.out.println("状态：" + review2);
 		int i = review2Dao.updateReview2(review2);
 		String review2_status = review2.getReview2_status();
 		String item_status = "3";

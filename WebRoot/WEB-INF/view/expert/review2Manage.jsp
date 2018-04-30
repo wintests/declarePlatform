@@ -17,6 +17,11 @@
 		    font-size: 12px;
 		    width: 180px;
 		}
+		
+		.datagrid-header-row td{
+			background-color:#E0ECFF;
+			font-weight:bold
+		}
 	</style>
 	
 </head>
@@ -26,7 +31,7 @@
 			$('#dg').datagrid(
 			{
 				//请求数据的url
-				url : '../../review2/listReview2.do?review2_status=' + '${review2_status }' + '&review2_user=' + '${review2_user }',
+				url : '../../review2/listReview2.do?review2_status=' + '${review2.review2_status }' + '&review2_user=' + '${review2.review2_user }',
 				title : '当前列表',
 				rownumbers : true,
 				height : 805,
@@ -85,42 +90,6 @@
 				] ],
 			});
 		});
-		
-		function removeApply() {
-			var selectedRows = $("#dg").datagrid("getSelections");
-			//判断是否有选择的行
-			if (selectedRows.length == 0) {
-				$.messager.alert("系统提示","请选择要删除的数据");
-				return;
-			}
-			//定义选中 选中item_id数组
-			var ids = [];
-			//循环遍历将选中行的id push进入数组
-			for ( var i = 0; i < selectedRows.length; i++) {
-				ids.push(selectedRows[i].item_id);
-			}
-			//提示是否确认删除
-			$.messager.confirm("系统提示","您确定要删除选中的<font color=red>" + selectedRows.length + "</font>条数据么？",
-			function(flag) {
-				if (flag) {
-					$.post("${pageContext.request.contextPath }/apply/deleteApplyBatchs.do",
-					{
-						idsStr : ids.join(","),		//将ids数组中的所有元素转换一个字符串，传到后台
-					},
-					function(data) {
-						if (data) {
-							$.messager.alert("系统提示","批量删除成功！");
-							$("#dg").datagrid("unselectAll");
-							$("#dg").datagrid("reload");
-						} else {
-							$.messager.alert("系统提示","批量删除失败！");
-						}
-					},"json");
-				} else {
-					$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
-				}
-			});
-		}
 		
 		function reload() {
 			$("#dg").datagrid("reload");
@@ -244,7 +213,6 @@
 			if(row.review2_status === "1") {
 				return [
 		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png'/>评审该项目</a>&nbsp;&nbsp;&nbsp;",  
-		            "<a href='javascript:void(0);' onclick='destory(" + row.item_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png'/>删除</a>",
 		        ].join("");
 			} else {
 				return [
@@ -265,55 +233,6 @@
 				$("#fm").form("load", row);
 				url = "${pageContext.request.contextPath }/review2/updateReview2.do";
 			}
-		};
-		
-		function changeReview(index) {
-			//点击修改前需要将之前选中的行取消掉，然后才能得到当前选中行
-			$("#dg").datagrid("unselectAll");
-			$("#dg").datagrid("selectRow",index);
-			var row = $("#dg").datagrid("getSelected");
-			//将时间格式化，因为当前数据的实际格式为JSON序列化的形式，而并非"yyyy-MM-dd"，只有格式化之后，数据才能够正确回填到form表格
-			row.item_starttime = dateFormatter(row.item_starttime);
-			row.item_deadline = dateFormatter(row.item_deadline);
-			if(row) {
-				$("#dlg").dialog("open").dialog("setTitle", "审核项目信息");
-				$("#fm").form("load", row);
-				//console.log(row);
-				document.getElementById("item_name").disabled = true;
-				document.getElementById("item_type").disabled = true;
-				document.getElementById("item_user").disabled = true;
-				document.getElementById("user_department").disabled = true;
-				document.getElementById("item_starttime").disabled = true;
-				document.getElementById("item_deadline").disabled = true;
-				document.getElementById("item_description").disabled = true;
-				url = "${pageContext.request.contextPath }/review1/updateReview1.do";
-			}
-		}
-		
-		 function destory(item_id,index) {
-		 	//获取选中行的数据(用来获取user_name属性值)
-			$("#dg").datagrid("selectRow",index);
-			var row = $("#dg").datagrid("getSelected");
-			//提示是否确认删除
-			$.messager.confirm("系统提示","您是否确定要删除申报项目：<font color=red>" + row.item_name + "</font>？",
-			function(flag) {
-				if (flag) {
-					$.post("${pageContext.request.contextPath }/apply/deleteApplyById.do",
-					{
-						item_id : item_id,
-					},
-					function(data) {
-						if (data) {
-							$.messager.alert("系统提示","删除成功！");
-							$("#dg").datagrid("reload");
-						} else {
-							$.messager.alert("系统提示","删除失败！");
-						}
-					},"json");
-				} else {
-					$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
-				}
-			});
 		};
 		
 		function loadType() {
@@ -345,7 +264,6 @@
 		<div id="toolbar" style="padding:5px;">
 			<!-- 工具栏 -->
 			<div>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-item_delete',plain:true" href="javascript:removeApply();">批量删除</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<span>按条件查询：</span>&nbsp;&nbsp;
 				<select id="type" name="item_type" class="easyui-combobox" style="width:150px;" >
@@ -362,7 +280,7 @@
 			<form id="fm" method="POST">
 				<input type="hidden" id="review2_id" name="review2_id"/>
 				<input type="hidden" id="item_id" name="item_id"/>
-				<input type="hidden" id="review2_user" name="review2_user" value="${si.user_name }"/>
+				<input type="hidden" id="review2_user" name="review2_user" value="${user.real_name }"/>
 				<table cellspacing="8px">
 					<tr>
 						<td>项目名称</td>

@@ -57,4 +57,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</foreach>
 	</delete>
 	
+	<update id="addCount" parameterType="int">
+		UPDATE itemType
+		SET item_count = item_count + 1
+		WHERE itemType_name IN 
+		(SELECT item_type FROM apply
+			WHERE item_id = #{item_id})
+	</update>
+	
+	<update id="addCountBatchs">
+		UPDATE itemType
+		SET item_count = item_count + 1
+		WHERE itemType_name IN 
+		(
+			SELECT item_type FROM apply
+			WHERE item_id IN
+			<foreach collection="ids" item="item_id" open="(" close=")" separator=",">
+				#{item_id}
+			</foreach>
+		)
+	</update>
+	
 </mapper>

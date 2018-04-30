@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qjz.declarePlatform.domain.Review2;
-import com.qjz.declarePlatform.domain.Signln;
+import com.qjz.declarePlatform.domain.User;
 import com.qjz.declarePlatform.service.Review2Service;
 import com.qjz.declarePlatform.util.JsonResult;
 
@@ -25,12 +25,16 @@ public class Review2Controller {
 	@RequestMapping("/expert/review2Manage")
 	public String review2Manage(HttpServletRequest request,
 			@RequestParam(value = "review2_status", required = false) String review2_status) {
-		request.setAttribute("review2_status", review2_status);
-		Signln si = (Signln)request.getSession().getAttribute("si");
-		if("4".equals(si.getUser_type())) {
-			String review2_user = si.getUser_name();
-			request.setAttribute("review2_user", review2_user);
+		//request.setAttribute("review2_status", review2_status);
+		Review2 review2 = new Review2();
+		review2.setReview2_status(review2_status);
+		User user = (User)request.getSession().getAttribute("user");
+		if("4".equals(user.getUser_type())) {
+			String review2_user = user.getReal_name();
+			//request.setAttribute("review2_user", review2_user);
+			review2.setReview2_user(review2_user);
 		}
+		request.setAttribute("review2", review2);
 		return "expert/review2Manage";
 	}
 	
@@ -42,6 +46,8 @@ public class Review2Controller {
 			@RequestParam(value = "rows", required = false) String rows,
 			@RequestParam(value = "review2_status", required = false) String review2_status,
 			@RequestParam(value = "review2_user", required = false) String review2_user) {
+		//System.out.println("1：" + review2_status);
+		//System.out.println("2:" + review2_user);
 		int currentPage = Integer.parseInt(page);
 		int pageSize = Integer.parseInt(rows);
 		Map<String, Object> map = review2Service.listReview2(review2_user, review2_status, currentPage, pageSize);
