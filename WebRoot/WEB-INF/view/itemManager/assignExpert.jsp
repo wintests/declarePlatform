@@ -11,10 +11,21 @@
 		a{
 			text-decoration:none;
 		}
+		
 		#searchBox{
 		    background: #fff8f8;
 		    font-size: 12px;
 		    width: 180px;
+		}
+		
+		.datagrid-header-row td{
+			background-color:#E0ECFF;
+			font-weight:bold;
+			height : 25px;
+		}
+		
+		.datagrid-btable tr{
+			height: 28px;
 		}
 	</style>
 	
@@ -25,10 +36,10 @@
 			$('#dg').datagrid(
 			{
 				//请求数据的url
-				url : '../../review1/listReview1.do?review1_status=2',
+				url : '../../review1/listReview1.do?review1_status=2&history_flag=1',
 				title : '当前列表',
 				rownumbers : true,
-				height : 805,
+				height : 800,
 				//载入提示信息
 				loadMsg : 'loading...',
 				//水平自动展开，如果设置此属性，则不会有水平滚动条，演示冻结列时，该参数不要设置
@@ -86,7 +97,11 @@
 			var selectedRows = $("#dg").datagrid("getSelections");
 			//确保被选中行只能为一行
 			if (selectedRows.length != 1) {
-				$.messager.alert("系统提示","请选择一条记录进行修改");
+				if(selectedRows.length  == 0) {
+					$.messager.alert("系统提示","请选择一条记录进行修改！","info");
+				} else {
+					$.messager.alert("系统提示","一次只能选择一条记录！","warning");
+				}
 				return;
 			}
 			//获取选中行
@@ -142,13 +157,13 @@
 				success : function(data) {
 					var data = JSON.parse(data);
 					if (data.state) {
-						$.messager.alert("系统提示", "分配专家成功");
+						$.messager.alert("系统提示", "恭喜您，分配专家成功！","info");
 						$("#fm2").form("reset");
 						$("#dlg2").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "分配专家失败");
+						$.messager.alert("系统提示", "分配专家失败，请重新操作！","error");
 						return;
 					}
 				}
@@ -273,7 +288,7 @@
 		
 		<table id="dg"></table>
 		
-		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="closed:true,buttons:'#dlg-buttons'">
+		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="iconCls:'icon-save',closed:true,buttons:'#dlg-buttons'">
 			<form id="fm" method="POST">
 				<input type="hidden" id="item_id" name="item_id"/>
 				<table cellspacing="8px">

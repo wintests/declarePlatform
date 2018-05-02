@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.qjz.declarePlatform.domain.Apply;
 import com.qjz.declarePlatform.domain.Review2;
 import com.qjz.declarePlatform.domain.User;
 import com.qjz.declarePlatform.service.Review2Service;
@@ -23,15 +24,15 @@ public class Review2Controller {
 	private Review2Service review2Service;
 	
 	@RequestMapping("/expert/review2Manage")
-	public String review2Manage(HttpServletRequest request,
-			@RequestParam(value = "review2_status", required = false) String review2_status) {
-		//request.setAttribute("review2_status", review2_status);
-		Review2 review2 = new Review2();
-		review2.setReview2_status(review2_status);
+	public String review2Manage(HttpServletRequest request, Review2 review2,
+			@RequestParam(value = "history_flag", required = false) String history_flag) {
+		/**
+		 * 传入的review2对象主要包括review2_user、review2_status字段
+		 */
+		request.setAttribute("history_flag", history_flag);
 		User user = (User)request.getSession().getAttribute("user");
 		if("4".equals(user.getUser_type())) {
 			String review2_user = user.getReal_name();
-			//request.setAttribute("review2_user", review2_user);
 			review2.setReview2_user(review2_user);
 		}
 		request.setAttribute("review2", review2);
@@ -44,13 +45,15 @@ public class Review2Controller {
 			//page第几页，rows每页多少行
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "rows", required = false) String rows,
-			@RequestParam(value = "review2_status", required = false) String review2_status,
-			@RequestParam(value = "review2_user", required = false) String review2_user) {
-		//System.out.println("1：" + review2_status);
-		//System.out.println("2:" + review2_user);
+			@RequestParam(value = "str", required = false) String str,
+			Apply apply, Review2 review2) {
+		/**
+		 * 传入的review2对象主要包括review2_user、review2_status字段
+		 * 传入的apply对象主要包括history_flag、item_type字段
+		 */
 		int currentPage = Integer.parseInt(page);
 		int pageSize = Integer.parseInt(rows);
-		Map<String, Object> map = review2Service.listReview2(review2_user, review2_status, currentPage, pageSize);
+		Map<String, Object> map = review2Service.listReview2(review2, apply, str, currentPage, pageSize);
 		return map;
 	}
 	

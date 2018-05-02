@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>评审专家界面</title>
+<title>立项审批管理</title>
 	<%@include file="../head.jspf"%>
 	<style type="text/css">
 		a{
@@ -17,6 +17,16 @@
 		    font-size: 12px;
 		    width: 180px;
 		}
+		
+		.datagrid-header-row td{
+			background-color:#E0ECFF;
+			font-weight:bold;
+			height : 25px;
+		}
+		
+		.datagrid-btable tr{
+			height: 28px;
+		}
 	</style>
 	
 </head>
@@ -26,10 +36,10 @@
 			$('#dg').datagrid(
 			{
 				//请求数据的url
-				url : '../../publicity/listPublicity.do?publicity_status=' + '${publicity_status }',
+				url : '../../publicity/listPublicity.do?publicity_status=' + '${publicity_status }' + '&history_flag=' + '${apply.history_flag}',
 				title : '当前列表',
 				rownumbers : true,
-				height : 805,
+				height : 800,
 				//载入提示信息
 				loadMsg : 'loading...',
 				//水平自动展开，如果设置此属性，则不会有水平滚动条，演示冻结列时，该参数不要设置
@@ -62,7 +72,7 @@
 	            			$("#dg").datagrid("hideColumn", "item_starttime");
 	            			$("#dg").datagrid("hideColumn", "item_deadline");
 	            			$("#dg").datagrid("hideColumn", "review2_user");
-	            			$("#dg").datagrid("hideColumn", "publicity_status");
+	            			//$("#dg").datagrid("hideColumn", "publicity_status");
 	            			$("#dg").datagrid("hideColumn", "publicity_grade");
 	            			$("#dg").datagrid("hideColumn", "publicity_time");
 	            			$("#dg").datagrid("hideColumn", "publicity_remark");
@@ -74,7 +84,7 @@
 		            }
 		        },
 				columns : [ [ 
-					{field : 'publicity_id',title : '立项序号',align : 'center',width : 100, hidden : true}, 
+					{field : 'publicity_id',title : '审批序号',align : 'center',width : 100, hidden : true}, 
 					{field : 'item_id',title : '项目编号',align : 'center',width : 100, hidden : true}, 
 					{field : 'item_name',title : '项目名称',align : 'center',width : 100}, 
 					{field : 'item_type',title : '项目类别',align : 'center',width : 100},
@@ -85,50 +95,14 @@
 					{field : 'review1_user',title : '推荐单位',align : 'center',width : 100},
 					{field : 'review2_user',title : '评审专家',align : 'center',width : 100},
 					{field : 'review2_score',title : '评审得分',align : 'center',width : 100, formatter : review2_scoreFormatter},
-					{field : 'publicity_status',title : '立项状态',align : 'center',width : 100, formatter : publicity_statusFormatter},
+					{field : 'publicity_status',title : '审批状态',align : 'center',width : 100, formatter : publicity_statusFormatter},
 					{field : 'publicity_grade',title : '立项等级',align : 'center',width : 100, formatter : publicity_gradeFormatter},
-					{field : 'publicity_time',title : '立项时间',align : 'center',width : 100, formatter : datetimeFormatter},
+					{field : 'publicity_time',title : '审批时间',align : 'center',width : 100, formatter : datetimeFormatter},
 					{field : 'publicity_remark',title : '备注',align : 'center',width : 100},
 					{field : 'option',title : '操作',align : 'center',width : 100,formatter : optionFormatter}, 
 				] ],
 			});
 		});
-		
-		function removeApply() {
-			var selectedRows = $("#dg").datagrid("getSelections");
-			//判断是否有选择的行
-			if (selectedRows.length == 0) {
-				$.messager.alert("系统提示","请选择要删除的数据");
-				return;
-			}
-			//定义选中 选中item_id数组
-			var ids = [];
-			//循环遍历将选中行的id push进入数组
-			for ( var i = 0; i < selectedRows.length; i++) {
-				ids.push(selectedRows[i].item_id);
-			}
-			//提示是否确认删除
-			$.messager.confirm("系统提示","您确定要删除选中的<font color=red>" + selectedRows.length + "</font>条数据么？",
-			function(flag) {
-				if (flag) {
-					$.post("${pageContext.request.contextPath }/apply/deleteApplyBatchs.do",
-					{
-						idsStr : ids.join(","),		//将ids数组中的所有元素转换一个字符串，传到后台
-					},
-					function(data) {
-						if (data) {
-							$.messager.alert("系统提示","批量删除成功！");
-							$("#dg").datagrid("unselectAll");
-							$("#dg").datagrid("reload");
-						} else {
-							$.messager.alert("系统提示","批量删除失败！");
-						}
-					},"json");
-				} else {
-					$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
-				}
-			});
-		}
 		
 		function reload() {
 			$("#dg").datagrid("reload");
@@ -160,13 +134,13 @@
 				success : function(data) {
 					var data = JSON.parse(data);
 					if (data.state) {
-						$.messager.alert("系统提示", "保存成功");
+						$.messager.alert("系统提示", "恭喜您，数据保存成功！", "info");
 						$("#fm").form("reset");
 						$("#dlg").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "保存失败");
+						$.messager.alert("系统提示", "数据保存失败，请重新操作！", "error");
 						return;
 					}
 				}
@@ -181,7 +155,7 @@
 		
 		function publicity_statusFormatter(value,row,index) {
 			if(value === "1") {
-				return "<a href='javascript:void(0);' onclick='changeReview("+index+")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/mini_edit.png'/><font color='purple'>待立项</font>";
+				return "<a href='javascript:void(0);' onclick='changeReview("+index+")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/mini_edit.png'/><font color='purple'>待审批</font>";
 			} else if(value === "2") {
 				return "<font color='green'>已立项</font>";
 			} else if(value === "3"){
@@ -302,11 +276,11 @@
 						publicity_remark : row.publicity_remark
 					},
 					function(data) {
-						if (data) {
-							$.messager.alert("系统提示","操作成功！");
+						if (data.state) {
+							$.messager.alert("系统提示","恭喜您，操作成功！", "info");
 							$("#dg").datagrid("reload");
 						} else {
-							$.messager.alert("系统提示","操作失败！");
+							$.messager.alert("系统提示","操作失败，请重新操作！", "error");
 						}
 					},"json");
 				} else {
@@ -351,11 +325,11 @@
 						item_id : item_id,
 					},
 					function(data) {
-						if (data) {
-							$.messager.alert("系统提示","删除成功！");
+						if (data.state) {
+							$.messager.alert("系统提示","恭喜您，数据删除成功！", "info");
 							$("#dg").datagrid("reload");
 						} else {
-							$.messager.alert("系统提示","删除失败！");
+							$.messager.alert("系统提示","数据删除失败，请重新操作！", "error");
 						}
 					},"json");
 				} else {
@@ -406,7 +380,7 @@
 		
 		<table id="dg"></table>
 		
-		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="closed:true,buttons:'#dlg-buttons'">
+		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="iconCls:'icon-save',closed:true,buttons:'#dlg-buttons'">
 			<form id="fm" method="POST">
 				<input type="hidden" id="publicity_id" name="publicity_id"/>
 				<input type="hidden" id="item_id" name="item_id"/>

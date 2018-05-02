@@ -166,6 +166,72 @@
 .icon-item_delete{
 	background:url('usericons/item_delete.png') no-repeat center center;
 }
+.icon-page_excel{
+	background:url('usericons/page_excel.png') no-repeat center center;
+}
+.icon-export{
+	background:url('usericons/export.png') no-repeat center center;
+}
+.icon-clear{
+	background:url('usericons/clear.png') no-repeat center center;
+}
+.icon-item_history{
+	background:url('usericons/item_history.png') no-repeat center center;
+}
+.icon-guide{
+	background:url('usericons/guide.png') no-repeat center center;
+}
+.icon-list_all{
+	background:url('usericons/list_all.png') no-repeat center center;
+}
+.icon-list_failure{
+	background:url('usericons/list_failure.png') no-repeat center center;
+}
+.icon-list_success{
+	background:url('usericons/list_success.png') no-repeat center center;
+}
+.icon-report_add{
+	background:url('usericons/report_add.png') no-repeat center center;
+}
+.icon-item_success{
+	background:url('usericons/item_success.png') no-repeat center center;
+}
+.icon-report_manage{
+	background:url('usericons/report_manage.png') no-repeat center center;
+}
+.icon-user_list{
+	background:url('usericons/user_list.png') no-repeat center center;
+}
+.icon-user_list1{
+	background:url('usericons/user_list1.png') no-repeat center center;
+}
+.icon-user_list2{
+	background:url('usericons/user_list2.png') no-repeat center center;
+}
+.icon-user_list3{
+	background:url('usericons/user_list3.png') no-repeat center center;
+}
+.icon-user_list4{
+	background:url('usericons/user_list4.png') no-repeat center center;
+}
+.icon-user_list5{
+	background:url('usericons/user_list5.png') no-repeat center center;
+}
+.icon-item_control{
+	background:url('usericons/item_control.png') no-repeat center center;
+}
+.icon-large_chart{
+	background:url('usericons/large_chart.png') no-repeat center center;
+}
+.icon-pie-chart{
+	background:url('usericons/pie-chart.png') no-repeat center center;
+}
+.icon-guide_edit{
+	background:url('usericons/guide_edit.png') no-repeat center center;
+}
+.icon-current{
+	background:url('usericons/current.png') no-repeat center center;
+}
 
 
 

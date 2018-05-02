@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.qjz.declarePlatform.domain.Apply;
 import com.qjz.declarePlatform.domain.Publicity;
 
 public interface PublicityDao {
@@ -16,14 +17,14 @@ public interface PublicityDao {
 	 * @param start 
 	 * @return
 	 */
-	public List<Map<String, Object>> listPublicity(@Param("status")String[] status, @Param("start")int start, @Param("pageSize")int pageSize);
+	public List<Map<String, Object>> listPublicity(@Param("status")String[] status, @Param("apply")Apply apply, @Param("str")String str, @Param("start")int start, @Param("pageSize")int pageSize);
 	
 	/**
 	 * 总记录数
 	 * @param status 
 	 * @return
 	 */
-	public Long count(@Param("status")String[] status);
+	public Long count(@Param("status")String[] status, @Param("apply")Apply apply, @Param("str")String str);
 
 	/**
 	 * 添加立项列表时，根据id得到其他表的基本信息

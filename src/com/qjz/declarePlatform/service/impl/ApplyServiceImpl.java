@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.qjz.declarePlatform.dao.ApplyDao;
+import com.qjz.declarePlatform.dao.ConfigDao;
 import com.qjz.declarePlatform.dao.ItemTypeDao;
 import com.qjz.declarePlatform.dao.Review1Dao;
 import com.qjz.declarePlatform.domain.Apply;
+import com.qjz.declarePlatform.domain.Config;
 import com.qjz.declarePlatform.domain.PageBean;
 import com.qjz.declarePlatform.service.ApplyService;
 
@@ -30,16 +32,18 @@ public class ApplyServiceImpl implements ApplyService {
 	
 	@Resource(name="itemTypeDao")
 	private ItemTypeDao itemTypeDao;
+	
+	@Resource(name="configDao")
+	private ConfigDao configDao;
 
 	@Override
-	public Map<String, Object> listApply(String item_submit, String item_status, Apply apply, String str, int currentPage,
-			int pageSize) {
+	public Map<String, Object> listApply(Apply apply, String str, int currentPage, int pageSize) {
 		//定义分页PageBean
 		PageBean pageBean = new PageBean(currentPage, pageSize);
 		//总记录数
-		Long total = applyDao.count(item_submit, item_status, apply, str);
+		Long total = applyDao.count(apply, str);
 		//得到查询出来的数据
-		List<Apply> list = applyDao.listApply(item_submit, item_status, apply, str, pageBean.getStart(), pageBean.getPageSize());
+		List<Map<String, Object>> list = applyDao.listApply(apply, str, pageBean.getStart(), pageBean.getPageSize());
 		try {
 			if(list.size() == 0) {
 				throw new RuntimeException("未查询到相关数据");
@@ -65,6 +69,8 @@ public class ApplyServiceImpl implements ApplyService {
 	@Override
 	@Transactional
 	public void addApply(Apply apply) {
+		//手动将history_flag设置为“1”,表示该项目为当前正在申报
+		apply.setHistory_flag("1");
 		int i = applyDao.addApply(apply);
 		if(i == 0) {
 			throw new RuntimeException("添加项目申请失败！");
@@ -138,6 +144,21 @@ public class ApplyServiceImpl implements ApplyService {
 			}
 		} else {
 			throw new RuntimeException("批量提交项目申报书失败！");
+		}
+	}
+
+	@Override
+	@Transactional
+	public void setHistory() {
+		List<Config> list = configDao.show();
+		if(list != null) {
+			String config_flag = list.get(0).getConfig_flag();
+			if("5".equals(config_flag)) {	//注意config_flag为String引用类型，config_flag的值为5，但config_flag不等于“5”
+				int i = applyDao.setHistory();
+				if(i == 0) {
+					throw new RuntimeException("项目标记为历史记录失败！");
+				}
+			}
 		}
 	}
 

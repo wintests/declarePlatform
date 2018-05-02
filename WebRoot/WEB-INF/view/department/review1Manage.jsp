@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>用户管理界面</title>
+<title>系部审核管理</title>
 	<%@include file="../head.jspf"%>
 	<style type="text/css">
 		a{
@@ -17,6 +17,16 @@
 		    font-size: 12px;
 		    width: 180px;
 		}
+		
+		.datagrid-header-row td{
+			background-color:#E0ECFF;
+			font-weight:bold;
+			height : 25px;
+		}
+		
+		.datagrid-btable tr{
+			height: 28px;
+		}
 	</style>
 	
 </head>
@@ -26,10 +36,10 @@
 			$('#dg').datagrid(
 			{
 				//请求数据的url
-				url : '../../review1/listReview1.do?review1_status=' + '${review1_status }' + '&user_department=' + '${user_department }',
+				url : '../../review1/listReview1.do?review1_status=' + '${review1_status }' + '&user_department=' + '${apply.user_department }' + '&history_flag=' + '${apply.history_flag }',
 				title : '当前列表',
 				rownumbers : true,
-				height : 805,
+				height : 800,
 				//载入提示信息
 				loadMsg : 'loading...',
 				//水平自动展开，如果设置此属性，则不会有水平滚动条，演示冻结列时，该参数不要设置
@@ -91,6 +101,7 @@
 					{field : 'review1_operator',title : '操作人员',align : 'center',width : 100},
 					{field : 'review1_time',title : '审核时间',align : 'center',width : 100, formatter : datetimeFormatter},
 					{field : 'review1_remark',title : '备注',align : 'center',width : 100},
+					{field : 'history_flag',title : '时间标志',align : 'center',width : 100},
 					{field : 'option',title : '操作',align : 'center',width : 100,formatter : optionFormatter}, 
 				] ],
 			});
@@ -126,14 +137,14 @@
 				success : function(data) {
 					var data = JSON.parse(data);
 					if (data.state) {
-						$.messager.alert("系统提示", "保存成功","info");
-						alert(1);
+						$.messager.alert("系统提示", "恭喜您，数据保存成功！","info");
+						//alert(1);
 						$("#fm").form("reset");
 						$("#dlg").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "保存失败","info");
+						$.messager.alert("系统提示", "数据保存失败，请重新操作！","error");
 						return;
 					}
 				}
@@ -272,7 +283,7 @@
 		
 		<table id="dg"></table>
 		
-		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="closed:true,buttons:'#dlg-buttons'">
+		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="iconCls:'icon-save',closed:true,buttons:'#dlg-buttons'">
 			<form id="fm" method="POST">
 				<input type="hidden" id="review1_id" name="review1_id"/>
 				<input type="hidden" id="item_id" name="item_id"/>

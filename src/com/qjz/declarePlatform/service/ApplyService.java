@@ -15,7 +15,7 @@ public interface ApplyService {
 	 * @param apply 
 	 * @return
 	 */
-	public Map<String, Object> listApply(String item_submit, String item_status, Apply apply, String str, int currentPage, int pageSize);
+	public Map<String, Object> listApply(Apply apply, String str, int currentPage, int pageSize);
 
 	/**
 	 * 更新申报项目信息
@@ -56,5 +56,10 @@ public interface ApplyService {
 	 * @param item_status 
 	 */
 	public void submitApplyBatchs(String idsStr, String item_submit);
+
+	/**
+	 * 将当前申报项目标记为历史记录
+	 */
+	public void setHistory();
 
 }

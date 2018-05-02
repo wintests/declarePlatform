@@ -9,8 +9,9 @@ public interface ConfigDao {
 	/**
 	 * 系统控制开关
 	 * @param config_flag
+	 * @return 
 	 */
-	public void updateConfig(Config config);
+	public int updateConfig(Config config);
 
 	/**
 	 * 显示信息
@@ -18,6 +19,10 @@ public interface ConfigDao {
 	 */
 	public List<Config> show();
 
+	/**
+	 * 总记录数
+	 * @return
+	 */
 	public Long count();
 
 }

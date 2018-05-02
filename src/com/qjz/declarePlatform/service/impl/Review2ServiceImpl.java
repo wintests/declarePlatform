@@ -1,5 +1,6 @@
 package com.qjz.declarePlatform.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.qjz.declarePlatform.dao.ApplyDao;
+import com.qjz.declarePlatform.dao.ConfigDao;
 import com.qjz.declarePlatform.dao.PublicityDao;
 import com.qjz.declarePlatform.dao.Review2Dao;
+import com.qjz.declarePlatform.domain.Apply;
+import com.qjz.declarePlatform.domain.Config;
 import com.qjz.declarePlatform.domain.PageBean;
 import com.qjz.declarePlatform.domain.Publicity;
 import com.qjz.declarePlatform.domain.Review2;
@@ -28,25 +32,46 @@ public class Review2ServiceImpl implements Review2Service {
 	
 	@Resource(name="publicityDao")
 	private PublicityDao publicityDao;
+	
+	@Resource(name="configDao")
+	private ConfigDao configDao;
 
 	@Override
-	public Map<String, Object> listReview2(String review2_user, String review2_status, int currentPage, int pageSize) {
+	public Map<String, Object> listReview2(Review2 review2, Apply apply, String str, int currentPage, int pageSize) {
 		//定义分页pageBean
 		PageBean pageBean = new PageBean(currentPage, pageSize);
-		//总记录数
-		Long total = review2Dao.count(review2_user, review2_status);
-		//得到查询的数据
-		List<Map<String, Object>> list = review2Dao.listReview2(review2_user, review2_status, pageBean.getStart(), pageBean.getPageSize());
-		try {
-			if(list.size() == 0) {
-				throw new RuntimeException("未查询到相关数据");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		//new一个map，用来存储total和rows，以返回到前台
 		Map<String, Object> map = new HashMap<String, Object>();
+		Long total = 0L;
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		
+		List<Config> lConfigs = configDao.show();
+		if(lConfigs != null && apply != null) {
+			String config_flag = lConfigs.get(0).getConfig_flag();
+			String history_flag = apply.getHistory_flag();
+			/**
+			 * 1 判断config_flag项目进度是否为专家评审阶段，如果不是则无法获取到数据
+			 * 2 如果history_flag为"2"，则表示为历史记录，可以获取到数据
+			 */
+			if("3".equals(config_flag) || "2".equals(history_flag)) {
+				//总记录数
+				total = review2Dao.count(review2, apply, str);
+				//得到查询的数据
+				list = review2Dao.listReview2(review2, apply, str, pageBean.getStart(), pageBean.getPageSize());
+				try {
+					if(list.size() == 0) {
+						throw new RuntimeException("未查询到相关数据");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		map.put("total", total);
 		map.put("rows", list);
+		System.out.println(map);
 		return map;
 	}
 

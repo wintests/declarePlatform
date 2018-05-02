@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>用户管理界面</title>
+<title>用户信息管理</title>
 	<%@include file="../head.jspf"%>
 	<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/js/userManage.js"></script> --%>
 	<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/js/Combobox.js"></script> --%>
@@ -19,6 +19,15 @@
 		    width: 180px;
 		}
 		
+		.datagrid-header-row td{
+			background-color:#E0ECFF;
+			font-weight:bold;
+			height : 25px;
+		}
+		
+		.datagrid-btable tr{
+			height: 28px;
+		}
 	</style>
 </head>
 	<script type="text/javascript">
@@ -55,7 +64,7 @@
 				url : '../../user/findUserByType.do?user_type=' + '${user_type}',
 				title : '当前列表',
 				rownumbers : true,
-				height : 805,
+				height : 800,
 				//singleSelect : true,
 				//载入提示信息
 				loadMsg : 'loading...',
@@ -104,7 +113,7 @@
 						//console.log(selectedRows)
 						//确保被选中行只能为一行
 						if (selectedRows.length != 1) {
-							$.messager.alert("系统提示","请选择一个要修改的用户");
+							$.messager.alert("系统提示","请选择一个要修改的用户！","info");
 							return;
 						}
 						//获取选中行user_name
@@ -128,7 +137,7 @@
 						//console.log(selectedRows);
 						//判断是否有选择的行
 						if (selectedRows.length == 0) {
-							$.messager.alert("系统提示","请选择要删除的数据");
+							$.messager.alert("系统提示","请选择要删除的数据！","info");
 							return;
 						}
 						//定义选中 选中user_name数组
@@ -148,11 +157,11 @@
 								},
 								function(data) {
 									//console.log(data);
-									if (data) {
-										$.messager.alert("系统提示","数据删除成功！");
+									if (data.state) {
+										$.messager.alert("系统提示","恭喜您，数据删除成功！", "info");
 										$("#dg").datagrid("reload");
 									} else {
-										$.messager.alert("系统提示","数据删除失败！");
+										$.messager.alert("系统提示","数据删除失败，请重新操作！", "error");
 									}
 								},"json");
 							} else {
@@ -211,7 +220,11 @@
 			//console.log(selectedRows)
 			//确保被选中行只能为一行
 			if (selectedRows.length != 1) {
-				$.messager.alert("系统提示","请选择一个要修改的用户");
+				if(selectedRows.length  == 0) {
+					$.messager.alert("系统提示","请选择一个用户进行修改！","info");
+				} else {
+					$.messager.alert("系统提示","一次只能选择一个用户！","warning");
+				}
 				return;
 			}
 			//获取选中行user_name
@@ -229,7 +242,7 @@
 			var selectedRows = $("#dg").datagrid("getSelections");
 			//判断是否有选择的行
 			if (selectedRows.length == 0) {
-				$.messager.alert("系统提示","请选择要删除的数据");
+				$.messager.alert("系统提示","请至少选择一条要删除的数据！", "info");
 				return;
 			}
 			//定义选中 选中user_name数组
@@ -248,11 +261,11 @@
 					},
 					function(data) {
 						if (data) {
-							$.messager.alert("系统提示","数据删除成功！");
+							$.messager.alert("系统提示","恭喜您，数据删除成功！", "info");
 							$("#dg").datagrid("unselectAll");
 							$("#dg").datagrid("reload");
 						} else {
-							$.messager.alert("系统提示","数据删除失败！");
+							$.messager.alert("系统提示","数据删除失败，请重新操作！", "error");
 						}
 					},"json");
 				} else {
@@ -265,7 +278,7 @@
 			var selectedRows = $("#dg").datagrid("getSelections");
 			//判断是否有选择的行
 			if (selectedRows.length == 0) {
-				$.messager.alert("系统提示","请选择需要启用的用户");
+				$.messager.alert("系统提示","请选择需要启用的用户！", "info");
 				return;
 			}
 			//定义选中 选中user_name数组
@@ -286,7 +299,7 @@
 			var selectedRows = $("#dg").datagrid("getSelections");
 			//判断是否有选择的行
 			if (selectedRows.length == 0) {
-				$.messager.alert("系统提示","请选择需要禁用的用户");
+				$.messager.alert("系统提示","请选择需要禁用的用户！", "info");
 				return;
 			}
 			//定义选中 选中user_name数组
@@ -311,12 +324,12 @@
 					signln_valid : signln_valid
 				},
 				function(data) {
-					if (data) {
-						$.messager.alert("系统提示","更改状态成功！");
+					if (data.state) {
+						$.messager.alert("系统提示","恭喜您，更改状态成功！", "info");
 						$("#dg").datagrid("unselectAll");
 						$("#dg").datagrid("reload");
 					} else {
-						$.messager.alert("系统提示","更改状态失败！");
+						$.messager.alert("系统提示","更改状态失败，请重新操作！", "error");
 					}
 				},"json");
 			} else {
@@ -355,13 +368,13 @@
 					//var data = eval("(" + data + ")"); //将json格式的data转换成js对象
 					var data = JSON.parse(data);
 					if (data.state) {
-						$.messager.alert("系统提示", "保存成功");
+						$.messager.alert("系统提示", "恭喜您，数据保存成功！", "info");
 						$("#fm").form("reset");
 						$("#dlg").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "保存失败");
+						$.messager.alert("系统提示", "数据保存失败，请重新操作！", "error");
 						return;
 					}
 				}
@@ -468,12 +481,12 @@
 					signln_valid : signln_valid
 				},
 				function(data) {
-					if (data) {
-						$.messager.alert("系统提示","更改状态成功！");
+					if (data.state) {
+						$.messager.alert("系统提示","恭喜您，更改状态成功！", "info");
 						$("#dg").datagrid("unselectAll");
 						$("#dg").datagrid("reload");
 					} else {
-						$.messager.alert("系统提示","更改状态失败！");
+						$.messager.alert("系统提示","更改状态失败，请重新操作！", "error");
 					}
 				},"json");
 			} else {
@@ -528,10 +541,10 @@
 					},
 					function(data) {
 						if (data) {
-							$.messager.alert("系统提示","删除成功！");
+							$.messager.alert("系统提示","恭喜您，数据删除成功！", "info");
 							$("#dg").datagrid("reload");
 						} else {
-							$.messager.alert("系统提示","删除失败！");
+							$.messager.alert("系统提示","数据删除失败，请重新操作！", "error");
 						}
 					},"json");
 				} else {
@@ -600,9 +613,7 @@
 		
 		<table id="dg"></table>
 		
-		<div id="dlg" class="easyui-dialog"
-			style="width:500px; height:480px; padding:10px 20px"
-			data-options="closed:true,buttons:'#dlg-buttons'">
+		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="iconCls:'icon-save',closed:true,buttons:'#dlg-buttons'">
 			<form id="fm" method="POST">
 				<input type="hidden" id="user_id" name="user_id"/>
 				<input type="hidden" name="user_name"/>

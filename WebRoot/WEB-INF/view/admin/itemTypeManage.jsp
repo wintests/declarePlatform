@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>用户管理界面</title>
+<title>项目类型管理</title>
 	<%@include file="../head.jspf"%>
 	<style type="text/css">
 		a{
@@ -15,6 +15,16 @@
 		    background: #fff8f8;
 		    font-size: 12px;
 		    width: 180px;
+		}
+		
+		.datagrid-header-row td{
+			background-color:#E0ECFF;
+			font-weight:bold;
+			height : 25px;
+		}
+		
+		.datagrid-btable tr{
+			height: 28px;
 		}
 		
 	</style>
@@ -28,7 +38,7 @@
 				url : '../../itemType/listItemType.do',
 				title : '当前列表',
 				rownumbers : true,
-				height : 805,
+				height : 800,
 				//singleSelect : true,
 				//载入提示信息
 				loadMsg : 'loading...',
@@ -84,7 +94,11 @@
 			var selectedRows = $("#dg").datagrid("getSelections");
 			//确保被选中行只能为一行
 			if (selectedRows.length != 1) {
-				$.messager.alert("系统提示","请选择一条数据进行修改","warning");
+				if(selectedRows.length  == 0) {
+					$.messager.alert("系统提示","请选择一条记录进行修改！","info");
+				} else {
+					$.messager.alert("系统提示","一次只能选择一条记录！","warning");
+				}
 				return;
 			}
 			//获取选中行
@@ -100,7 +114,7 @@
 			var selectedRows = $("#dg").datagrid("getSelections");
 			//判断是否有选择的行
 			if (selectedRows.length == 0) {
-				$.messager.alert("系统提示","请选择要删除的分类");
+				$.messager.alert("系统提示","请选择要删除的分类！", "info");
 				return;
 			}
 			var ids = [];
@@ -123,12 +137,12 @@
 							idsStr : ids.join(","),
 						},
 						function(data) {
-							if (data) {
-								$.messager.alert("系统提示","批量删除分类成功！","info");
+							if (data.state) {
+								$.messager.alert("系统提示","恭喜您，批量删除分类成功！","info");
 								$("#dg").datagrid("unselectAll");
 								$("#dg").datagrid("reload");
 							} else {
-								$.messager.alert("系统提示","批量删除分类失败！","error");
+								$.messager.alert("系统提示","批量删除分类失败，请重新操作！","error");
 							}
 						},"json");
 					} else {
@@ -163,13 +177,13 @@
 				success : function(data) {
 					var data = JSON.parse(data);	//将json格式的data转换成js对象
 					if (data.state) {
-						$.messager.alert("系统提示", "保存成功","info");
+						$.messager.alert("系统提示", "恭喜您，数据保存成功！","info");
 						$("#fm").form("reset");
 						$("#dlg").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "保存失败","error");
+						$.messager.alert("系统提示", "数据保存失败，请重新操作！","error");
 						return;
 					}
 				}
@@ -244,10 +258,10 @@
 						},
 						function(data) {
 							if (data) {
-								$.messager.alert("系统提示","项目类型删除成功！","info");
+								$.messager.alert("系统提示","恭喜您，项目类型删除成功！","info");
 								$("#dg").datagrid("reload");
 							} else {
-								$.messager.alert("系统提示","项目类型删除失败！","error");
+								$.messager.alert("系统提示","项目类型删除失败，请重新操作！","error");
 							}
 						},"json");
 					} else {
@@ -277,9 +291,7 @@
 		
 		<table id="dg"></table>
 		
-		<div id="dlg" class="easyui-dialog"
-			style="width:350px; height:170px; padding:10px 20px"
-			data-options="closed:true,buttons:'#dlg-buttons'">
+		<div id="dlg" class="easyui-dialog" style="width:350px; height:170px; padding:10px 20px" data-options="iconCls:'icon-save',closed:true,buttons:'#dlg-buttons'">
 			<form id="fm" method="POST">
 				<input type="hidden" id="itemType_id" name="itemType_id"/>
 				<table cellspacing="8px">

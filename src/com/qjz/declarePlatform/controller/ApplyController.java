@@ -24,12 +24,11 @@ public class ApplyController {
 	
 	//跳转到页面
 	@RequestMapping("/reporter/applyManage")
-	public String applyManage(HttpServletRequest request,
-			@RequestParam(value = "item_submit", required = false) String item_submit,
-			@RequestParam(value = "item_status", required = false) String item_status) {
-		Apply apply = new Apply();
-		apply.setItem_submit(item_submit);
-		apply.setItem_status(item_status);
+	public String applyManage(HttpServletRequest request, Apply apply) {
+		/**
+		 * 传入的apply对象主要包括以下字段：
+		 * 		history_flag、item_status、item_submit 
+		 */
 		User user = (User) request.getSession().getAttribute("user");
 		if(user != null) {
 			if("5".equals(user.getUser_type())) {
@@ -48,33 +47,24 @@ public class ApplyController {
 			//page第几页，rows每页多少行
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "rows", required = false) String rows,
-			@RequestParam(value = "item_submit", required = false) String item_submit,
-			@RequestParam(value = "item_user", required = false) String item_user,
-			@RequestParam(value = "item_status", required = false) String item_status,
-			@RequestParam(value = "apply_year", required = false) String apply_year,
-			@RequestParam(value = "item_type", required = false) String item_type,
-			@RequestParam(value = "str", required = false) String str) {
-//		int currentPage = Integer.parseInt(page);
-//		int pageSize = Integer.parseInt(rows);
-		
-		Apply apply = new Apply();
-		apply.setApply_year(apply_year);
-		apply.setItem_type(item_type);
-		apply.setItem_user(item_user);
-		
-		if(item_submit == null || item_status == null) {
-			item_submit = "";
-			item_status = "";
-		}
-		int currentPage = 1;	//默认当前页，即刚进入系统时默认第一页
+			@RequestParam(value = "str", required = false) String str,
+			Apply apply) {
+		/**
+		 * 传入的apply对象主要包括以下字段：
+		 * 		history_flag、item_status、item_submit、item_user、item_type、apply_year 
+		 */
+		//easyui datagrid可以设置默认的page和rows，所以可以直接进行字符串转整数处理
+		/*int currentPage = 1;	//默认当前页，即刚进入系统时默认第一页
 		if(page != null) {
 			currentPage = Integer.parseInt(page);
 		}
 		int pageSize = 5;	//默认每页显示条数，即刚进入系统时每页显示10条记录
 		if(rows != null) {
 			pageSize = Integer.parseInt(rows);
-		}
-		Map<String, Object> map = applyService.listApply(item_submit, item_status, apply, str, currentPage, pageSize);
+		}*/
+		int currentPage = Integer.parseInt(page);
+		int pageSize = Integer.parseInt(rows);
+		Map<String, Object> map = applyService.listApply(apply, str, currentPage, pageSize);
 		return map;
 	}
 	
@@ -123,6 +113,14 @@ public class ApplyController {
 	@ResponseBody
 	public JsonResult submitApplyBatchs(String idsStr, String item_submit) {
 		applyService.submitApplyBatchs(idsStr, item_submit);
+		return new JsonResult();
+	}
+	
+	//标记为历史记录
+	@RequestMapping("/setHistory")
+	@ResponseBody
+	public JsonResult setHistory() {
+		applyService.setHistory();
 		return new JsonResult();
 	}
 

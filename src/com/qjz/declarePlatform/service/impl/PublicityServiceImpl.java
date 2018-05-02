@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.qjz.declarePlatform.dao.ApplyDao;
 import com.qjz.declarePlatform.dao.PublicityDao;
+import com.qjz.declarePlatform.domain.Apply;
 import com.qjz.declarePlatform.domain.PageBean;
 import com.qjz.declarePlatform.domain.Publicity;
 import com.qjz.declarePlatform.service.PublicityService;
@@ -25,17 +26,17 @@ public class PublicityServiceImpl implements PublicityService {
 	private ApplyDao applyDao;
 
 	@Override
-	public Map<String, Object> listPublicity(String publicity_status, int currentPage, int pageSize) {
-		//review1_status可能为1(未审核)，也可能是"2,3"(已审核，包括审核通过和审核不通过)
+	public Map<String, Object> listPublicity(String publicity_status, Apply apply, String str, int currentPage, int pageSize) {
+		//publicity_status可能为1(未审批)，也可能是"2,3"(已审批，包括成功立项和立项失败)
 		String[] status = publicity_status.split(",");
 		if(publicity_status == "")
 			status = null;
 		//定义分页PageBean
 		PageBean pageBean = new PageBean(currentPage, pageSize);
 		//总记录数
-		Long total = publicityDao.count(status);
+		Long total = publicityDao.count(status, apply, str);
 		//得到查询的数据
-		List<Map<String, Object>> list = publicityDao.listPublicity(status, pageBean.getStart(), pageBean.getPageSize());
+		List<Map<String, Object>> list = publicityDao.listPublicity(status, apply, str, pageBean.getStart(), pageBean.getPageSize());
 		try {
 			if(list.size() == 0) {
 				throw new RuntimeException("未查询到相关数据");
@@ -64,18 +65,15 @@ public class PublicityServiceImpl implements PublicityService {
 	public void updatePublicity(Publicity publicity) {
 		String publicity_status = publicity.getPublicity_status();
 		String item_status = "4";
+		int i = publicityDao.updatePublicity(publicity);
 		if("2".equals(publicity_status)) {	//立项通过
-			int i = publicityDao.updatePublicity(publicity);
-			if(i == 0) {
-				throw new RuntimeException("立项失败");
-			}
 			item_status = "5";
 		} else if("3".equals(publicity_status)) {
 			item_status = "6";
 		}
 		int j = applyDao.changeStatus(publicity.getItem_id(), item_status);
-		if(j == 0) {
-			throw new RuntimeException("更新项目状态失败");
+		if(i == 0 && j == 0) {
+			throw new RuntimeException("立项审查失败");
 		}
 	}
 

@@ -17,11 +17,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				#{review1_status}
 			</foreach>
 		</if>
-		<if test="user_department != null and user_department != ''">
-			AND apply.user_department = #{user_department}
-		</if>
-		<if test="item_type != null and item_type != ''">
-			AND apply.item_type = #{item_type}
+		<if test="apply != null">
+			<if test="apply.user_department != null and apply.user_department != ''">
+				AND apply.user_department = #{apply.user_department}
+			</if>
+			<if test="apply.item_type != null and apply.item_type != ''">
+				AND apply.item_type = #{apply.item_type}
+			</if>
+			<if test="apply.history_flag != null and apply.history_flag != ''">
+				AND history_flag = #{apply.history_flag}
+			</if>
 		</if>
 		<if test="str != null and str != ''">
 			AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%')
@@ -40,11 +45,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				#{review1_status}
 			</foreach>
 		</if>
-		<if test="user_department != null and user_department != ''">
-			AND apply.user_department = #{user_department}
-		</if>
-		<if test="item_type != null and item_type != ''">
-			AND apply.item_type = #{item_type}
+		<if test="apply != null">
+			<if test="apply.user_department != null and apply.user_department != ''">
+				AND apply.user_department = #{apply.user_department}
+			</if>
+			<if test="apply.item_type != null and apply.item_type != ''">
+				AND apply.item_type = #{apply.item_type}
+			</if>
+			<if test="apply.history_flag != null and apply.history_flag != ''">
+				AND history_flag = #{apply.history_flag}
+			</if>
 		</if>
 		<if test="str != null and str != ''">
 			AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%')

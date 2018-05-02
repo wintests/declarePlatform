@@ -5,29 +5,30 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.qjz.declarePlatform.domain.Apply;
 import com.qjz.declarePlatform.domain.Review1;
 
 public interface Review1Dao {
 	
 	/**
 	 * 显示系部审核列表
-	 * @param status 
-	 * @param str 
-	 * @param item_type 
-	 * @param pageSize 
-	 * @param start 
+	 * @param status
+	 * @param apply
+	 * @param str
+	 * @param start
+	 * @param pageSize
 	 * @return
 	 */
-	public List<Map<String, Object>> listReview1(@Param("status")String[] status, @Param("user_department")String user_department, @Param("item_type")String item_type, @Param("str")String str, @Param("start")int start, @Param("pageSize")int pageSize);
+	public List<Map<String, Object>> listReview1(@Param("status")String[] status, @Param("apply")Apply apply, @Param("str")String str, @Param("start")int start, @Param("pageSize")int pageSize);
 	
 	/**
 	 * 得到总记录数
-	 * @param status 
-	 * @param str 
-	 * @param item_type 
+	 * @param status
+	 * @param apply
+	 * @param str
 	 * @return
 	 */
-	public Long count(@Param("status")String[] status, @Param("user_department")String user_department, @Param("item_type")String item_type, @Param("str")String str);
+	public Long count(@Param("status")String[] status, @Param("apply")Apply apply, @Param("str")String str);
 
 	/**
 	 * 新增审核项目

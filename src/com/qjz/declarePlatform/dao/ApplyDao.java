@@ -1,6 +1,7 @@
 package com.qjz.declarePlatform.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -10,25 +11,21 @@ public interface ApplyDao {
 	
 	/**
 	 * 显示所有申报项目
-	 * @param item_submit
-	 * @param item_status
 	 * @param apply
 	 * @param str
 	 * @param start
 	 * @param pageSize
 	 * @return
 	 */
-	public List<Apply> listApply(@Param("item_submit")String item_submit, @Param("item_status")String item_status, @Param("apply")Apply apply, @Param("str")String str, @Param("start")int start, @Param("pageSize")int pageSize);
+	public List<Map<String, Object>> listApply(@Param("apply")Apply apply, @Param("str")String str, @Param("start")int start, @Param("pageSize")int pageSize);
 	
 	/**
 	 * 申报项目总数
-	 * @param item_submit
-	 * @param item_status
 	 * @param apply
 	 * @param str
 	 * @return
 	 */
-	public Long count(@Param("item_submit")String item_submit, @Param("item_status")String item_status, @Param("apply")Apply apply, @Param("str")String str);
+	public Long count(@Param("apply")Apply apply, @Param("str")String str);
 
 	/**
 	 * 更新项目信息
@@ -80,5 +77,11 @@ public interface ApplyDao {
 	 * @return
 	 */
 	public int changeStatus(@Param("item_id")Integer item_id, @Param("item_status")String item_status);
+
+	/**
+	 * 设置时间标志
+	 * @return
+	 */
+	public int setHistory();
 
 }

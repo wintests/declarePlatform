@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>用户管理界面</title>
+<title>用户申报管理</title>
 	<%@include file="../head.jspf"%>
 	<style type="text/css">
 		a{
@@ -19,6 +19,16 @@
 		    font-size: 12px;
 		    width: 180px;
 		}
+		
+		.datagrid-header-row td{
+			background-color:#E0ECFF;
+			font-weight:bold;
+			height : 25px;
+		}
+		
+		.datagrid-btable tr{
+			height: 28px;
+		}
 	</style>
 	
 </head>
@@ -28,10 +38,10 @@
 			$('#dg').datagrid(
 			{
 				//请求数据的url
-				url : '../../apply/listApply.do?item_submit=' + '${apply.item_submit}' + '&item_status=' + '${apply.item_status}' + '&item_user=' + '${apply.item_user}',
+				url : '../../apply/listApply.do?item_submit=' + '${apply.item_submit}' + '&item_status=' + '${apply.item_status}' + '&item_user=' + '${apply.item_user}' + '&history_flag=' + '${apply.history_flag}',
 				title : '当前列表',
 				rownumbers : true,
-				height : 805,
+				height : 800,
 				//载入提示信息
 				loadMsg : 'loading...',
 				//水平自动展开，如果设置此属性，则不会有水平滚动条，演示冻结列时，该参数不要设置
@@ -55,16 +65,29 @@
 				] ],
 				onLoadSuccess: function (data) {
 		            if (data.total != 0) {
-		            	var array = [];
+		            	var array1 = [];
+		            	var array2 = [];
 		            	for(var i = 0 ; i < data.rows.length; i++) {
-		            		if(data.rows[i].apply_time != null)
-		            			array.push(data.rows[i].apply_time);
+		            	//console.log(data.row[i].apply_time);
+		            		if(data.rows[i].apply_time != null) {
+		            			//console.log(typeof data.rows[i].history_flag);
+		            			array1.push(data.rows[i].apply_time);
+		            			if(data.rows[i].history_flag === "2") {
+		            				array2.push(data.rows[i].history_flag);
+		            			}
+		            		}
 		            	}
-	            		if(array.length == 0) {
+	            		if(array1.length == 0) {
 	            			$("#dg").datagrid("hideColumn", "apply_time");
 	            			$("#dg").datagrid("hideColumn", "item_status");
+	            			$("#dg").datagrid("hideColumn", "item_starttime");
+	            			$("#dg").datagrid("hideColumn", "item_deadline");
 	            		} else {
 	            			//$("#dg").datagrid("hideColumn", "item_submit");
+	            			if(array2.length != 0) {
+	            				$("#dg").datagrid("hideColumn", "option");
+	            				$("#addApply").hide();
+	            			}
 	            		}
 		            } else {
 		            	$.messager.alert("提示框","未查询到相关数据！", "info");
@@ -74,15 +97,17 @@
 					{field : 'item_id',title : '项目编号',align : 'center',width : 100, hidden : true}, 
 					{field : 'item_name',title : '项目名称',align : 'center',width : 100}, 
 					{field : 'item_type',title : '项目类别',align : 'center',width : 100},
-					{field : 'item_user',title : '项目申报人',align : 'center',width : 100}, 
-					{field : 'user_department',title : '所属系部',align : 'center',width : 100},
+					{field : 'item_user',title : '项目申报人',align : 'center',width : 100},
+					{field : 'user_title',title : '申报人职称',align : 'center',width : 100},
 					{field : 'apply_year',title : '申报年份',align : 'center',width : 100},
-					{field : 'item_starttime',title : '开始日期',align : 'center',width : 100, formatter : dateFormatter}, 
-					{field : 'item_deadline',title : '截止日期',align : 'center',width : 100, formatter : dateFormatter}, 
+					{field : 'user_department',title : '所属系部',align : 'center',width : 100},
+					{field : 'item_starttime',title : '项目起始日期',align : 'center',width : 100, formatter : dateFormatter}, 
+					{field : 'item_deadline',title : '项目截止日期',align : 'center',width : 100, formatter : dateFormatter}, 
 					{field : 'item_submit',title : '提交状态',align : 'center',width : 100, formatter : item_submitFormatter}, 
 					{field : 'apply_time',title : '提交时间',align : 'center',width : 100, formatter : datetimeFormatter}, 
 					{field : 'item_status',title : '当前状态',align : 'center',width : 100, formatter : item_statusFormatter}, 
 					{field : 'item_description',title : '项目描述',align : 'center',width : 100}, 
+					{field : 'history_flag',title : '时间标志',align : 'center',width : 100, hidden : true}, 
 					{field : 'option',title : '操作',align : 'center',width : 100,formatter : optionFormatter}, 
 				] ],
 			});
@@ -102,11 +127,16 @@
 			var selectedRows = $("#dg").datagrid("getSelections");
 			//确保被选中行只能为一行
 			if (selectedRows.length != 1) {
-				$.messager.alert("系统提示","请选择一条记录进行修改");
+				if(selectedRows.length  == 0) {
+					$.messager.alert("系统提示","请选择一条记录进行修改！","info");
+				} else {
+					$.messager.alert("系统提示","一次只能选择一条记录！","warning");
+				}
 				return;
 			}
 			//获取选中行
 			var row = selectedRows[0];
+			console.log(row)
 			row.item_starttime = dateFormatter(row.item_starttime);
 			row.item_deadline = dateFormatter(row.item_deadline);
 			//打开对话框并且设置标题
@@ -121,7 +151,7 @@
 			var selectedRows = $("#dg").datagrid("getSelections");
 			//判断是否有选择的行
 			if (selectedRows.length == 0) {
-				$.messager.alert("系统提示","请选择要删除的数据");
+				$.messager.alert("系统提示","请您至少选择一条要删除的数据！","info");
 				return;
 			}
 			//定义选中 选中item_id数组
@@ -139,12 +169,12 @@
 						idsStr : ids.join(","),		//将ids数组中的所有元素转换一个字符串，传到后台
 					},
 					function(data) {
-						if (data) {
-							$.messager.alert("系统提示","批量删除成功！");
+						if (data.state) {
+							$.messager.alert("系统提示","恭喜您，批量删除成功！","info");
 							$("#dg").datagrid("unselectAll");
 							$("#dg").datagrid("reload");
 						} else {
-							$.messager.alert("系统提示","批量删除失败！");
+							$.messager.alert("系统提示","批量删除失败，请重新操作！","error");
 						}
 					},"json");
 				} else {
@@ -157,7 +187,7 @@
 			var selectedRows = $("#dg").datagrid("getSelections");
 			//判断是否有选择的行
 			if (selectedRows.length == 0) {
-				$.messager.alert("系统提示","请选择需要提交的项目申报书");
+				$.messager.alert("系统提示","请至少选择一项需要提交的项目申报书！","info");
 				return;
 			}
 			//定义选中 选中item_id数组
@@ -182,12 +212,13 @@
 					item_submit : item_submit
 				},
 				function(data) {
-					if (data) {
-						$.messager.alert("系统提示","批量提交成功！");
+					//console.log(data.data);
+					if (data.state) {
+						$.messager.alert("系统提示","恭喜您，批量提交成功！","info");
 						$("#dg").datagrid("unselectAll");
 						$("#dg").datagrid("reload");
 					} else {
-						$.messager.alert("系统提示","批量提交失败！");
+						$.messager.alert("系统提示","批量提交失败，请重新操作！","error");
 					}
 				},"json");
 			} else {
@@ -197,6 +228,18 @@
 		
 		function reload() {
 			$("#dg").datagrid("reload");
+		}
+		
+		function print() {
+			alert("print");
+		}
+		
+		function page_excel() {
+			alert("page_excel");
+		}
+		
+		function help() {
+			alert("help");
 		}
 		
 		function search() {
@@ -214,6 +257,14 @@
 				item_type : item_type,
 			});
 		}
+		
+		function clear() {
+			//$("#year").combobox("clear");
+			//$("#type").combobox("clear");
+			$("#year").combobox("setValue", "");
+			$("#type").combobox("setValue", "-----请选择项目类别-----");
+			$("#searchBox").val("");
+		}
 
 		//定义全局url，用于修改和添加操作
 		var url;
@@ -226,14 +277,18 @@
 				}, //进行验证，通过才让提交
 				success : function(data) {
 					var data = JSON.parse(data);
+					console.log(data);
+					console.log(data.message);
+					console.log(data.state);
+					console.log(data.data);
 					if (data.state) {
-						$.messager.alert("系统提示", "保存成功", "info");
+						$.messager.alert("系统提示", "恭喜您，数据保存成功！", "info");
 						$("#fm").form("reset");
 						$("#dlg").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "保存失败", "info");
+						$.messager.alert("系统提示", "数据保存失败，请重新操作！", "error");
 						return;
 					}
 				}
@@ -304,9 +359,9 @@
 			if(value === "1") {
 				return "<font color='purple'>等待系部审核⋯⋯</font>";
 			} else if(value === "2" || value ==="3") {
-				return "<font color='purple'>等待专家评审⋯⋯</font>";
+				return "<font color='#2D3E50'>等待专家评审⋯⋯</font>";
 			} else if(value === "4"){
-				return "<font color='purple'>等待立项审查⋯⋯</font>";
+				return "<font color='blue'>等待最终审批⋯⋯</font>";
 			} else if(value === "5"){
 				return "<font color='green'>已批准立项</font>";
 			} else if(value === "6"){
@@ -324,15 +379,15 @@
 			if(array.length != 0) {
 				$("#editApply").show();
 				return [
-		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png' title='修改'/>修改</a>&nbsp;&nbsp;&nbsp;",  
-		            "<a href='javascript:void(0);' onclick='destory(" + row.item_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png' title='删除'/>删除</a>",
+		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png'/>修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",  
+		            "<a href='javascript:void(0);' onclick='destory(" + row.item_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png'/>删除</a>",
 		        ].join("");
 			} else {
 				$("#editApply").hide();
 				$("#submitBatchs").hide();
 				$("#removeApply").hide();
 				return [
-		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png' title='查看详细'/>查看详细</a>&nbsp;&nbsp;&nbsp;",  
+		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png'/>查看详细</a>&nbsp;&nbsp;&nbsp;",  
 		        ].join("");
 			}
 		}
@@ -358,12 +413,12 @@
 					item_submit : item_submit
 				},
 				function(data) {
-					if (data) {
-						$.messager.alert("系统提示","申报书提交成功！");
+					if (data.state) {
+						$.messager.alert("系统提示","恭喜您，申报书提交成功！","info");
 						$("#dg").datagrid("unselectAll");
 						$("#dg").datagrid("reload");
 					} else {
-						$.messager.alert("系统提示","申报书提交失败！");
+						$.messager.alert("系统提示","申报书提交失败！","error");
 					}
 				},"json");
 			} else {
@@ -400,11 +455,11 @@
 						item_id : item_id,
 					},
 					function(data) {
-						if (data) {
-							$.messager.alert("系统提示","删除成功！");
+						if (data.state) {
+							$.messager.alert("系统提示","恭喜您，数据删除成功！", "info");
 							$("#dg").datagrid("reload");
 						} else {
-							$.messager.alert("系统提示","删除失败！");
+							$.messager.alert("系统提示","数据删除失败，请重新操作！", "error");
 						}
 					},"json");
 				} else {
@@ -449,32 +504,45 @@
 		<div id="toolbar" style="padding:5px;">
 			<!-- 工具栏 -->
 			<div>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-item_add',plain:true" href="javascript:addApply();">新增申报</a>
+				<a id="addApply" class="easyui-linkbutton" data-options="iconCls:'icon-item_add',plain:true" href="javascript:addApply();">新增申报</a>
 				<a id="editApply" class="easyui-linkbutton" data-options="iconCls:'icon-item_edit',plain:true" href="javascript:editApply();">修改项目申报书</a>
 				<a id="removeApply" class="easyui-linkbutton" data-options="iconCls:'icon-item_delete',plain:true" href="javascript:removeApply();">批量删除</a>
 				<a id="submitBatchs" class="easyui-linkbutton" data-options="iconCls:'icon-enabled',plain:true" href="javascript:submitBatchs();">批量提交</a>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<span>按条件查询：</span>&nbsp;&nbsp;
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-print',plain:true" href="javascript:print();">打印文档</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-page_excel',plain:true" href="javascript:page_excel();">导出Excel</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" href="javascript:help();">帮助中心</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新页面</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<!-- <span>按条件查询：</span>&nbsp;&nbsp; -->
+				<span>&nbsp;&nbsp;申报年份：</span>
 				<select id="year" name="apply_year" class="easyui-combobox" style="width:125px;">
-					<option value="">-----请选择年份-----</option>
+					<option value="">----请选择年份----</option>
 					<option value="${year }">${year }</option>
 					<option value="${year-1 }">${year-1 }</option>
 					<option value="${year-2 }">${year-2 }</option>
 					<option value="${year-3 }">${year-3 }</option>
 					<option value="${year-4 }">${year-4 }</option>
 					<option value="${year-5 }">${year-5 }</option>
+					<option value="${year-6 }">${year-6 }</option>
+					<option value="${year-7 }">${year-7 }</option>
+					<option value="${year-8 }">${year-8 }</option>
+					<option value="${year-9 }">${year-9 }</option>
 				</select>
+				<span>&nbsp;&nbsp;项目类别：</span>
 				<select id="type" name="item_type" class="easyu1i-combobox" style="width:150px;" >
 					<!-- <option value="">-----请选择项目类别-----</option> -->
 				</select>
-				<input type="text" id="searchBox" name="str" placeholder="按项目名称或申报人查找" size="20" onkeydown="if(event.keyCode==13) search()"/>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true," href="javascript:search();">查询</a>
+				<span>&nbsp;&nbsp;项目名称：</span>
+				<input type="text" id="searchBox" name="str" placeholder="请输入关键字" size="20" onkeydown="if(event.keyCode==13) search()"/>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true," href="javascript:search();">开始查询</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true," href="javascript:clear();">重置查询</a>
 			</div>
 		</div>
 		
 		<table id="dg"></table>
 		
-		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="closed:true,buttons:'#dlg-buttons'">
+		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="iconCls:'icon-save',closed:true,collapsible:true,minimizable:true,maximizable:true,resizable:true,buttons:'#dlg-buttons'">
 			<form id="fm" method="POST">
 				<input type="hidden" id="item_id" name="item_id"/>
 				<table cellspacing="8px">
@@ -498,6 +566,19 @@
 							<input type="text" id="item_user" name="item_user" value="${user.user_name }">&nbsp;
 						</td>
 					</tr>
+					<tr>
+						<td>职称</td>
+						<td>
+							<select id="user_title" name="user_title" class="easyui-combobox" style="width:100px;">
+								<option value="">-----请选择-----</option>
+								<option value="教授">教授</option>
+								<option value="副教授">副教授</option>
+								<option value="研究员">研究员</option>
+								<option value="副研究员">副研究员</option>
+								<option value="讲师">讲师</option>
+								<option value="助教">助教</option>
+							</select> &nbsp;
+					</td>
 					<tr>
 						<td>所属系部</td>
 						<td>

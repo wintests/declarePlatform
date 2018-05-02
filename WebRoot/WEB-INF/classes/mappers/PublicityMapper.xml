@@ -10,12 +10,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT apply.*, publicity.*, user.*
 		FROM apply, publicity, user
 		WHERE apply.item_id = publicity.item_id
-		AND user.user_name = publicity.item_user
+		AND user.real_name = publicity.item_user
 		<if test="status != null">
 			AND publicity.publicity_status IN 
 			<foreach collection="status" item="publicity_status" open="(" close=")" separator=",">
 				#{publicity_status}
 			</foreach>
+		</if>
+		<if test="apply != null">
+			<if test="apply.item_type != null and apply.item_type != ''">
+				AND apply.item_type = #{apply.item_type}
+			</if>
+			<if test="apply.history_flag != null and apply.history_flag != ''">
+				AND history_flag = #{apply.history_flag}
+			</if>
+		</if>
+		<if test="str != null and str != ''">
+			AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%')
 		</if>
 		LIMIT #{start},#{pageSize}
 	</select>
@@ -24,12 +35,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT COUNT(*)
 		FROM apply, publicity, user
 		WHERE apply.item_id = publicity.item_id
-		AND user.user_name = publicity.item_user
+		AND user.real_name = publicity.item_user
 		<if test="status != null">
 			AND publicity.publicity_status IN 
 			<foreach collection="status" item="publicity_status" open="(" close=")" separator=",">
 				#{publicity_status}
 			</foreach>
+		</if>
+		<if test="apply != null">
+			<if test="apply.item_type != null and apply.item_type != ''">
+				AND apply.item_type = #{apply.item_type}
+			</if>
+			<if test="apply.history_flag != null and apply.history_flag != ''">
+				AND history_flag = #{apply.history_flag}
+			</if>
+		</if>
+		<if test="str != null and str != ''">
+			AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%')
 		</if>
 	</select>
 	

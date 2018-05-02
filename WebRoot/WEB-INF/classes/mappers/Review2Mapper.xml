@@ -12,11 +12,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE apply.item_id = review2.item_id
 		AND review1.item_id = review2.item_id
 		AND user.real_name = apply.item_user
-		<if test="review2_user != null and review2_user != ''">
-			AND review2_user = #{review2_user}
+		<if test="review2 != null">
+			<if test="review2.review2_user != null and review2.review2_user != ''">
+				AND review2.review2_user = #{review2.review2_user}
+			</if>
+			<if test="review2.review2_status != null and review2.review2_status != ''">
+				AND review2.review2_status = #{review2.review2_status}
+			</if>
 		</if>
-		<if test="review2_status != null and review2_status != ''">
-			AND review2_status = #{review2_status}
+		<if test="apply != null">
+			<if test="apply.item_type != null and apply.item_type != ''">
+				AND apply.item_type = #{apply.item_type}
+			</if>
+			<if test="apply.history_flag != null and apply.history_flag != ''">
+				AND history_flag = #{apply.history_flag}
+			</if>
+		</if>
+		<if test="str != null and str != ''">
+			AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%')
 		</if>
 		LIMIT #{start},#{pageSize}
 	</select>
@@ -27,11 +40,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE apply.item_id = review2.item_id
 		AND review1.item_id = review2.item_id
 		AND user.real_name = apply.item_user
-		<if test="review2_user != null and review2_user != ''">
-			AND review2_user = #{review2_user}
+		<if test="review2 != null">
+			<if test="review2.review2_user != null and review2.review2_user != ''">
+				AND review2.review2_user = #{review2.review2_user}
+			</if>
+			<if test="review2.review2_status != null and review2.review2_status != ''">
+				AND review2.review2_status = #{review2.review2_status}
+			</if>
 		</if>
-		<if test="review2_status != null and review2_status != ''">
-			AND review2_status = #{review2_status}
+		<if test="apply != null">
+			<if test="apply.item_type != null and apply.item_type != ''">
+				AND apply.item_type = #{apply.item_type}
+			</if>
+			<if test="apply.history_flag != null and apply.history_flag != ''">
+				AND history_flag = #{apply.history_flag}
+			</if>
+		</if>
+		<if test="str != null and str != ''">
+			AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%')
 		</if>
 	</select>
 	

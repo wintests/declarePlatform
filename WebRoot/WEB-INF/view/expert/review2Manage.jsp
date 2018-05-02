@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>评审专家界面</title>
+<title>专家评审管理</title>
 	<%@include file="../head.jspf"%>
 	<style type="text/css">
 		a{
@@ -20,7 +20,12 @@
 		
 		.datagrid-header-row td{
 			background-color:#E0ECFF;
-			font-weight:bold
+			font-weight:bold;
+			height : 25px;
+		}
+		
+		.datagrid-btable tr{
+			height: 28px;
 		}
 	</style>
 	
@@ -31,10 +36,10 @@
 			$('#dg').datagrid(
 			{
 				//请求数据的url
-				url : '../../review2/listReview2.do?review2_status=' + '${review2.review2_status }' + '&review2_user=' + '${review2.review2_user }',
+				url : '../../review2/listReview2.do?review2_status=' + '${review2.review2_status }' + '&review2_user=' + '${review2.review2_user }' + '&history_flag=' + '${history_flag }',
 				title : '当前列表',
 				rownumbers : true,
-				height : 805,
+				height : 800,
 				//载入提示信息
 				loadMsg : 'loading...',
 				//水平自动展开，如果设置此属性，则不会有水平滚动条，演示冻结列时，该参数不要设置
@@ -121,13 +126,13 @@
 				success : function(data) {
 					var data = JSON.parse(data);
 					if (data.state) {
-						$.messager.alert("系统提示", "保存成功");
+						$.messager.alert("系统提示", "恭喜您，数据保存成功！", "info");
 						$("#fm").form("reset");
 						$("#dlg").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "保存失败");
+						$.messager.alert("系统提示", "数据保存失败，请重新操作！", "error");
 						return;
 					}
 				}
@@ -217,7 +222,6 @@
 			} else {
 				return [
 		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png'/>查看详细</a>&nbsp;&nbsp;&nbsp;",  
-		            "<a href='javascript:void(0);' onclick='destory(" + row.item_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png'/>删除</a>",
 		        ].join("");
 			}
 		}
@@ -276,7 +280,7 @@
 		
 		<table id="dg"></table>
 		
-		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="closed:true,buttons:'#dlg-buttons'">
+		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="iconCls:'icon-save',closed:true,buttons:'#dlg-buttons'">
 			<form id="fm" method="POST">
 				<input type="hidden" id="review2_id" name="review2_id"/>
 				<input type="hidden" id="item_id" name="item_id"/>
