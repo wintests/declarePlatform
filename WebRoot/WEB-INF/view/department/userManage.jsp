@@ -61,7 +61,7 @@
 			$('#dg').datagrid(
 			{
 				//请求数据的url
-				url : '../../user/findUserByType.do?user_type=' + '${user_type}',
+				url : '../../user/findUserByType.do?user_type=' + '${user_type}' + '&user_department=' + '${user_department}',
 				title : '当前列表',
 				rownumbers : true,
 				height : 800,
@@ -223,7 +223,7 @@
 				if(selectedRows.length  == 0) {
 					$.messager.alert("系统提示","<font size='2'>请选择一个用户进行修改！</font>","info");
 				} else {
-					$.messager.alert("系统提示","<font size='2'>一次只能选择一个用户！<font>","warning");
+					$.messager.alert("系统提示","<font size='2'>一次只能选择一个用户！</font>","warning");
 				}
 				return;
 			}
@@ -252,7 +252,7 @@
 				ids.push(selectedRows[i].user_id);
 			}
 			//提示是否确认删除
-			$.messager.confirm("系统提示","<font size='2'>您确定要删除选中的<font color=red>" + selectedRows.length + "</font>条数据么？</font>",
+			$.messager.confirm("系统提示","<font size='2'>您确定要删除选中的<font color=red>" + selectedRows.length + "</font>条数据？</font>",
 			function(flag) {
 				if (flag) {
 					$.post("${pageContext.request.contextPath }/user/deleteUserBatchs.do",
@@ -288,7 +288,7 @@
 				ids.push(selectedRows[i].user_id);
 			}
 			//提示是否确认删除
-			$.messager.confirm("系统提示","<font size='2'>您是否要批量启用选中的<font color=red>" + selectedRows.length + "</font>个用户？</font>",
+			$.messager.confirm("系统提示","<font size='2'>您确定要批量启用选中的<font color=red>" + selectedRows.length + "</font>个用户？</font>",
 			function(flag) {
 				var signln_valid = "2";
 				changeStatusBatchs(flag, ids, signln_valid);
@@ -309,7 +309,7 @@
 				ids.push(selectedRows[i].user_id);
 			}
 			//提示是否确认删除
-			$.messager.confirm("系统提示","<font size='2'>您是否要批量禁用选中的<font color=red>" + selectedRows.length + "</font>个用户？</font>",
+			$.messager.confirm("系统提示","<font size='2'>您确定要批量禁用选中的<font color=red>" + selectedRows.length + "</font>个用户？</font>",
 			function(flag) {
 				var signln_valid = "1";
 				changeStatusBatchs(flag, ids, signln_valid);
@@ -329,7 +329,7 @@
 						$("#dg").datagrid("unselectAll");
 						$("#dg").datagrid("reload");
 					} else {
-						$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
+						$.messager.alert("系统提示", data.messagae , "error");
 					}
 				},"json");
 			} else {
@@ -461,12 +461,12 @@
 			$("#dg").datagrid("selectRow",index);
 			var row = $("#dg").datagrid("getSelected");
 			if(row.signln_valid == "1") {
-				$.messager.confirm("更改用户状态", "<font size='2'>是否启用用户：<font color=red>" + row.user_name + "</font>？</font>", function(r){
+				$.messager.confirm("更改用户状态", "<font size='2'>是否启用用户：<font color=red>" + row.user_name + "</font>？<font>", function(r){
 					var signln_valid = "2";
 					changeStatus(r, row.user_id, signln_valid);
 				});
 			} else {
-				$.messager.confirm("更改用户状态", "<font size='2'>是否禁用用户：<font color=red>" + row.user_name + "</font>？</font>", function(r){
+				$.messager.confirm("更改用户状态", "<font size='2'>是否禁用用户：<font color=red>" + row.user_name + "</font>？<font>", function(r){
 					var signln_valid = "1";
 					changeStatus(r, row.user_id, signln_valid);
 				});

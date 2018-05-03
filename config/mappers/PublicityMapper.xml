@@ -21,8 +21,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="apply.item_type != null and apply.item_type != ''">
 				AND apply.item_type = #{apply.item_type}
 			</if>
+			<if test="apply.apply_year != null and apply.apply_year != ''">
+				AND apply.apply_year = #{apply.apply_year}
+			</if>
 			<if test="apply.history_flag != null and apply.history_flag != ''">
 				AND history_flag = #{apply.history_flag}
+			</if>
+		</if>
+		<if test="user != null">
+			<if test="user.user_department != null and user.user_department != ''">
+				AND user.user_department = #{user.user_department}
+			</if>
+			<if test="user.user_title != null and user.user_title != ''">
+				AND user.user_title = #{user.user_title}
 			</if>
 		</if>
 		<if test="str != null and str != ''">
@@ -36,18 +47,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM apply, publicity, user
 		WHERE apply.item_id = publicity.item_id
 		AND user.real_name = publicity.item_user
-		<if test="status != null">
-			AND publicity.publicity_status IN 
-			<foreach collection="status" item="publicity_status" open="(" close=")" separator=",">
-				#{publicity_status}
-			</foreach>
-		</if>
 		<if test="apply != null">
 			<if test="apply.item_type != null and apply.item_type != ''">
 				AND apply.item_type = #{apply.item_type}
 			</if>
+			<if test="apply.apply_year != null and apply.apply_year != ''">
+				AND apply.apply_year = #{apply.apply_year}
+			</if>
 			<if test="apply.history_flag != null and apply.history_flag != ''">
 				AND history_flag = #{apply.history_flag}
+			</if>
+		</if>
+		<if test="user != null">
+			<if test="user.user_department != null and user.user_department != ''">
+				AND user.user_department = #{user.user_department}
+			</if>
+			<if test="user.user_title != null and user.user_title != ''">
+				AND user.user_title = #{user.user_title}
 			</if>
 		</if>
 		<if test="str != null and str != ''">

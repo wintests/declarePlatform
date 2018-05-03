@@ -7,24 +7,31 @@ import org.apache.ibatis.annotations.Param;
 
 import com.qjz.declarePlatform.domain.Apply;
 import com.qjz.declarePlatform.domain.Publicity;
+import com.qjz.declarePlatform.domain.User;
 
 public interface PublicityDao {
 	
 	/**
 	 * 显示立项列表
-	 * @param status 
-	 * @param pageSize 
-	 * @param start 
+	 * @param status
+	 * @param apply
+	 * @param user
+	 * @param str
+	 * @param start
+	 * @param pageSize
 	 * @return
 	 */
-	public List<Map<String, Object>> listPublicity(@Param("status")String[] status, @Param("apply")Apply apply, @Param("str")String str, @Param("start")int start, @Param("pageSize")int pageSize);
+	public List<Map<String, Object>> listPublicity(@Param("status")String[] status, @Param("apply")Apply apply, @Param("user")User user, @Param("str")String str, @Param("start")int start, @Param("pageSize")int pageSize);
 	
 	/**
 	 * 总记录数
-	 * @param status 
+	 * @param status
+	 * @param apply
+	 * @param user
+	 * @param str
 	 * @return
 	 */
-	public Long count(@Param("status")String[] status, @Param("apply")Apply apply, @Param("str")String str);
+	public Long count(@Param("status")String[] status, @Param("apply")Apply apply, @Param("user")User user, @Param("str")String str);
 
 	/**
 	 * 添加立项列表时，根据id得到其他表的基本信息

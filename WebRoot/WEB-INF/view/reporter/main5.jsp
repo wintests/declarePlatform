@@ -25,15 +25,14 @@
 <body class="easyui-layout">
 	<div data-options="region:'north',title:'header',split:true,noheader:true," style="height:60px;background:#2D3E50;">
 		<div class="logo">后台管理</div>
-		<%-- <div>
-			用户类型：<c:if test="${user.user_type == '1' }">系统管理员</c:if>
-					<c:if test="${user.user_type == '2' }">项目管理员</c:if>
-					<c:if test="${user.user_type == '3' }">系部管理员</c:if>
-					<c:if test="${user.user_type == '4' }">评审专家</c:if>
-					<c:if test="${user.user_type == '5' }">项目申报者</c:if>
-		</div> --%>
-		<div class="timeDiv" id="timeDiv"></div>
-		<div class="logout">您好，<font color="#95B8E7">${user.user_name }</font><font color="yellow">${user.real_name }</font> &nbsp;| &nbsp;
+		<div class="timeDiv" id="timeDiv"></div>&nbsp;&nbsp;
+		<div class="logout">欢迎您，
+			<%-- <c:if test="${user.user_type == '1' }">系统管理员：</c:if>
+			<c:if test="${user.user_type == '2' }">项目管理员：</c:if>
+			<c:if test="${user.user_type == '3' }">系部管理员：</c:if>
+			<c:if test="${user.user_type == '4' }">评审专家：</c:if>
+			<c:if test="${user.user_type == '5' }">项目申报者：</c:if> --%>
+			<font color="#95B8E7">${user.user_name }</font><font color="yellow">${user.real_name }</font> &nbsp;| &nbsp;
 			<a href="javascript:logout();"><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/usericons/logout.png'/>&nbsp;退出用户</a>
 		</div>
 	</div>   
@@ -53,8 +52,8 @@
 				    <a id="aa1" class="easyui-linkbutton" 
 				    	data-options="plain:true,iconCls:'icon-manager'" style="width: 125px;padding:2px 8px 2px 5px;">我的当前申报</a>
 	            	<div id="aa" style="padding:0px 0px 0px 17px">
-			            <a href="javascript:openTab('待提交的项目','${pageContext.request.contextPath }/apply/reporter/applyManage.do?item_submit=1&history_flag=1','icon-item_success')" class="easyui-linkbutton"
-			               data-options="plain:true,iconCls:'icon-item_success'" style="width: 115px;padding:2px 8px 2px 5px;">待提交的项目</a>
+			            <a href="javascript:openTab('待提交的项目','${pageContext.request.contextPath }/apply/reporter/applyManage.do?item_submit=1&history_flag=1','icon-review1_wait')" class="easyui-linkbutton"
+			               data-options="plain:true,iconCls:'icon-review1_wait'" style="width: 115px;padding:2px 8px 2px 5px;">待提交的项目</a>
 			            <a href="javascript:openTab('查看本次申报','${pageContext.request.contextPath }/apply/reporter/applyManage.do?item_submit=2&history_flag=1','icon-find')" class="easyui-linkbutton"
 			               data-options="plain:true,iconCls:'icon-find'" style="width: 115px;padding:2px 8px 2px 5px;">查看本次申报</a>
 	            	</div>

@@ -52,8 +52,10 @@
 				pageSize : 15,
 				//每页显示记录数项目
 				pageList : [ 3, 5, 10, 15, 20 ],
+				sortOrder : 'asc',
+				remoteSort : false,
 				//指定id为标识字段，在删除，更新的时候有用，如果配置此字段，在翻页时，换页不会影响选中的项
-				idField : 'review2_id',
+				idField : 'publicity_id',
 				striped : true,	//隔行换色
 				//上方工具条 添加 修改 删除 刷新按钮
 				toolbar : '#toolbar',
@@ -63,12 +65,17 @@
 				] ],
 				onLoadSuccess: function (data) {
 		            if (data.total != 0) {
-		            	var array = [];
+		            	var array1 = [];
+		            	var array2 = [];
 		            	for(var i = 0 ; i < data.rows.length; i++) {
-		            		if(data.rows[i].publicity_status === "1")
-		            			array.push(data.rows[i].review1_status);
+		            		if(data.rows[i].publicity_status != "1") {
+		            			array1.push(data.rows[i].publicity_status);
+		            			if(data.rows[i].publicity_grade	!= null) {
+		            				array2.push(data.rows[i].publicity_grade);
+		            			}
+		            		}
 		            	}
-	            		if(array.length == data.rows.length) {
+	            		if(array1.length == 0) {
 	            			$("#dg").datagrid("hideColumn", "item_starttime");
 	            			$("#dg").datagrid("hideColumn", "item_deadline");
 	            			$("#dg").datagrid("hideColumn", "review2_user");
@@ -77,28 +84,33 @@
 	            			$("#dg").datagrid("hideColumn", "publicity_time");
 	            			$("#dg").datagrid("hideColumn", "publicity_remark");
 	            		} else {
-	            			$("#dg").datagrid("hideColumn", "review2_score");
+	            			if(array2.length == 0) {
+		            			$("#dg").datagrid("hideColumn", "publicity_grade");
+		            			$("#dg").datagrid("hideColumn", "option");
+		            		}
 	            		}
 		            } else {
-		            	$.messager.alert("提示框","未查询到相关数据！", "info");
+		            	$.messager.alert("提示框","<font size='2'>未查询到相关数据！</font>", "info");
 		            }
 		        },
 				columns : [ [ 
 					{field : 'publicity_id',title : '审批序号',align : 'center',width : 100, hidden : true}, 
 					{field : 'item_id',title : '项目编号',align : 'center',width : 100, hidden : true}, 
-					{field : 'item_name',title : '项目名称',align : 'center',width : 100}, 
+					{field : 'item_name',title : '项目名称',align : 'center',sortable : true,width : 100}, 
 					{field : 'item_type',title : '项目类别',align : 'center',width : 100},
-					{field : 'item_user',title : '项目申报人',align : 'center',width : 100}, 
+					{field : 'item_user',title : '项目申报人',align : 'center',sortable : true,width : 100}, 
 					{field : 'user_title',title : '职称',align : 'center',width : 100}, 
+					{field : 'apply_year',title : '申报年份',align : 'center',sortable : true,width : 100}, 
 					{field : 'item_starttime',title : '开始日期',align : 'center',width : 100, formatter : dateFormatter}, 
 					{field : 'item_deadline',title : '截止日期',align : 'center',width : 100, formatter : dateFormatter}, 
 					{field : 'review1_user',title : '推荐单位',align : 'center',width : 100},
 					{field : 'review2_user',title : '评审专家',align : 'center',width : 100},
-					{field : 'review2_score',title : '评审得分',align : 'center',width : 100, formatter : review2_scoreFormatter},
+					{field : 'review2_score',title : '评审得分',align : 'center',sortable : true,width : 100, formatter : review2_scoreFormatter},
 					{field : 'publicity_status',title : '审批状态',align : 'center',width : 100, formatter : publicity_statusFormatter},
 					{field : 'publicity_grade',title : '立项等级',align : 'center',width : 100, formatter : publicity_gradeFormatter},
-					{field : 'publicity_time',title : '审批时间',align : 'center',width : 100, formatter : datetimeFormatter},
+					{field : 'publicity_time',title : '审批时间',align : 'center',sortable : true,width : 100, formatter : datetimeFormatter},
 					{field : 'publicity_remark',title : '备注',align : 'center',width : 100},
+					{field : 'history_flag',title : '时间标志',align : 'center',width : 100},
 					{field : 'option',title : '操作',align : 'center',width : 100,formatter : optionFormatter}, 
 				] ],
 			});
@@ -108,18 +120,44 @@
 			$("#dg").datagrid("reload");
 		}
 		
+		function print() {
+			alert("print");
+		}
+		
+		function page_excel() {
+			alert("page_excel");
+		}
+		
+		function help() {
+			alert("help");
+		}
+		
 		function search() {
 			var str = $("#searchBox").val();
+			var apply_year = $("#year").combobox("getValue");
 			var item_type = $("#type").combobox("getValue");
+			var user_department = $("#department").combobox("getValue");
+			var user_title = $("#title").combobox("getValue");
 			
 			if(item_type === "-----请选择项目类别-----") {
 				item_type = "";
 			}
-    		
+			
 			$("#dg").datagrid("load",{
 				str : str,
+				apply_year : apply_year,
 				item_type : item_type,
+				user_department : user_department,
+				user_title : user_title,
 			});
+		}
+		
+		function clear() {
+			$("#year").combobox("setValue", "");
+			$("#type").combobox("setValue", "-----请选择项目类别-----");
+			$("#department").combobox("setValue", "");
+			$("#title").combobox("setValue", "");
+			$("#searchBox").val("");
 		}
 		
 		//定义全局url
@@ -134,13 +172,13 @@
 				success : function(data) {
 					var data = JSON.parse(data);
 					if (data.state) {
-						$.messager.alert("系统提示", "恭喜您，数据保存成功！", "info");
+						$.messager.alert("系统提示", "<font size='2'>恭喜您，数据保存成功！</font>", "info");
 						$("#fm").form("reset");
 						$("#dlg").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "数据保存失败，请重新操作！", "error");
+						$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
 						return;
 					}
 				}
@@ -243,7 +281,6 @@
 			} else {
 				return [
 		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png'/>查看详细</a>&nbsp;&nbsp;&nbsp;",  
-		            "<a href='javascript:void(0);' onclick='destory(" + row.item_id + "," + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/cancel.png'/>删除</a>",
 		        ].join("");
 			}
 		}
@@ -255,7 +292,7 @@
 			var row = $("#dg").datagrid("getSelected");
 			console.log(row);
 			if(row) {
-				$("#dlg").dialog("open").dialog("setTitle", "立项审查项目");
+				$("#dlg").dialog("open").dialog("setTitle", "审批当前项目");
 				$("#fm").form("load", row);
 				url = "${pageContext.request.contextPath }/publicity/updatePublicity.do";
 			}
@@ -266,7 +303,7 @@
 			$("#dg").datagrid("selectRow",index);
 			var row = $("#dg").datagrid("getSelected");
 			//提示是否不允许立项
-			$.messager.confirm("系统提示","您是否确定以下项目将不允许立项：<font color=red>" + row.item_name + "</font>？",
+			$.messager.confirm("系统提示","<font size='2'>您是否确定以下项目将不允许立项：<font color=red>" + row.item_name + "</font>？</font>",
 			function(flag) {
 				if (flag) {
 					$.post("${pageContext.request.contextPath }/publicity/updatePublicity.do",
@@ -277,59 +314,10 @@
 					},
 					function(data) {
 						if (data.state) {
-							$.messager.alert("系统提示","恭喜您，操作成功！", "info");
+							$.messager.alert("系统提示","<font size='2'>恭喜您，操作成功！</font>", "info");
 							$("#dg").datagrid("reload");
 						} else {
-							$.messager.alert("系统提示","操作失败，请重新操作！", "error");
-						}
-					},"json");
-				} else {
-					$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
-				}
-			});
-		};
-		
-		function changeReview(index) {
-			//点击修改前需要将之前选中的行取消掉，然后才能得到当前选中行
-			$("#dg").datagrid("unselectAll");
-			$("#dg").datagrid("selectRow",index);
-			var row = $("#dg").datagrid("getSelected");
-			//将时间格式化，因为当前数据的实际格式为JSON序列化的形式，而并非"yyyy-MM-dd"，只有格式化之后，数据才能够正确回填到form表格
-			row.item_starttime = dateFormatter(row.item_starttime);
-			row.item_deadline = dateFormatter(row.item_deadline);
-			if(row) {
-				$("#dlg").dialog("open").dialog("setTitle", "审核项目信息");
-				$("#fm").form("load", row);
-				//console.log(row);
-				document.getElementById("item_name").disabled = true;
-				document.getElementById("item_type").disabled = true;
-				document.getElementById("item_user").disabled = true;
-				document.getElementById("user_department").disabled = true;
-				document.getElementById("item_starttime").disabled = true;
-				document.getElementById("item_deadline").disabled = true;
-				document.getElementById("item_description").disabled = true;
-				url = "${pageContext.request.contextPath }/review1/updateReview1.do";
-			}
-		}
-		
-		 function destory(item_id,index) {
-		 	//获取选中行的数据(用来获取user_name属性值)
-			$("#dg").datagrid("selectRow",index);
-			var row = $("#dg").datagrid("getSelected");
-			//提示是否确认删除
-			$.messager.confirm("系统提示","您是否确定要删除申报项目：<font color=red>" + row.item_name + "</font>？",
-			function(flag) {
-				if (flag) {
-					$.post("${pageContext.request.contextPath }/apply/deleteApplyById.do",
-					{
-						item_id : item_id,
-					},
-					function(data) {
-						if (data.state) {
-							$.messager.alert("系统提示","恭喜您，数据删除成功！", "info");
-							$("#dg").datagrid("reload");
-						} else {
-							$.messager.alert("系统提示","数据删除失败，请重新操作！", "error");
+							$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
 						}
 					},"json");
 				} else {
@@ -367,20 +355,58 @@
 		<div id="toolbar" style="padding:5px;">
 			<!-- 工具栏 -->
 			<div>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-item_delete',plain:true" href="javascript:removeApply();">批量删除</a>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<span>按条件查询：</span>&nbsp;&nbsp;
-				<select id="type" name="item_type" class="easyui-combobox" style="width:150px;" >
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新页面</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-print',plain:true" href="javascript:print();">打印文档</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-page_excel',plain:true" href="javascript:page_excel();">导出Excel</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" href="javascript:help();">帮助中心</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<!-- <span>按条件查询：</span>&nbsp;&nbsp; -->
+				<span>&nbsp;&nbsp;申报年份：</span>
+				<select id="year" name="apply_year" class="easyui-combobox" style="width:125px;">
+					<option value="">----请选择年份----</option>
+					<option value="${year }">${year }</option>
+					<option value="${year-1 }">${year-1 }</option>
+					<option value="${year-2 }">${year-2 }</option>
+					<option value="${year-3 }">${year-3 }</option>
+					<option value="${year-4 }">${year-4 }</option>
+					<option value="${year-5 }">${year-5 }</option>
+					<option value="${year-6 }">${year-6 }</option>
+					<option value="${year-7 }">${year-7 }</option>
+					<option value="${year-8 }">${year-8 }</option>
+					<option value="${year-9 }">${year-9 }</option>
+				</select>
+				<span>&nbsp;&nbsp;项目类别：</span>
+				<select id="type" name="item_type" class="easyu1i-combobox" style="width:150px;" >
 					<!-- <option value="">-----请选择项目类别-----</option> -->
 				</select>
-				<input type="text" id="searchBox" name="str" placeholder="按项目名称或申报人查找" size="20" onkeydown="if(event.keyCode==13) search()"/>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true," href="javascript:search();">查询</a>
+				<span>&nbsp;&nbsp;所属系部：</span>
+				<select id="department" name="user_department" class="easyui-combobox" style="width:125px;">
+					<option value="">-----请选择系部-----</option>
+					<option value="计算机系">计算机系</option>
+					<option value="软件工程系">软件工程系</option>
+					<option value="信息安全系">信息安全系</option>
+					<option value="网络工程系">网络工程系</option>
+				</select>
+				<span>&nbsp;&nbsp;申报人职称：</span>
+				<select id="title" name="user_title" class="easyui-combobox" style="width:125px;">
+					<option value="">-----请选择职称-----</option>
+					<option value="教授">教授</option>
+					<option value="副教授">副教授</option>
+					<option value="研究员">研究员</option>
+					<option value="副研究员">副研究员</option>
+					<option value="讲师">讲师</option>
+					<option value="助教">助教</option>
+				</select> &nbsp;
+				<span>&nbsp;&nbsp;项目申报人或项目名称：</span>
+				<input type="text" id="searchBox" name="str" placeholder="请输入关键字" size="20" onkeydown="if(event.keyCode==13) search()"/>&nbsp;
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true," href="javascript:search();">开始查询</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true," href="javascript:clear();">重置查询</a>
 			</div>
 		</div>
 		
 		<table id="dg"></table>
 		
-		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="iconCls:'icon-save',closed:true,buttons:'#dlg-buttons'">
+		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="iconCls:'icon-guide_edit',closed:true,collapsible:true,minimizable:true,maximizable:true,resizable:true,buttons:'#dlg-buttons'">
 			<form id="fm" method="POST">
 				<input type="hidden" id="publicity_id" name="publicity_id"/>
 				<input type="hidden" id="item_id" name="item_id"/>

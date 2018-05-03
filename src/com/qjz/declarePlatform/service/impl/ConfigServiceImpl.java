@@ -27,13 +27,16 @@ public class ConfigServiceImpl implements ConfigService {
 	@Transactional
 	public void updateConfig(Config config) {
 		int i = configDao.updateConfig(config);
-		if(i != 0) {
-			int j = applyDao.setHistory();
-			if(j == 0) {
-				throw new RuntimeException("设置时间标志失败！");
+		if(i == 0) {
+			throw new RuntimeException("更新状态失败，请重新操作！");
+		}
+		if(config != null) {
+			if("5".equals(config.getConfig_flag())) {
+				int j = applyDao.setHistory();
+				if(j == 0) {
+					throw new RuntimeException("设置时间标志失败，请重新操作！");
+				}
 			}
-		} else {
-			throw new RuntimeException("更改项目阶段失败！");
 		}
 	}
 

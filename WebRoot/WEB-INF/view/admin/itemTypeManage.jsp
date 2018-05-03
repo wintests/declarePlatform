@@ -67,7 +67,7 @@
 				] ],
 				onLoadSuccess: function (data) {
 		            if (data.total == 0) {
-		            	$.messager.alert("提示框","未查询到相关数据！", "info");
+		            	$.messager.alert("提示框","<font size='2'>未查询到相关数据！</font>", "info");
 		            }
 		        },
 				columns : [ [ 
@@ -95,9 +95,9 @@
 			//确保被选中行只能为一行
 			if (selectedRows.length != 1) {
 				if(selectedRows.length  == 0) {
-					$.messager.alert("系统提示","请选择一条记录进行修改！","info");
+					$.messager.alert("系统提示","<font size='2'>请选择一条记录进行修改！</font>","info");
 				} else {
-					$.messager.alert("系统提示","一次只能选择一条记录！","warning");
+					$.messager.alert("系统提示","<font size='2'>一次只能选择一条记录！</font>","warning");
 				}
 				return;
 			}
@@ -114,7 +114,7 @@
 			var selectedRows = $("#dg").datagrid("getSelections");
 			//判断是否有选择的行
 			if (selectedRows.length == 0) {
-				$.messager.alert("系统提示","请选择要删除的分类！", "info");
+				$.messager.alert("系统提示","<font size='2'>请选择要删除的分类！</font>", "info");
 				return;
 			}
 			var ids = [];
@@ -128,7 +128,7 @@
 					counts.push(item_count);
 			}
 			//提示是否确认删除
-			$.messager.confirm("系统提示","您确定要删除选中的<font color=red>" + selectedRows.length + "</font>个类别么？",
+			$.messager.confirm("系统提示","<font size='2'>您确定要删除选中的<font color=red>" + selectedRows.length + "</font>个类别么？</font>",
 			function(flag) {
 				if (flag) {
 					if(counts.length === 0) {
@@ -138,15 +138,15 @@
 						},
 						function(data) {
 							if (data.state) {
-								$.messager.alert("系统提示","恭喜您，批量删除分类成功！","info");
+								$.messager.alert("系统提示","<font size='2'>恭喜您，批量删除分类成功！</font>","info");
 								$("#dg").datagrid("unselectAll");
 								$("#dg").datagrid("reload");
 							} else {
-								$.messager.alert("系统提示","批量删除分类失败，请重新操作！","error");
+								$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
 							}
 						},"json");
 					} else {
-						$.messager.alert("系统提示","所选分类下存在申报项目，不允许批量删除，请重新选择！","warning");
+						$.messager.alert("系统提示","<font size='2'>所选分类下存在申报项目，不允许批量删除，请重新选择！</font>","warning");
 					}
 				} else {
 					$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
@@ -177,13 +177,13 @@
 				success : function(data) {
 					var data = JSON.parse(data);	//将json格式的data转换成js对象
 					if (data.state) {
-						$.messager.alert("系统提示", "恭喜您，数据保存成功！","info");
+						$.messager.alert("系统提示", "<font size='2'>恭喜您，数据保存成功！</font>","info");
 						$("#fm").form("reset");
 						$("#dlg").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "数据保存失败，请重新操作！","error");
+						$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
 						return;
 					}
 				}
@@ -248,7 +248,7 @@
 			$("#dg").datagrid("selectRow",index);
 			var row = $("#dg").datagrid("getSelected");
 			//提示是否确认删除
-			$.messager.confirm("系统提示","您是否要删除项目类型：<font color=red>" + row.itemType_name + "</font>？",
+			$.messager.confirm("系统提示","<font size='2'>您是否要删除项目类型：<font color=red>" + row.itemType_name + "</font>？</font>",
 			function(flag) {
 				if (flag) {
 					if(row.item_count == 0) {
@@ -257,15 +257,15 @@
 							itemType_id : itemType_id,
 						},
 						function(data) {
-							if (data) {
-								$.messager.alert("系统提示","恭喜您，项目类型删除成功！","info");
+							if (data.state) {
+								$.messager.alert("系统提示","<font size='2'>恭喜您，项目类型删除成功！</font>","info");
 								$("#dg").datagrid("reload");
 							} else {
-								$.messager.alert("系统提示","项目类型删除失败，请重新操作！","error");
+								$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
 							}
 						},"json");
 					} else {
-						$.messager.alert("系统提示","该分类下存在申报项目，不允许删除！","warning");
+						$.messager.alert("系统提示","<font size='2'>该分类存在申报项目，不允许删除！</font>","warning");
 					}
 				} else {
 					$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录

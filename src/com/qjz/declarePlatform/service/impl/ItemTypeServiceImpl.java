@@ -52,7 +52,7 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 	public void updateItemType(ItemType itemType) {
 		int i = itemTypeDao.updateItemType(itemType);
 		if(i == 0) {
-			throw new RuntimeException("更新分类信息失败！");
+			throw new RuntimeException("更新分类信息失败，请重新操作！");
 		}
 	}
 
@@ -61,7 +61,7 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 	public void addItemType(ItemType itemType) {
 		int i = itemTypeDao.addItemType(itemType);
 		if(i == 0) {
-			throw new RuntimeException("新增分类失败！");
+			throw new RuntimeException("新增分类失败，请重新操作！");
 		}
 	}
 
@@ -70,7 +70,7 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 	public void deleteItemType(Integer itemType_id) {
 		int i = itemTypeDao.deleteItemType(itemType_id);
 		if(i == 0) {
-			throw new RuntimeException("删除分类失败！");
+			throw new RuntimeException("项目类型删除失败，请重新操作！");
 		}
 	}
 
@@ -84,7 +84,7 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 		}
 		int i = itemTypeDao.deleteItemTypeBatchs(ids);
 		if(i == 0) {
-			throw new RuntimeException("批量删除分类失败！");
+			throw new RuntimeException("批量删除分类失败，请重新操作！");
 		}
 	}
 
@@ -93,7 +93,7 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 	public void addCount(Integer item_id) {
 		int i = itemTypeDao.addCount(item_id);
 		if(i == 0) {
-			throw new RuntimeException("更新项目数量失败！");
+			throw new RuntimeException("更新项目数量失败，请重新操作！");
 		}
 	}
 
@@ -107,7 +107,7 @@ public class ItemTypeServiceImpl implements ItemTypeService {
 		}
 		int i = itemTypeDao.addCountBatchs(ids);
 		if(i == 0) {
-			throw new RuntimeException("批量更新项目数量失败！");
+			throw new RuntimeException("批量更新项目数量失败，请重新操作！");
 		}
 		
 	}

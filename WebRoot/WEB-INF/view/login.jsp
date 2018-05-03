@@ -74,12 +74,13 @@
 								if(data.data.signln_valid != "1") {
 									location.href = "home.do";
 								} else {
-									$.messager.alert("登录失败！","该用户已被禁用，请联系相关人员处理！","warning",function() {
+									$.messager.alert("登录失败！","<font size='2'>该用户已被禁用，请联系相关人员处理！</font>","warning",function() {
 										$("#password").select();
 									});
 								}
 							} else {
-								$.messager.alert("登录失败！","用户名或密码错误","error",function() {
+								console.log(data);
+								$.messager.alert("登录失败！","<font size='2'>用户名或密码错误！</font>", "error",function() {
 									$("#password").select();
 								});
 							}

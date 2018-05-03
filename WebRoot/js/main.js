@@ -37,7 +37,7 @@ function logout() {
 	/*
 	 * $.messager.defaults = { ok : "是", cancel : "否", };
 	 */
-	$.messager.confirm("操作提示", "是否退出当前用户", function(flag) {
+	$.messager.confirm("操作提示", "<font size='2'>是否退出当前用户?</font>", function(flag) {
 		console.log(flag);
 		if (flag) {
 			location.href = "logout.do";
@@ -83,7 +83,7 @@ function modifyPassword() {
 				return false; //验证不通过直接false，即没填
 			} 
 			if(newUser_pass != newUser_pass2) {
-				$.messager.alert("系统提示", "两次密码必须填写一致");
+				$.messager.alert("系统提示", "<font size='2'>两次密码必须填写一致!</font>","warning");
 				return false;
 			}
 			return true;
@@ -93,10 +93,10 @@ function modifyPassword() {
 			var data = JSON.parse(data);
 			//console.log(data)
 			if(data.state) {
-				$.messager.alert("系统提示", "密码修改成功，下一次登陆生效");
+				$.messager.alert("系统提示", "<font size='2'>密码修改成功，下一次登录生效!</font>", "info");
 				closePasswordModifyDialog();
 			} else {
-				$.messager.alert("系统提示", "密码修改失败");
+				$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
 				return;
 			} 
 		}

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qjz.declarePlatform.domain.Apply;
 import com.qjz.declarePlatform.domain.Publicity;
+import com.qjz.declarePlatform.domain.User;
 import com.qjz.declarePlatform.service.PublicityService;
 import com.qjz.declarePlatform.util.JsonResult;
 
@@ -46,9 +47,10 @@ public class PublicityController {
 			@RequestParam(value = "rows", required = false) String rows,
 			@RequestParam(value = "publicity_status", required = false) String publicity_status,
 			@RequestParam(value = "str", required = false) String str,
-			Apply apply) {
+			Apply apply, User user) {
 		
 		System.out.println("apply状态1：" + apply);
+		System.out.println("user状态1：" + user);
 		System.out.println("publicity_status状态1：" + publicity_status);
 		System.out.println("str状态1：" + str);
 		
@@ -58,7 +60,7 @@ public class PublicityController {
 		
 		int currentPage = Integer.parseInt(page);
 		int pageSize = Integer.parseInt(rows);
-		Map<String, Object> map = publicityService.listPublicity(publicity_status, apply, str, currentPage, pageSize);
+		Map<String, Object> map = publicityService.listPublicity(publicity_status, apply, user, str, currentPage, pageSize);
 		return map;
 	}
 	

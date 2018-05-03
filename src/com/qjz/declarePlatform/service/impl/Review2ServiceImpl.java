@@ -54,7 +54,7 @@ public class Review2ServiceImpl implements Review2Service {
 			 * 1 判断config_flag项目进度是否为专家评审阶段，如果不是则无法获取到数据
 			 * 2 如果history_flag为"2"，则表示为历史记录，可以获取到数据
 			 */
-			if("3".equals(config_flag) || "2".equals(history_flag)) {
+			if("3".equals(config_flag) || "4".equals(config_flag) || "5".equals(config_flag) || "2".equals(history_flag)) {
 				//总记录数
 				total = review2Dao.count(review2, apply, str);
 				//得到查询的数据
@@ -82,7 +82,7 @@ public class Review2ServiceImpl implements Review2Service {
 		String item_status = "3";
 		int j = applyDao.changeStatus(item_id, item_status);
 		if(i == 0 || j == 0) {
-			throw new RuntimeException("分配专家评审项目失败");
+			throw new RuntimeException("分配专家评审项目失败，请重新操作！");
 		}
 	}
 
@@ -100,12 +100,12 @@ public class Review2ServiceImpl implements Review2Service {
 			int k = publicityDao.addPublicity(review2.getItem_id(), publicity.getItem_user(), 
 					publicity.getReview1_user(), publicity.getReview2_user(), publicity.getReview2_score());
 			if(k == 0) {
-				throw new RuntimeException("添加到项目立项列表失败");
+				throw new RuntimeException("添加到项目立项列表失败，请重新操作！");
 			}
 		}
 		int j = applyDao.changeStatus(review2.getItem_id(), item_status);
 		if(i == 0 || j == 0) {
-			throw new RuntimeException("专家评审项目信息失败");
+			throw new RuntimeException("专家评审项目信息失败，请重新操作！");
 		}
 	}
 

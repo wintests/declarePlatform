@@ -232,6 +232,18 @@
 .icon-current{
 	background:url('usericons/current.png') no-repeat center center;
 }
+.icon-assign_result{
+	background:url('usericons/assign_result.png') no-repeat center center;
+}
+.icon-review_wait{
+	background:url('usericons/review_wait.png') no-repeat center center;
+}
+.icon-user_department{
+	background:url('usericons/user_department.png') no-repeat center center;
+}
+.icon-review1_wait{
+	background:url('usericons/review1_wait.png') no-repeat center center;
+}
 
 
 

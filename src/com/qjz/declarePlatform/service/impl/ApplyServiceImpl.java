@@ -62,7 +62,7 @@ public class ApplyServiceImpl implements ApplyService {
 	public void updateApply(Apply apply) {
 		int i = applyDao.updateApply(apply);
 		if(i == 0) {
-			throw new RuntimeException("更新项目申报书失败！");
+			throw new RuntimeException("更新项目申报书失败，请重新操作！");
 		}
 	}
 
@@ -73,7 +73,7 @@ public class ApplyServiceImpl implements ApplyService {
 		apply.setHistory_flag("1");
 		int i = applyDao.addApply(apply);
 		if(i == 0) {
-			throw new RuntimeException("添加项目申请失败！");
+			throw new RuntimeException("添加项目申请失败，请重新操作！");
 		}
 	}
 
@@ -82,7 +82,7 @@ public class ApplyServiceImpl implements ApplyService {
 	public void deleteApplyById(Integer item_id) {
 		int i = applyDao.deleteApplyById(item_id);
 		if(i == 0) {
-			throw new RuntimeException("删除项目申请失败！");
+			throw new RuntimeException("删除项目申请失败，请重新操作！");
 		}
 	}
 
@@ -96,7 +96,7 @@ public class ApplyServiceImpl implements ApplyService {
 		}
 		int i = applyDao.deleteApplyBatchs(ids);
 		if(i == 0) {
-			throw new RuntimeException("批量删除项目申请失败！");
+			throw new RuntimeException("批量删除项目申请失败，请重新操作！");
 		}
 	}
 
@@ -109,14 +109,14 @@ public class ApplyServiceImpl implements ApplyService {
 			String item_status = "1";
 			int k = applyDao.changeStatus(item_id, item_status);
 			if(j == 0 || k == 0) {
-				throw new RuntimeException("添加到系部审核列表失败！");
+				throw new RuntimeException("添加到系部审核列表失败，请重新操作！");
 			}
 			int m = itemTypeDao.addCount(item_id);
 			if(m == 0) {
-				throw new RuntimeException("更新项目数量失败！");
+				throw new RuntimeException("更新项目数量失败，请重新操作！");
 			}
 		} else {
-			throw new RuntimeException("提交项目申报书失败！");
+			throw new RuntimeException("提交项目申报书失败，请重新操作！");
 		}
 	}
 
@@ -136,14 +136,14 @@ public class ApplyServiceImpl implements ApplyService {
 				applyDao.changeStatus(item_id, item_status);
 			}
 			if(j == 0) {
-				throw new RuntimeException("批量添加到系部审核列表失败！");
+				throw new RuntimeException("批量添加到系部审核列表失败，请重新操作！");
 			}
 			int k = itemTypeDao.addCountBatchs(ids);
 			if(k == 0) {
-				throw new RuntimeException("批量更新项目数量失败！");
+				throw new RuntimeException("批量更新项目数量失败，请重新操作！");
 			}
 		} else {
-			throw new RuntimeException("批量提交项目申报书失败！");
+			throw new RuntimeException("批量提交项目申报书失败，请重新操作！");
 		}
 	}
 
@@ -156,7 +156,7 @@ public class ApplyServiceImpl implements ApplyService {
 			if("5".equals(config_flag)) {	//注意config_flag为String引用类型，config_flag的值为5，但config_flag不等于“5”
 				int i = applyDao.setHistory();
 				if(i == 0) {
-					throw new RuntimeException("项目标记为历史记录失败！");
+					throw new RuntimeException("项目标记为历史记录失败，请重新操作！");
 				}
 			}
 		}

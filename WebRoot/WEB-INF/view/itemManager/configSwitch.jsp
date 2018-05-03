@@ -45,7 +45,7 @@
 				] ],
 				onLoadSuccess: function (data) {
 		            if (data.total == 0) {
-		            	$.messager.alert("提示框","不存在申报控制开关管理！", "info");
+		            	$.messager.alert("提示框","<font size='2'>不存在申报控制开关管理！</font>", "info");
 		            }
 		        },
 				columns : [ [ 
@@ -102,13 +102,14 @@
 					//将json格式的data转换成js对象
 					var data = JSON.parse(data);
 					if (data.state) {
-						$.messager.alert("系统提示", "恭喜您，编辑状态成功！", "info");
+						//console.log(data.state);
+						$.messager.alert("系统提示", "<font size='2'>恭喜您，更新状态成功！</font>", "info");
 						$("#fm").form("reset");
 						$("#dlg").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "编辑状态失败，请重新操作！", "error");
+						$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
 						return;
 					}
 				}

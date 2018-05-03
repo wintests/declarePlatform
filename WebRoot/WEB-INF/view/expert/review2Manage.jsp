@@ -75,7 +75,7 @@
 	            			$("#dg").datagrid("hideColumn", "review2_remark");
 	            		}
 		            } else {
-		            	$.messager.alert("提示框","未查询到相关数据！", "info");
+		            	$.messager.alert("提示框","<font size='2'>未查询到相关数据！</font>", "info");
 		            }
 		        },
 				columns : [ [ 
@@ -126,13 +126,13 @@
 				success : function(data) {
 					var data = JSON.parse(data);
 					if (data.state) {
-						$.messager.alert("系统提示", "恭喜您，数据保存成功！", "info");
+						$.messager.alert("系统提示", "<font size='2'>恭喜您，数据保存成功！</font>", "info");
 						$("#fm").form("reset");
 						$("#dlg").dialog("close"); //关闭对话框
 						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
 						$("#dg").datagrid("reload"); //刷新一下
 					} else {
-						$.messager.alert("系统提示", "数据保存失败，请重新操作！", "error");
+						$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
 						return;
 					}
 				}

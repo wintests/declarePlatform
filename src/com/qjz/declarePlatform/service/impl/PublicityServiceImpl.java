@@ -14,6 +14,7 @@ import com.qjz.declarePlatform.dao.PublicityDao;
 import com.qjz.declarePlatform.domain.Apply;
 import com.qjz.declarePlatform.domain.PageBean;
 import com.qjz.declarePlatform.domain.Publicity;
+import com.qjz.declarePlatform.domain.User;
 import com.qjz.declarePlatform.service.PublicityService;
 
 @Service
@@ -26,7 +27,7 @@ public class PublicityServiceImpl implements PublicityService {
 	private ApplyDao applyDao;
 
 	@Override
-	public Map<String, Object> listPublicity(String publicity_status, Apply apply, String str, int currentPage, int pageSize) {
+	public Map<String, Object> listPublicity(String publicity_status, Apply apply, User user, String str, int currentPage, int pageSize) {
 		//publicity_status可能为1(未审批)，也可能是"2,3"(已审批，包括成功立项和立项失败)
 		String[] status = publicity_status.split(",");
 		if(publicity_status == "")
@@ -34,9 +35,9 @@ public class PublicityServiceImpl implements PublicityService {
 		//定义分页PageBean
 		PageBean pageBean = new PageBean(currentPage, pageSize);
 		//总记录数
-		Long total = publicityDao.count(status, apply, str);
+		Long total = publicityDao.count(status, apply, user, str);
 		//得到查询的数据
-		List<Map<String, Object>> list = publicityDao.listPublicity(status, apply, str, pageBean.getStart(), pageBean.getPageSize());
+		List<Map<String, Object>> list = publicityDao.listPublicity(status, apply, user, str, pageBean.getStart(), pageBean.getPageSize());
 		try {
 			if(list.size() == 0) {
 				throw new RuntimeException("未查询到相关数据");
@@ -56,7 +57,7 @@ public class PublicityServiceImpl implements PublicityService {
 		Publicity publicity = publicityDao.getPublicity(item_id);
 		int i = publicityDao.addPublicity(publicity.getItem_id(), publicity.getItem_user(), publicity.getReview1_user(), publicity.getReview2_user(), publicity.getReview2_score());
 		if(i == 0) {
-			throw new RuntimeException("添加到立项列表失败");
+			throw new RuntimeException("添加到立项列表失败，请重新操作！");
 		}
 	}
 
@@ -73,7 +74,7 @@ public class PublicityServiceImpl implements PublicityService {
 		}
 		int j = applyDao.changeStatus(publicity.getItem_id(), item_status);
 		if(i == 0 && j == 0) {
-			throw new RuntimeException("立项审查失败");
+			throw new RuntimeException("立项审批失败，请重新操作！");
 		}
 	}
 

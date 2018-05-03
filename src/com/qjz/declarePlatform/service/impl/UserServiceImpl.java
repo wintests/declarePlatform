@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
 		Long total = userManageDao.count(user_type, str, user);
 		//得到该用户类型下的所有数据
 		List<User> list = userManageDao.findUserByType(user_type, str, user, pageBean.getStart(),pageBean.getPageSize());
+		//System.out.println("list:" + list);
 		try {
 			if(list.size() == 0) {
 				throw new RuntimeException("未查询到相关数据");
@@ -55,7 +56,7 @@ public class UserServiceImpl implements UserService {
 		int i = userManageDao.updateUserById(user);
 		int j = userManageDao.updateSignln(user);
 		if(i == 0 || j == 0) {
-			throw new RuntimeException("更新失败！");
+			throw new RuntimeException("更新信息失败，请重新操作！");
 		}
 	}
 	
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService {
 		int i = userManageDao.modifyPassword(user_name,user_pass);
 		int j = userManageDao.modifySignlnPassword(user_name,user_pass);
 		if(i == 0 || j == 0) {
-			throw new RuntimeException("密码修改失败！");
+			throw new RuntimeException("密码修改失败，请重新操作！");
 		}
 		
 	}
@@ -76,7 +77,7 @@ public class UserServiceImpl implements UserService {
 		int i = userManageDao.addUser(user);
 		int j = userManageDao.addSignln(user);
 		if(i == 0 || j == 0) {
-			throw new RuntimeException("添加失败！");
+			throw new RuntimeException("添加用户失败，请重新操作！");
 		}
 	}
 
@@ -87,7 +88,7 @@ public class UserServiceImpl implements UserService {
 		int i = userManageDao.deleteUserById(user_id);
 		int j = userManageDao.deleteSignlnByName(user_name);
 		if(i == 0 || j == 0 || user_name == null) {
-			throw new RuntimeException("删除失败！");
+			throw new RuntimeException("删除用户失败，请重新操作！");
 		}
 	}
 
@@ -107,7 +108,7 @@ public class UserServiceImpl implements UserService {
 		int i = userManageDao.deleteUserBatchs(ids);
 		int j = userManageDao.deleteSignlnBatchs(list);
 		if(i == 0 || j == 0) {
-			throw new RuntimeException("删除失败！");
+			throw new RuntimeException("批量删除用户失败，请重新操作！");
 		}
 	}
 
@@ -118,7 +119,7 @@ public class UserServiceImpl implements UserService {
 		int i = userManageDao.changeUserStatus(user_id, signln_valid);
 		int j = userManageDao.changeSignlnStatus(user_name, signln_valid);
 		if(i == 0 || j == 0) {
-			throw new RuntimeException("更改用户状态失败！");
+			throw new RuntimeException("更改用户状态失败，请重新操作！");
 		}
 	}
 
@@ -138,7 +139,7 @@ public class UserServiceImpl implements UserService {
 		int i = userManageDao.changeUserStatusBatchs(ids, signln_valid);
 		int j = userManageDao.changeSignlnStatusBatchs(list, signln_valid);
 		if(i == 0 || j == 0) {
-			throw new RuntimeException("批量更改用户状态失败！");
+			throw new RuntimeException("批量更改用户状态失败，请重新操作！");
 		}
 	}
 

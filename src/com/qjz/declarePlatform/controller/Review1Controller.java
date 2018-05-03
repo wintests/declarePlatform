@@ -55,7 +55,7 @@ public class Review1Controller {
 			@RequestParam(value = "rows", required = false) String rows,
 			@RequestParam(value = "review1_status", required = false) String review1_status,
 			@RequestParam(value = "str", required = false) String str,
-			Apply apply) {
+			Apply apply, User user) {
 		
 		/**
 		 * 传入的apply对象主要包括以下字段：
@@ -63,13 +63,16 @@ public class Review1Controller {
 		 * 而传入的review1_status可能为“1”(未审核状态)，也可能为“2,3”(已审核状态)
 		 */
 		
+		System.out.println(apply);
+		System.out.println(user);
+		
 		if(review1_status == null) {
 			review1_status = "";
 		}
 		
 		int currentPage = Integer.parseInt(page);
 		int pageSize = Integer.parseInt(rows);
-		Map<String, Object> map = review1Service.listReview1(review1_status, apply, str, currentPage, pageSize);
+		Map<String, Object> map = review1Service.listReview1(review1_status, apply, user, str, currentPage, pageSize);
 		return map;
 	}
 	

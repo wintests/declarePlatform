@@ -29,8 +29,8 @@
 	               data-options="plain:true,iconCls:'icon-guide'" style="width: 125px;padding:2px 8px 2px 5px;">查看评审要求</a>
 	            <a href="javascript:openTab('评审项目列表','${pageContext.request.contextPath }/review2/expert/review2Manage.do&history_flag=1','icon-list')" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-list'" style="width: 125px;padding:2px 8px 2px 5px;">评审项目列表</a>
-	            <a href="javascript:openTab('待评审的项目','${pageContext.request.contextPath }/review2/expert/review2Manage.do?review2_status=1&history_flag=1','icon-item_success')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-item_success'" style="width: 125px;padding:2px 8px 2px 5px;">待评审的项目</a>
+	            <a href="javascript:openTab('待评审的项目','${pageContext.request.contextPath }/review2/expert/review2Manage.do?review2_status=1&history_flag=1','icon-review1_wait')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-review1_wait'" style="width: 125px;padding:2px 8px 2px 5px;">待评审的项目</a>
 	            <a href="javascript:openTab('查看本次评审','${pageContext.request.contextPath }/review2/expert/review2Manage.do?review2_status=2&history_flag=1','icon-find')" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-find'" style="width: 125px;padding:2px 8px 2px 5px;">查看本次评审</a>
 	        </div>

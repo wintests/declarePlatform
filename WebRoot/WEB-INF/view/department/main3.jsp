@@ -37,18 +37,18 @@
 	               data-options="plain:true,iconCls:'icon-modifyPassword'" style="width: 125px;padding:2px 8px 2px 5px;">修改密码</a>
 	        </div>
 	        <div title="系部人员管理" data-options="iconCls:'icon-user_manager'" style="padding:10px;">
-	            <a href="javascript:openTab('本系用户列表','${pageContext.request.contextPath }/user/admin/userManage.do?user_type=5','icon-user_list')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-user_list'" style="width: 125px;padding:2px 8px 2px 5px;">本系用户列表</a>
+	            <a href="javascript:openTab('本系用户列表','${pageContext.request.contextPath }/user/admin/userManage.do?user_type=5&user_department=${user.user_department }','icon-user_department')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-user_department'" style="width: 125px;padding:2px 8px 2px 5px;">本系用户列表</a>
 	        </div>
     		<div title="系部审核管理" data-options="iconCls:'icon-report_manage'" style="padding:10px">
-	            <a href="javascript:openTab('本系申报情况','${pageContext.request.contextPath }/review1/department/review1Manage.do','icon-list')" class="easyui-linkbutton"
+	            <a href="javascript:openTab('本系申报情况','${pageContext.request.contextPath }/review1/department/review1Manage.do?&history_flag=1','icon-list')" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-list'" style="width: 125px;padding:2px 8px 2px 5px;">本系申报情况</a>
 	            <div>
 				    <a id="aa1" class="easyui-linkbutton" 
 				    	data-options="plain:true,iconCls:'icon-review'" style="width: 125px;padding:2px 8px 2px 5px;">当前项目审核</a>
 	            	<div id="aa" style="padding:0px 0px 0px 17px">
-			            <a href="javascript:openTab('待审核的项目','${pageContext.request.contextPath }/review1/department/review1Manage.do?review1_status=1&history_flag=1','icon-item_success')" class="easyui-linkbutton"
-			               data-options="plain:true,iconCls:'icon-item_success'" style="width: 115px;padding:2px 8px 2px 5px;">待审核的项目</a>
+			            <a href="javascript:openTab('待审核的项目','${pageContext.request.contextPath }/review1/department/review1Manage.do?review1_status=1&history_flag=1','icon-review1_wait')" class="easyui-linkbutton"
+			               data-options="plain:true,iconCls:'icon-review1_wait'" style="width: 115px;padding:2px 8px 2px 5px;">待审核的项目</a>
 			            <a href="javascript:openTab('查看本次审核','${pageContext.request.contextPath }/review1/department/review1Manage.do?review1_status=2&review1_status=3&history_flag=1','icon-find')" class="easyui-linkbutton"
 			               data-options="plain:true,iconCls:'icon-find'" style="width: 115px;padding:2px 8px 2px 5px;">查看本次审核</a>
 	            	</div>

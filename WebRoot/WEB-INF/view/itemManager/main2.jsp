@@ -8,6 +8,18 @@
 	<%@include file="../head.jspf" %>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/main.css" />
 	<script type="text/javascript" src="${pageContext.request.contextPath }/js/main.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			//1 分组可以点击，控制下面的列表项的显示或隐藏
+			//2 当前分组的列表项显示时，其他分组隐藏(只有一个是显示状态)
+			//3 所有的分组列表项默认都是隐藏的
+			$("#aa").children("a").hide().parent().prev("a").click(function(){
+				//$("#aa1").css("background-color","#FBEC88");
+				$(this).nextAll("div").children("a").toggle().parent().siblings("#aa").find("a").hide();
+			});
+			
+		});
+	</script>
 </head>
 <body class="easyui-layout">
 	<div data-options="region:'north',title:'header',split:true,noheader:true," style="height:60px;background:#2D3E50;">
@@ -27,18 +39,26 @@
     		<div title="申报评审管理" data-options="iconCls:'icon-report_manage'" style="padding:10px">
 	            <a href="javascript:openTab('修改申报指南','${pageContext.request.contextPath }/apply/reporter/guide.do','icon-guide_edit')" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-guide_edit'" style="width: 125px;padding:2px 8px 2px 5px;">修改申报指南</a>
-	            <a href="javascript:openTab('本次申报列表','${pageContext.request.contextPath }/apply/reporter/add.do','icon-list')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-list'" style="width: 125px;padding:2px 8px 2px 5px;">本次申报列表</a>
-	            <a href="javascript:openTab('分配评审专家','${pageContext.request.contextPath }/publicity/itemManager/assignExpert.do','icon-link')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-link'" style="width: 125px;padding:2px 8px 2px 5px;">分配评审专家</a>
-	            <a href="javascript:openTab('当前分配情况','${pageContext.request.contextPath }/publicity/itemManager/assignResult.do','icon-current')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-current'" style="width: 125px;padding:2px 8px 2px 5px;">当前分配情况</a>
+	           <%--  <a href="javascript:openTab('本次申报列表','${pageContext.request.contextPath }/apply/reporter/add.do','icon-list')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-list'" style="width: 125px;padding:2px 8px 2px 5px;">本次申报列表</a> --%>
+	            <div>
+				    <a id="aa1" class="easyui-linkbutton" 
+				    	data-options="plain:true,iconCls:'icon-list'" style="width: 125px;padding:2px 8px 2px 5px;">系部推荐名单</a>
+	            	<div id="aa" style="padding:0px 0px 0px 17px">
+			            <a href="javascript:openTab('分配评审专家','${pageContext.request.contextPath }/publicity/itemManager/assignExpert.do','icon-assign_result')" class="easyui-linkbutton"
+			               data-options="plain:true,iconCls:'icon-assign_result'" style="width: 125px;padding:2px 8px 2px 5px;">分配评审专家</a>
+			            <a href="javascript:openTab('查看分配情况','${pageContext.request.contextPath }/publicity/itemManager/assignResult.do','icon-link')" class="easyui-linkbutton"
+			               data-options="plain:true,iconCls:'icon-link'" style="width: 125px;padding:2px 8px 2px 5px;">查看分配情况</a>
+	            	</div>
+	            </div>   
 	            <a href="javascript:openTab('本次评审结果','${pageContext.request.contextPath }/review2/expert/review2Manage.do?review2_status=2&history_flag=1','icon-user_list')" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-user_list'" style="width: 125px;padding:2px 8px 2px 5px;">本次评审结果</a>
+	            <a href="javascript:openTab('历史评审查询','${pageContext.request.contextPath }/review2/expert/review2Manage.do?review2_status=2&history_flag=2','icon-history')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-history'" style="width: 125px;padding:2px 8px 2px 5px;">历史评审查询</a>
 	        </div>
 	        <div title="当前审批管理" data-options="iconCls:'icon-manager'" style="padding:10px;">
-	            <a href="javascript:openTab('待审批的项目','${pageContext.request.contextPath }/publicity/itemManager/publicityManage.do?publicity_status=1&history_flag=1','icon-item_success')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-item_success'" style="width: 125px;padding:2px 8px 2px 5px;">待审批的项目</a>
+	            <a href="javascript:openTab('待审批的项目','${pageContext.request.contextPath }/publicity/itemManager/publicityManage.do?publicity_status=1&history_flag=1','icon-review1_wait')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-review1_wait'" style="width: 125px;padding:2px 8px 2px 5px;">待审批的项目</a>
 	            <a href="javascript:openTab('本次审批结果','${pageContext.request.contextPath }/publicity/itemManager/publicityManage.do?publicity_status=2&publicity_status=3&history_flag=1','icon-find')" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-find'" style="width: 125px;padding:2px 8px 2px 5px;">本次审批结果</a>
 	        </div>

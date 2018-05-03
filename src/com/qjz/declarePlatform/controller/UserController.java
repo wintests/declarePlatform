@@ -34,9 +34,17 @@ public class UserController {
 	
 	@RequestMapping("/admin/userManage")
 	public String userManage(Model model,
-			@RequestParam(value = "user_type", required = false) String user_type) {
+			@RequestParam(value = "user_type", required = false) String user_type,
+			@RequestParam(value = "user_department", required = false) String user_department) {
 		model.addAttribute("user_type",user_type);
-		return "admin/userManage";
+		String path = "admin/userManage";
+		if(user_department != null) {
+			path = "department/userManage";
+			model.addAttribute("user_department",user_department);
+		}
+		System.out.println("user_type: " + user_type);
+		System.out.println("user_department: " + user_department);
+		return path;
 	}
 	
 	@RequestMapping("/listExpert")
