@@ -15,13 +15,11 @@ public interface UserService {
 	
 	/**
 	 * 根据用户类型查找(分页显示)
-	 * @param user_type
 	 * @param page
 	 * @param rows
 	 * @return
 	 */
-	public Map<String, Object> findUserByType(String user_type, String str, User user, int currentPage,
-			int pageSize);
+	public Map<String, Object> findUserByType(String str, User user, int currentPage, int pageSize);
 
 	/**
 	 * 根据id更新用户信息

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.qjz.declarePlatform.domain.Apply;
 import com.qjz.declarePlatform.domain.Review2;
+import com.qjz.declarePlatform.domain.User;
 
 public interface Review2Dao {
 	
@@ -14,20 +15,22 @@ public interface Review2Dao {
 	 * 显示专家评审列表
 	 * @param review2
 	 * @param apply
+	 * @param user
 	 * @param start
 	 * @param pageSize
 	 * @return
 	 */
-	public List<Map<String, Object>> listReview2(@Param("review2")Review2 review2, @Param("apply")Apply apply, @Param("str")String str, @Param("start")int start, @Param("pageSize")int pageSize);
+	public List<Map<String, Object>> listReview2(@Param("review2")Review2 review2, @Param("apply")Apply apply, @Param("user")User user, @Param("str")String str, @Param("start")int start, @Param("pageSize")int pageSize);
 
 	
 	/**
 	 * 得到总记录数
 	 * @param review2
 	 * @param apply
+	 * @param user
 	 * @return
 	 */
-	public Long count(@Param("review2")Review2 review2, @Param("apply")Apply apply, @Param("str")String str);
+	public Long count(@Param("review2")Review2 review2, @Param("apply")Apply apply, @Param("user")User user, @Param("str")String str);
 
 
 	/**

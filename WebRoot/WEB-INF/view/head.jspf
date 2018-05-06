@@ -6,7 +6,7 @@
 	
 	<!-- 引入 jQuery 核心库，这里采用的是 2.0 -->
 	<script type="text/javascript" src="${pageContext.request.contextPath }/jquery-easyui-1.3.4/jquery.min.js"></script>
-	<!-- 引入 jQuery EasyUI 核心库，这里采用的是 1.3.5 -->
+	<!-- 引入 jQuery EasyUI 核心库，这里采用的是 1.3.4 -->
 	<script type="text/javascript" src="${pageContext.request.contextPath }/jquery-easyui-1.3.4/jquery.easyui.min.js"></script>
 	<!-- 引入 EasyUI 中文提示信息 -->
 	<script type="text/javascript" src="${pageContext.request.contextPath }/jquery-easyui-1.3.4/locale/easyui-lang-zh_CN.js"></script>

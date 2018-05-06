@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.qjz.declarePlatform.domain.Apply;
 import com.qjz.declarePlatform.domain.Review2;
+import com.qjz.declarePlatform.domain.User;
 
 public interface Review2Service {
 	
@@ -11,12 +12,13 @@ public interface Review2Service {
 	 * 显示专家评审列表
 	 * @param review2
 	 * @param apply
+	 * @param user
 	 * @param str
 	 * @param currentPage
 	 * @param pageSize
 	 * @return
 	 */
-	public Map<String, Object> listReview2(Review2 review2, Apply apply, String str, int currentPage, int pageSize);
+	public Map<String, Object> listReview2(Review2 review2, Apply apply, User user, String str, int currentPage, int pageSize);
 
 	/**
 	 * 新增专家评审项目

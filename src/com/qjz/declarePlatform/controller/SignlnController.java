@@ -45,7 +45,8 @@ public class SignlnController {
 	public String login(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
 		if(user != null) {
-			if(user.getSignln_valid() == "2") {
+			if("2".equals(user.getSignln_valid())) {
+				System.out.println(user);
 				return "redirect:home.do";
 			}
 		}

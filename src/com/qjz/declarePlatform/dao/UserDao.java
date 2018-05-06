@@ -16,13 +16,21 @@ public interface UserDao {
 	
 	/**
 	 * 根据用户类型查找用户
+	 * @param str
+	 * @param user
+	 * @param start
+	 * @param pageSize
+	 * @return
 	 */
-	public List<User> findUserByType(@Param("user_type")String user_type, @Param("str")String str, @Param("user")User user, @Param("start")int start, @Param("pageSize")int pageSize);
+	public List<User> findUserByType(@Param("str")String str, @Param("user")User user, @Param("start")int start, @Param("pageSize")int pageSize);
 	
 	/**
 	 * 该用户类型下的总记录数
+	 * @param str
+	 * @param user
+	 * @return
 	 */
-	public Long count(@Param("user_type")String user_type, @Param("str")String str, @Param("user")User user);
+	public Long count(@Param("str")String str, @Param("user")User user);
 
 	/**
 	 * 根据id更新用户信息

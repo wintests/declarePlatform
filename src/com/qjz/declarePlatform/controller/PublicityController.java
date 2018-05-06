@@ -49,11 +49,6 @@ public class PublicityController {
 			@RequestParam(value = "str", required = false) String str,
 			Apply apply, User user) {
 		
-		System.out.println("apply状态1：" + apply);
-		System.out.println("user状态1：" + user);
-		System.out.println("publicity_status状态1：" + publicity_status);
-		System.out.println("str状态1：" + str);
-		
 		if(publicity_status == null) {
 			publicity_status ="";
 		}

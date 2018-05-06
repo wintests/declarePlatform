@@ -1,3 +1,4 @@
+<%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
@@ -15,7 +16,7 @@
 		#searchBox{
 		    background: #fff8f8;
 		    font-size: 12px;
-		    width: 180px;
+		    width: 150px;
 		}
 		
 		.datagrid-header-row td{
@@ -52,6 +53,8 @@
 				pageSize : 15,
 				//每页显示记录数项目
 				pageList : [ 3, 5, 10, 15, 20 ],
+				sortOrder : 'asc',
+				remoteSort : false,
 				//指定id为标识字段，在删除，更新的时候有用，如果配置此字段，在翻页时，换页不会影响选中的项
 				idField : 'review2_id',
 				striped : true,	//隔行换色
@@ -63,16 +66,20 @@
 				] ],
 				onLoadSuccess: function (data) {
 		            if (data.total != 0) {
-		            	var array = [];
+		            	var array1 = [];
 		            	for(var i = 0 ; i < data.rows.length; i++) {
-		            		if(data.rows[i].review2_status === "1")
-		            			array.push(data.rows[i].review1_status);
+		            		if(data.rows[i].review2_status != "1")
+		            			array1.push(data.rows[i].review1_status);
 		            	}
-	            		if(array.length == data.rows.length) {
+	            		if(array1.length == 0) {
+	            			//alert(1);
 	            			$("#dg").datagrid("hideColumn", "review2_time");
 	            			$("#dg").datagrid("hideColumn", "review2_score");
 	            			$("#dg").datagrid("hideColumn", "review2_opinion");
 	            			$("#dg").datagrid("hideColumn", "review2_remark");
+	            		} else {
+	            			//alert(2);
+	            			$("#dg").datagrid("hideColumn", "option");
 	            		}
 		            } else {
 		            	$.messager.alert("提示框","<font size='2'>未查询到相关数据！</font>", "info");
@@ -81,14 +88,15 @@
 				columns : [ [ 
 					{field : 'review2_id',title : '评审序号',align : 'center',width : 100, hidden : true}, 
 					{field : 'item_id',title : '项目编号',align : 'center',width : 100, hidden : true}, 
-					{field : 'item_name',title : '项目名称',align : 'center',width : 100}, 
+					{field : 'item_name',title : '项目名称',align : 'center', sortable : true, width : 100}, 
 					{field : 'item_type',title : '项目类别',align : 'center',width : 100},
-					{field : 'item_user',title : '项目申报人',align : 'center',width : 100}, 
+					{field : 'item_user',title : '项目申报人',align : 'center', sortable : true, width : 100}, 
 					{field : 'user_title',title : '职称',align : 'center',width : 100}, 
-					{field : 'review1_user',title : '审核单位',align : 'center',width : 100},
+					{field : 'apply_year',title : '申报年份',align : 'center', sortable : true, width : 100}, 
+					{field : 'review1_user',title : '审核单位',align : 'center', sortable : true, width : 100},
 					{field : 'review2_status',title : '评审状态',align : 'center',width : 100, formatter : review2_statusFormatter},
-					{field : 'review2_time',title : '评审时间',align : 'center',width : 100, formatter : datetimeFormatter},
-					{field : 'review2_score',title : '评审分数',align : 'center',width : 100, formatter : review2_scoreFormatter},
+					{field : 'review2_time',title : '评审时间',align : 'center', sortable : true, width : 100, formatter : datetimeFormatter},
+					{field : 'review2_score',title : '评审分数',align : 'center', sortable : true ,width : 100, formatter : review2_scoreFormatter},
 					{field : 'review2_opinion',title : '评审意见',align : 'center',width : 100},
 					{field : 'review2_remark',title : '备注',align : 'center',width : 100},
 					{field : 'option',title : '操作',align : 'center',width : 100,formatter : optionFormatter}, 
@@ -100,9 +108,24 @@
 			$("#dg").datagrid("reload");
 		}
 		
+		function print() {
+			alert("print");
+		}
+		
+		function page_excel() {
+			alert("page_excel");
+		}
+		
+		function help() {
+			alert("help");
+		}
+		
 		function search() {
 			var str = $("#searchBox").val();
+			var apply_year = $("#year").combobox("getValue");
 			var item_type = $("#type").combobox("getValue");
+			var user_department = $("#department").combobox("getValue");
+			var user_title = $("#title").combobox("getValue");
 			
 			if(item_type === "-----请选择项目类别-----") {
 				item_type = "";
@@ -110,8 +133,19 @@
     		
 			$("#dg").datagrid("load",{
 				str : str,
+				apply_year : apply_year,
 				item_type : item_type,
+				user_department : user_department,
+				user_title : user_title,
 			});
+		}
+		
+		function clear() {
+			$("#year").combobox("setValue", "");
+			$("#type").combobox("setValue", "-----请选择项目类别-----");
+			$("#department").combobox("setValue", "");
+			$("#title").combobox("setValue", "");
+			$("#searchBox").val("");
 		}
 		
 		//定义全局url
@@ -147,7 +181,7 @@
 		
 		function review2_statusFormatter(value,row,index) {
 			if(value === "1") {
-				return "<a href='javascript:void(0);' onclick='changeReview("+index+")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/mini_edit.png'/><font color='red'>待评审</font>";
+				return "<a href='javascript:void(0);' onclick='modify("+index+")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/mini_edit.png'/><font color='red'>待评审</font>";
 			} else if(value === "2") {
 				return "<font color='green'>已评审</font>";
 			} else {
@@ -231,7 +265,7 @@
 			$("#dg").datagrid("unselectAll");
 			$("#dg").datagrid("selectRow",index);
 			var row = $("#dg").datagrid("getSelected");
-			console.log(row);
+			//console.log(row);
 			if(row) {
 				$("#dlg").dialog("open").dialog("setTitle", "专家评审项目");
 				$("#fm").form("load", row);
@@ -265,16 +299,63 @@
 	</script>
 	
 	<body onload="loadType();">
+	
+		<%
+			Calendar calendar=Calendar.getInstance(); 
+    		int year=calendar.get(Calendar.YEAR); 
+			request.getSession().setAttribute("year", year);
+		 %>
+	
 		<div id="toolbar" style="padding:5px;">
 			<!-- 工具栏 -->
 			<div>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<span>按条件查询：</span>&nbsp;&nbsp;
-				<select id="type" name="item_type" class="easyui-combobox" style="width:150px;" >
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新页面</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-print',plain:true" href="javascript:print();">打印文档</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-page_excel',plain:true" href="javascript:page_excel();">导出Excel</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" href="javascript:help();">帮助中心</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<!-- <span>按条件查询：</span>&nbsp;&nbsp; -->
+				<span>&nbsp;&nbsp;申报年份：</span>
+				<select id="year" name="apply_year" class="easyui-combobox" style="width:100px;">
+					<option value="">----请选择----</option>
+					<option value="${year }">${year }</option>
+					<option value="${year-1 }">${year-1 }</option>
+					<option value="${year-2 }">${year-2 }</option>
+					<option value="${year-3 }">${year-3 }</option>
+					<option value="${year-4 }">${year-4 }</option>
+					<option value="${year-5 }">${year-5 }</option>
+					<option value="${year-6 }">${year-6 }</option>
+					<option value="${year-7 }">${year-7 }</option>
+					<option value="${year-8 }">${year-8 }</option>
+					<option value="${year-9 }">${year-9 }</option>
+				</select>
+				<span>&nbsp;&nbsp;项目类别：</span>
+				<select id="type" name="item_type" class="easyu1i-combobox" style="width:150px;" >
 					<!-- <option value="">-----请选择项目类别-----</option> -->
 				</select>
-				<input type="text" id="searchBox" name="str" placeholder="按项目名称或申报人查找" size="20" onkeydown="if(event.keyCode==13) search()"/>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true," href="javascript:search();">查询</a>
+				<span>&nbsp;&nbsp;所属系部：</span>
+				<select id="department" name="user_department" class="easyui-combobox" style="width:100px;">
+					<option value="">-----请选择-----</option>
+					<option value="计算机系">计算机系</option>
+					<option value="软件工程系">软件工程系</option>
+					<option value="信息安全系">信息安全系</option>
+					<option value="网络工程系">网络工程系</option>
+				</select>
+				<span>&nbsp;&nbsp;申报人职称：</span>
+				<select id="title" name="user_title" class="easyui-combobox" style="width:100px;">
+					<option value="">-----请选择-----</option>
+					<option value="教授">教授</option>
+					<option value="副教授">副教授</option>
+					<option value="研究员">研究员</option>
+					<option value="副研究员">副研究员</option>
+					<option value="讲师">讲师</option>
+					<option value="助教">助教</option>
+				</select> &nbsp;
+				<span>&nbsp;&nbsp;项目申报人或项目名称：</span>
+				<input type="text" id="searchBox" name="str" placeholder="请输入关键字" size="20" onkeydown="if(event.keyCode==13) search()"/>&nbsp;
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true," href="javascript:search();">开始查询</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true," href="javascript:clear();">重置查询</a>
 			</div>
 		</div>
 		

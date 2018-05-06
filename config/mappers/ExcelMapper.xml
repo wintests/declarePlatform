@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:命名空间,对statement的信息进行分类管理 -->
+<!-- 注意：在mapper代理时，它具有特殊及重要的作用,需要和mapper接口的全限命名一致 -->
+<mapper namespace="com.qjz.declarePlatform.dao.ExcelDao">
+
+	<select id="exportUserExcel" parameterType="java.lang.String" resultType="com.qjz.declarePlatform.domain.User">
+		SELECT * FROM user
+		<where>
+			<if test="str != null and str != ''">
+				AND (user_name LIKE '%${str}%' OR real_name LIKE '%${str}%')
+			</if>
+			<if test="user != null">
+				<if test="user.user_department != null and user.user_department != ''">
+					AND user_department = #{user.user_department}
+				</if>
+				<if test="user.user_type != null and user.user_type != ''">
+					AND user_type = #{user.user_type}
+				</if> 
+				<if test="user.user_title != null and user.user_title != ''">
+					AND user_title = #{user.user_title}
+				</if> 
+				<if test="user.signln_valid != null and user.signln_valid != ''">
+					AND signln_valid = #{user.signln_valid}
+				</if> 
+			</if>
+		</where>
+		LIMIT #{start},#{pageSize}
+	</select>
+	
+	<insert id="importUserExcel" parameterType="com.qjz.declarePlatform.domain.User">
+		INSERT INTO 
+		user(user_name,
+			user_pass,
+			real_name,
+			user_sex,
+			user_department,
+			user_title,
+			user_mailbox,
+			user_telphone,
+			user_type,
+			signln_valid,
+			user_remark)
+		VALUES(#{user_name},
+			#{user_pass},
+			#{real_name},
+			#{user_sex},
+			#{user_department},
+			#{user_title},
+			#{user_mailbox},
+			#{user_telphone},
+			#{user_type},
+			#{signln_valid},
+			#{user_remark})
+	</insert>
+	
+	<select id="exportPublicityExcel" resultType="com.qjz.declarePlatform.domain.ItemVO">
+		SELECT apply.*, publicity.*, user.*
+		FROM apply, publicity, user
+		WHERE apply.item_id = publicity.item_id
+		AND user.real_name = publicity.item_user
+		<if test="status != null">
+			AND publicity.publicity_status IN 
+			<foreach collection="status" item="publicity_status" open="(" close=")" separator=",">
+				#{publicity_status}
+			</foreach>
+		</if>
+		<if test="apply != null">
+			<if test="apply.item_type != null and apply.item_type != ''">
+				AND apply.item_type = #{apply.item_type}
+			</if>
+			<if test="apply.apply_year != null and apply.apply_year != ''">
+				AND apply.apply_year = #{apply.apply_year}
+			</if>
+			<if test="apply.history_flag != null and apply.history_flag != ''">
+				AND history_flag = #{apply.history_flag}
+			</if>
+		</if>
+		<if test="user != null">
+			<if test="user.user_department != null and user.user_department != ''">
+				AND user.user_department = #{user.user_department}
+			</if>
+			<if test="user.user_title != null and user.user_title != ''">
+				AND user.user_title = #{user.user_title}
+			</if>
+		</if>
+		<if test="str != null and str != ''">
+			AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%')
+		</if>
+		LIMIT #{start},#{pageSize}
+	</select>
+	
+</mapper>

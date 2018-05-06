@@ -15,6 +15,7 @@ import com.qjz.declarePlatform.domain.PageBean;
 import com.qjz.declarePlatform.domain.User;
 import com.qjz.declarePlatform.service.UserService;
 
+
 @Service
 public class UserServiceImpl implements UserService {
 	
@@ -28,15 +29,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Map<String, Object> findUserByType(String user_type, String str, User user, int currentPage,
+	public Map<String, Object> findUserByType(String str, User user, int currentPage,
 			int pageSize) {
 		//定义分页pageBean
 		PageBean pageBean = new PageBean(currentPage, pageSize);
 		//得到总记录数
-		Long total = userManageDao.count(user_type, str, user);
+		Long total = userManageDao.count(str, user);
 		//得到该用户类型下的所有数据
-		List<User> list = userManageDao.findUserByType(user_type, str, user, pageBean.getStart(),pageBean.getPageSize());
-		//System.out.println("list:" + list);
+		List<User> list = userManageDao.findUserByType(str, user, pageBean.getStart(),pageBean.getPageSize());
 		try {
 			if(list.size() == 0) {
 				throw new RuntimeException("未查询到相关数据");

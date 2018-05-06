@@ -43,4 +43,19 @@
 	 	<property name="prefix" value="/WEB-INF/view/"></property>
 	 	<property name="suffix" value=".jsp"></property>
 	 </bean>
+	 
+	 <!-- 文件上传需要配置此解析器 
+       找类的快捷键为:ctrl+shift+t
+       查看本类方法：ctrl+o,假如想继续看父类方法继续ctrl+o
+    -->
+    <!-- <bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		默认编码
+		<property name="defaultEncoding" value="utf-8" />
+		文件大小最大值
+		<property name="maxUploadSize" value="10485760000" />
+		内存中的最大值
+		<property name="maxInMemorySize" value="40960" />
+   </bean> -->
+	 
 </beans>

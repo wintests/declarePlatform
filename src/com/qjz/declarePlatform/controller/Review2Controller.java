@@ -46,7 +46,7 @@ public class Review2Controller {
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "rows", required = false) String rows,
 			@RequestParam(value = "str", required = false) String str,
-			Apply apply, Review2 review2) {
+			Apply apply, Review2 review2, User user) {
 		/**
 		 * 传入的review2对象主要包括review2_user、review2_status字段
 		 * 传入的apply对象主要包括history_flag、item_type字段
@@ -55,7 +55,7 @@ public class Review2Controller {
 		//System.out.println("review2:" + review2);
 		int currentPage = Integer.parseInt(page);
 		int pageSize = Integer.parseInt(rows);
-		Map<String, Object> map = review2Service.listReview2(review2, apply, str, currentPage, pageSize);
+		Map<String, Object> map = review2Service.listReview2(review2, apply, user, str, currentPage, pageSize);
 		return map;
 	}
 	

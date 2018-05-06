@@ -15,7 +15,7 @@ public class Publicity implements Serializable {
 	private String item_user;// 项目申报人
 	private String review1_user;// 推荐单位
 	private String review2_user;// 评审专家
-	private Integer review2_score;// 评审得分
+	private String review2_score;// 评审得分
 	private String publicity_status;// 立项状态
 	private String publicity_grade;// 项目立项等级
 	private Date publicity_time;// 项目立项时间
@@ -61,11 +61,11 @@ public class Publicity implements Serializable {
 		this.review2_user = review2_user;
 	}
 
-	public Integer getReview2_score() {
+	public String getReview2_score() {
 		return review2_score;
 	}
 
-	public void setReview2_score(Integer review2_score) {
+	public void setReview2_score(String review2_score) {
 		this.review2_score = review2_score;
 	}
 

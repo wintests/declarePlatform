@@ -50,7 +50,7 @@ public interface PublicityDao {
 	 * @return
 	 */
 	public int addPublicity(@Param("item_id")Integer item_id, @Param("item_user")String item_user,
-			@Param("review1_user")String review1_user, @Param("review2_user")String review2_user, @Param("review2_score")Integer review2_score);
+			@Param("review1_user")String review1_user, @Param("review2_user")String review2_user, @Param("review2_score")String review2_score);
 
 	/**
 	 * 更新立项项目信息

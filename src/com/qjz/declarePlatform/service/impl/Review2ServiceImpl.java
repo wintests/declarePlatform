@@ -19,6 +19,7 @@ import com.qjz.declarePlatform.domain.Config;
 import com.qjz.declarePlatform.domain.PageBean;
 import com.qjz.declarePlatform.domain.Publicity;
 import com.qjz.declarePlatform.domain.Review2;
+import com.qjz.declarePlatform.domain.User;
 import com.qjz.declarePlatform.service.Review2Service;
 
 @Service
@@ -37,7 +38,7 @@ public class Review2ServiceImpl implements Review2Service {
 	private ConfigDao configDao;
 
 	@Override
-	public Map<String, Object> listReview2(Review2 review2, Apply apply, String str, int currentPage, int pageSize) {
+	public Map<String, Object> listReview2(Review2 review2, Apply apply, User user, String str, int currentPage, int pageSize) {
 		//定义分页pageBean
 		PageBean pageBean = new PageBean(currentPage, pageSize);
 		
@@ -56,9 +57,9 @@ public class Review2ServiceImpl implements Review2Service {
 			 */
 			if("3".equals(config_flag) || "4".equals(config_flag) || "5".equals(config_flag) || "2".equals(history_flag)) {
 				//总记录数
-				total = review2Dao.count(review2, apply, str);
+				total = review2Dao.count(review2, apply, user, str);
 				//得到查询的数据
-				list = review2Dao.listReview2(review2, apply, str, pageBean.getStart(), pageBean.getPageSize());
+				list = review2Dao.listReview2(review2, apply, user, str, pageBean.getStart(), pageBean.getPageSize());
 				try {
 					if(list.size() == 0) {
 						throw new RuntimeException("未查询到相关数据");

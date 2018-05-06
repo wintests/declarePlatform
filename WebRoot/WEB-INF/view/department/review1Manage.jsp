@@ -16,7 +16,7 @@
 		#searchBox{
 		    background: #fff8f8;
 		    font-size: 12px;
-		    width: 180px;
+		    width: 150px;
 		}
 		
 		.datagrid-header-row td{
@@ -323,13 +323,14 @@
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-print',plain:true" href="javascript:print();">打印文档</a>&nbsp;
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-page_excel',plain:true" href="javascript:page_excel();">导出Excel</a>&nbsp;
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" href="javascript:help();">帮助中心</a>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<!-- <span>按条件查询：</span>&nbsp;&nbsp; -->
 				<span>&nbsp;&nbsp;申报年份：</span>
-				<select id="year" name="apply_year" class="easyui-combobox" style="width:125px;">
-					<option value="">----请选择年份----</option>
+				<select id="year" name="apply_year" class="easyui-combobox" style="width:100px;">
+					<option value="">----请选择----</option>
 					<option value="${year }">${year }</option>
 					<option value="${year-1 }">${year-1 }</option>
 					<option value="${year-2 }">${year-2 }</option>
@@ -346,8 +347,8 @@
 					<!-- <option value="">-----请选择项目类别-----</option> -->
 				</select>
 				<span>&nbsp;&nbsp;申报人职称：</span>
-				<select id="title" name="user_title" class="easyui-combobox" style="width:125px;">
-					<option value="">-----请选择职称-----</option>
+				<select id="title" name="user_title" class="easyui-combobox" style="width:100px;">
+					<option value="">-----请选择-----</option>
 					<option value="教授">教授</option>
 					<option value="副教授">副教授</option>
 					<option value="研究员">研究员</option>
@@ -388,7 +389,7 @@
 					<tr>
 						<td>职称</td>
 						<td>
-							<select id="user_title" name="user_title" class="easyui-combobox" style="width:100px;">
+							<select id="user_title" name="user_title" class="easyui-combobox" style="width:125px;">
 								<option value="">-----请选择职称-----</option>
 								<option value="教授">教授</option>
 								<option value="副教授">副教授</option>

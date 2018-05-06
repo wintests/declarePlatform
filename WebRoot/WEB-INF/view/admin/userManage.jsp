@@ -7,7 +7,6 @@
 <title>用户信息管理</title>
 	<%@include file="../head.jspf"%>
 	<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/js/userManage.js"></script> --%>
-	<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/js/Combobox.js"></script> --%>
 	<style type="text/css">
 		a{
 			text-decoration:none;
@@ -16,7 +15,7 @@
 		#searchBox{
 		    background: #fff8f8;
 		    font-size: 12px;
-		    width: 180px;
+		    width: 125px;
 		}
 		
 		.datagrid-header-row td{
@@ -28,6 +27,7 @@
 		.datagrid-btable tr{
 			height: 28px;
 		}
+		
 	</style>
 </head>
 	<script type="text/javascript">
@@ -341,6 +341,27 @@
 			$("#dg").datagrid("reload");
 		}
 		
+		function print() {
+			alert("print");
+		}
+		
+		function page_excel() {
+			
+			//先返回页面参数对象，然后得到对象的页数pageNumber和页面大小pageSize
+			var options = $("#dg" ).datagrid("getPager" ).data("pagination" ).options;
+		    var pageNumber = options.pageNumber;
+		    var pageSize = options.pageSize;
+		
+			var str = $("#searchBox").val();
+			var user_department = $("#department").combobox("getValue");
+			var user_title = $("#title").combobox("getValue");
+			var signln_valid = $("#valid").combobox("getValue");
+			
+			window.location.href = "../../resource/userExcelExport.do?user_type=" + '${user_type}' + "&user_department=" 
+								+ user_department + "&user_title=" + user_title + "&signln_valid=" 
+								+ signln_valid + "&str=" + str + "&page=" + pageNumber + "&rows=" + pageSize;
+		}
+		
 		function searchUser() {
 			var str = $("#searchBox").val();
 			var user_department = $("#department").combobox("getValue");
@@ -353,6 +374,13 @@
 				user_title : user_title,
 				signln_valid : signln_valid
 			});
+		}
+		
+		function clear() {
+			$("#department").combobox("setValue", "");
+			$("#title").combobox("setValue", "");
+			$("#valid").combobox("setValue", "");
+			$("#searchBox").val("");
 		}
 
 		//定义全局url，用于修改和添加操作
@@ -583,17 +611,23 @@
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-user_delete',plain:true" href="javascript:removeUser();">批量删除</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-enabled',plain:true" href="javascript:enabledBatchs();">批量启用</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-disabled',plain:true" href="javascript:disabledBatchs();">批量禁用</a>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<span>按条件查询：</span>&nbsp;&nbsp;
-				<select id="department" name="user_department" class="easyui-combobox" style="width:150px;">
-					<option value="">-----请选择所属系部-----</option>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-print',plain:true" href="javascript:print();">打印文档</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-page_excel',plain:true" href="javascript:page_excel();">导出Excel</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新页面</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<!-- <span>按条件查询：</span>&nbsp;&nbsp; -->
+				<span>&nbsp;&nbsp;所属系部：</span>
+				<select id="department" name="user_department" class="easyui-combobox" style="width:100px;">
+					<option value="">-----请选择-----</option>
 					<option value="计算机系">计算机系</option>
 					<option value="软件工程系">软件工程系</option>
 					<option value="信息安全系">信息安全系</option>
 					<option value="网络工程系">网络工程系</option>
 				</select>
-				<select id="title" name="user_title" class="easyui-combobox" style="width:150px;">
-					<option value="">-----请选择教师职称-----</option>
+				<span>&nbsp;&nbsp;申报人职称：</span>
+				<select id="title" name="user_title" class="easyui-combobox" style="width:100px;">
+					<option value="">-----请选择-----</option>
 					<option value="教授">教授</option>
 					<option value="副教授">副教授</option>
 					<option value="研究员">研究员</option>
@@ -601,19 +635,22 @@
 					<option value="讲师">讲师</option>
 					<option value="助教">助教</option>
 				</select>
-				<select id="valid" name="signln_valid" class="easyui-combobox" style="width:150px;">
-					<option value="">-----请选择用户状态-----</option>
+				<span>&nbsp;&nbsp;用户状态：</span>
+				<select id="valid" name="signln_valid" class="easyui-combobox" style="width:100px;">
+					<option value="">-----请选择-----</option>
 					<option value="2">正常</option>
 					<option value="1">禁用</option>
 				</select>
-				<input type="text" id="searchBox" name="str" placeholder="按用户名或真实姓名查找" size="20" onkeydown="if(event.keyCode==13) searchUser()"/>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true," href="javascript:searchUser();">查询</a>
+				<span>&nbsp;&nbsp;用户名或姓名：</span>
+				<input type="text" id="searchBox" name="str" placeholder="请输入关键字" size="20" onkeydown="if(event.keyCode==13) searchUser()"/>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true," href="javascript:searchUser();">开始查询</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true," href="javascript:clear();">重置查询</a>
 			</div>
 		</div>
 		
 		<table id="dg"></table>
 		
-		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="iconCls:'icon-save',closed:true,buttons:'#dlg-buttons'">
+		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="iconCls:'icon-guide_edit',closed:true,collapsible:true,minimizable:true,maximizable:true,resizable:true,buttons:'#dlg-buttons'">
 			<form id="fm" method="POST">
 				<input type="hidden" id="user_id" name="user_id"/>
 				<input type="hidden" name="user_name"/>

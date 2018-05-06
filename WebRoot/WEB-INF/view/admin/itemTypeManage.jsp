@@ -14,7 +14,7 @@
 		#searchBox{
 		    background: #fff8f8;
 		    font-size: 12px;
-		    width: 180px;
+		    width: 150px;
 		}
 		
 		.datagrid-header-row td{
@@ -158,11 +158,23 @@
 			$("#dg").datagrid("reload");
 		}
 		
+		function print() {
+			alert("print");
+		}
+		
+		function page_excel() {
+			alert("page_excel");
+		}
+		
 		function searchItemType() {
 			var itemType_name = $("#searchBox").val();
 			$("#dg").datagrid("load",{
 				itemType_name : itemType_name,
 			});
+		}
+		
+		function clear() {
+			$("#searchBox").val("");
 		}
 
 		//定义全局url，用于修改和添加操作
@@ -282,10 +294,15 @@
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-category_add',plain:true" href="javascript:addItemType();">添加分类</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-category_edit',plain:true" href="javascript:editItemType();">修改分类</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-category_delete',plain:true" href="javascript:removeItemType();">批量删除</a>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<span>按条件查询：</span>&nbsp;&nbsp;
-				<input type="text" id="searchBox" name="itemType_name" placeholder="请输入类型名称关键字" size="20" onkeydown="if(event.keyCode==13) searchItemType()"/>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true," href="javascript:searchItemType();">查询</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-print',plain:true" href="javascript:print();">打印文档</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-page_excel',plain:true" href="javascript:page_excel();">导出Excel</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新页面</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<!-- <span>按条件查询：</span>&nbsp;&nbsp; -->
+				<span>&nbsp;&nbsp;项目类型名称：</span>
+				<input type="text" id="searchBox" name="itemType_name" placeholder="请输入关键字" size="20" onkeydown="if(event.keyCode==13) searchItemType()"/>&nbsp;
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true," href="javascript:searchItemType();">开始查询</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true," href="javascript:clear();">重置查询</a>
 			</div>
 		</div>
 		

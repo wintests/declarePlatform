@@ -63,9 +63,6 @@ public class Review1Controller {
 		 * 而传入的review1_status可能为“1”(未审核状态)，也可能为“2,3”(已审核状态)
 		 */
 		
-		System.out.println(apply);
-		System.out.println(user);
-		
 		if(review1_status == null) {
 			review1_status = "";
 		}

@@ -7,13 +7,14 @@ public class Signln implements Serializable {
 	/**
 	 * 登录信息
 	 */
-	private static final long serialVersionUID = 1L;
 
 	private String user_name;// 用户名
 	private String user_pass;// 密码
 	private String user_type;// 用户类型
 	private String signln_valid;// 状态
 
+	private static final long serialVersionUID = 1L;
+	
 	public String getUser_name() {
 		return user_name;
 	}
@@ -44,10 +45,6 @@ public class Signln implements Serializable {
 
 	public void setSignln_valid(String signln_valid) {
 		this.signln_valid = signln_valid;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 
 	@Override

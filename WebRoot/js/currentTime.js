@@ -33,7 +33,7 @@ function calender() {
 	}
 
 	var timeDiv = document.getElementById('timeDiv');
-	timeDiv.innerHTML = "今天是：" + year + "年" + month + "月" + day + "日　" + hour
+	timeDiv.innerHTML = "当前时间：&nbsp;&nbsp;" + year + "年" + month + "月" + day + "日　" + hour
 			+ ":" + minute + ":" + second + "　" + dateweek;
 	var mytime = setTimeout("calender()", 1000);
 }

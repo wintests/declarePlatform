@@ -8,7 +8,6 @@ public class User implements Serializable {
 	/**
 	 * 用户信息
 	 */
-	private static final long serialVersionUID = 1L;
 
 	private Integer user_id; // id编号
 	private String user_name; // 用户名
@@ -24,6 +23,8 @@ public class User implements Serializable {
 	private String signln_valid; // 状态
 	private String user_remark; // 备注
 
+	private static final long serialVersionUID = 1L;
+	
 	public Integer getUser_id() {
 		return user_id;
 	}

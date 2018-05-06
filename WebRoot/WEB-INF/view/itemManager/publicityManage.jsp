@@ -15,7 +15,7 @@
 		#searchBox{
 		    background: #fff8f8;
 		    font-size: 12px;
-		    width: 180px;
+		    width: 150px;
 		}
 		
 		.datagrid-header-row td{
@@ -125,7 +125,24 @@
 		}
 		
 		function page_excel() {
-			alert("page_excel");
+			//先返回页面参数对象，然后得到对象的页数pageNumber和页面大小pageSize
+			var options = $("#dg" ).datagrid("getPager" ).data("pagination" ).options;
+		    var pageNumber = options.pageNumber;
+		    var pageSize = options.pageSize;
+		
+			var apply_year = $("#year").combobox("getValue");
+			var item_type = $("#type").combobox("getValue");
+			var user_department = $("#department").combobox("getValue");
+			var user_title = $("#title").combobox("getValue");
+			var str = $("#searchBox").val();
+			
+			if(item_type === "-----请选择项目类别-----") {
+				item_type = "";
+			}
+			
+			window.location.href = "../../resource/publicityExcelExport.do?publicity_status=" + '${publicity_status }' + '&history_flag=' + '${apply.history_flag}'
+								+ "&apply_year=" + apply_year + "&item_type=" + item_type + "&user_department=" + user_department 
+								+ "&user_title=" + user_title + "&str=" + str + "&page=" + pageNumber + "&rows=" + pageSize;
 		}
 		
 		function help() {
@@ -359,11 +376,12 @@
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-print',plain:true" href="javascript:print();">打印文档</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-page_excel',plain:true" href="javascript:page_excel();">导出Excel</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" href="javascript:help();">帮助中心</a>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<!-- <span>按条件查询：</span>&nbsp;&nbsp; -->
 				<span>&nbsp;&nbsp;申报年份：</span>
-				<select id="year" name="apply_year" class="easyui-combobox" style="width:125px;">
-					<option value="">----请选择年份----</option>
+				<select id="year" name="apply_year" class="easyui-combobox" style="width:100px;">
+					<option value="">----请选择----</option>
 					<option value="${year }">${year }</option>
 					<option value="${year-1 }">${year-1 }</option>
 					<option value="${year-2 }">${year-2 }</option>
@@ -380,16 +398,16 @@
 					<!-- <option value="">-----请选择项目类别-----</option> -->
 				</select>
 				<span>&nbsp;&nbsp;所属系部：</span>
-				<select id="department" name="user_department" class="easyui-combobox" style="width:125px;">
-					<option value="">-----请选择系部-----</option>
+				<select id="department" name="user_department" class="easyui-combobox" style="width:100px;">
+					<option value="">-----请选择-----</option>
 					<option value="计算机系">计算机系</option>
 					<option value="软件工程系">软件工程系</option>
 					<option value="信息安全系">信息安全系</option>
 					<option value="网络工程系">网络工程系</option>
 				</select>
 				<span>&nbsp;&nbsp;申报人职称：</span>
-				<select id="title" name="user_title" class="easyui-combobox" style="width:125px;">
-					<option value="">-----请选择职称-----</option>
+				<select id="title" name="user_title" class="easyui-combobox" style="width:100px;">
+					<option value="">-----请选择-----</option>
 					<option value="教授">教授</option>
 					<option value="副教授">副教授</option>
 					<option value="研究员">研究员</option>
