@@ -40,6 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			user_title,
 			user_mailbox,
 			user_telphone,
+			reg_date,
 			user_type,
 			signln_valid,
 			user_remark)
@@ -51,9 +52,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{user_title},
 			#{user_mailbox},
 			#{user_telphone},
+			NOW(),
 			#{user_type},
 			#{signln_valid},
 			#{user_remark})
+	</insert>
+	
+	<insert id="importSignlnExcel" parameterType="com.qjz.declarePlatform.domain.User">
+		INSERT INTO 
+		signln(user_name,
+			user_pass,
+			user_type,
+			signln_valid)
+		VALUES(#{user_name},
+			#{user_pass},
+			#{user_type},
+			#{signln_valid})
 	</insert>
 	
 	<select id="exportPublicityExcel" resultType="com.qjz.declarePlatform.domain.ItemVO">

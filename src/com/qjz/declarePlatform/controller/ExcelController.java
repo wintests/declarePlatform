@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.qjz.declarePlatform.domain.Apply;
 import com.qjz.declarePlatform.domain.User;
@@ -33,13 +33,14 @@ public class ExcelController {
 
 	@RequestMapping(value = "/userExcelImport", method = RequestMethod.POST)
 	@ResponseBody
-	public JsonResult userExcelImport(HttpServletRequest request) {
-//		System.out.println("测试1");
+	public JsonResult userExcelImport(HttpServletRequest request, String fileName) {
+		//把request强转成MultipartHttpServletRequest多部件对象
 		MultipartHttpServletRequest multipart = (MultipartHttpServletRequest) request;
-//		System.out.println("测试2");
-		MultipartFile file = multipart.getFile("file");
-//		System.out.println("测试3");
-//		System.out.println("文件：" + file);
+		//根据文件名称获取文件对象
+		CommonsMultipartFile file = (CommonsMultipartFile) multipart.getFile(fileName);
+		//MultipartFile file = multipart.getFile(fileName);
+		//获取文件上传流
+		//byte[] fbytes = file.getBytes();
 		excelService.importUserExcel(file);
 		return new JsonResult();
 	}

@@ -1,3 +1,4 @@
+<%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
@@ -369,6 +370,13 @@
 	</script>
 	
 	<body onload="loadType();">
+	
+		<%
+			Calendar calendar=Calendar.getInstance(); 
+    		int year=calendar.get(Calendar.YEAR); 
+			request.getSession().setAttribute("year", year);
+		 %>
+	
 		<div id="toolbar" style="padding:5px;">
 			<!-- 工具栏 -->
 			<div>

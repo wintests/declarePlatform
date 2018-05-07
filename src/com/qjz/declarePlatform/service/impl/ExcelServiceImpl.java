@@ -34,7 +34,7 @@ public class ExcelServiceImpl implements ExcelService {
 			InputStream in = file.getInputStream();
 			listob = ExcelUtil.getBankListByExcel(in,file.getOriginalFilename());
 		} catch (Exception e) {
-			throw new RuntimeException("excel解析失败!请稍后再试!");
+			throw new RuntimeException("文件解析失败，请重新导入！");
 		}
 		//遍历listob数据，把数据放到List中  
 		for(int i = 0; i < listob.size(); i++){
@@ -53,20 +53,42 @@ public class ExcelServiceImpl implements ExcelService {
 			user.setUser_type(String.valueOf(ob.get(8)));
 			user.setSignln_valid(String.valueOf(ob.get(9)));
 			user.setUser_remark(String.valueOf(ob.get(10)));
-//			//答案选项
-//			String []op =String.valueOf(ob.get(7)).split(","); 
-//			user.setAnswerOption(JSONArray.toJSONString(op));
-//			//正确答案
-//			String[] an = String.valueOf(ob.get(8)).split(",");
-//			int [] ans = new int[an.length];
-//			for(int j = 0;j<an.length;j++){
-//				ans[j]=Integer.parseInt(an[j]);
-//			}
-//			user.setRightanswer(JSONArray.toJSONString(ans));
-//			user.setExerhelp(String.valueOf(ob.get(9)));
+			if(user != null) {
+				String user_sex = user.getUser_sex();
+				if("男".equals(user_sex)) {
+					user.setUser_sex("1");
+				} else if("女".equals(user_sex)) {
+					user.setUser_sex("2");
+				} else {
+					user.setUser_sex("");
+				}
+				String user_type = user.getUser_type();
+				if("系统管理员".equals(user_type)) {
+					user.setUser_type("1");
+				} else if("项目管理员".equals(user_type)) {
+					user.setUser_type("2");
+				} else if("系部管理员".equals(user_type)) {
+					user.setUser_type("3");
+				} else if("评审专家".equals(user_type)) {
+					user.setUser_type("4");
+				} else if("项目申报者".equals(user_type)) {
+					user.setUser_type("5");
+				} else {
+					user.setUser_type("");
+				}
+				String signln_valid = user.getSignln_valid();
+				if("禁用".equals(signln_valid)) {
+					user.setSignln_valid("1");
+				} else if("正常".equals(signln_valid)) {
+					user.setSignln_valid("2");
+				} else {
+					user.setSignln_valid("");
+				}
+			}
 			int j = excelDao.importUserExcel(user);
-			if(j==0){
-				throw new RuntimeException("插入失败!");
+			int k = excelDao.importSignlnExcel(user);
+			if(j==0 || k == 0){
+				throw new RuntimeException("导入数据表失败，请重新操作!");
 			}
 		}
 

@@ -7,6 +7,7 @@
 <title>用户信息管理</title>
 	<%@include file="../head.jspf"%>
 	<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/js/userManage.js"></script> --%>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery.form.js"></script>
 	<style type="text/css">
 		a{
 			text-decoration:none;
@@ -345,6 +346,12 @@
 			alert("print");
 		}
 		
+		function importExcel() {
+			$("#ifm").form("reset");
+			//打开对话框并且设置标题
+			$("#importForm").dialog("open").dialog("setTitle", "上传数据表");
+		}
+		
 		function page_excel() {
 			
 			//先返回页面参数对象，然后得到对象的页数pageNumber和页面大小pageSize
@@ -558,7 +565,6 @@
 			$("#dg").datagrid("selectRow",index);
 			var row = $("#dg").datagrid("getSelected");
 			//row.reg_date = reg_dateFormatter(row.reg_date);
-			console.log(row);
 			//提示是否确认删除
 			$.messager.confirm("系统提示","<font size='2'>您是否确定要删除用户：<font color=red>" + row.user_name + "</font>？</font>",
 			function(flag) {
@@ -581,25 +587,43 @@
 			});
 		};
 		
-		/* function loadType() {
-			//alert(1);
-			$.ajax({
-			    type: "POST",
-			    url: '../../itemType/list.do',
-			    dataType: "json",
-			    success: function(data) {
-			        $('#itemType_name').combobox({
-			            data: data.data,
-			            valueField: 'itemType_id',
-			            textField: 'itemType_name',
-			            onSelect : function(record) {
-							alert("选择一个时触发");
-							console.log(record);
-						},
-			        });
-			    }
-			});
-		} */
+		function closeImportDialog() {
+			$("#ifm").form("reset");
+			$("#importForm").dialog("close"); //关闭对话框
+		}
+		
+		function saveImport() {
+			var option = {
+							type:'POST',
+							url:'${pageContext.request.contextPath }/resource/userExcelImport.do',
+							dataType:'text',
+							data:{
+								fileName: 'importFile'
+							},
+							success:function(data){
+								//data从后台传过来为JSON串，需要转换为JS对象得到其参数
+								var data = JSON.parse(data);
+								if (data.state) {
+									//alert(1);
+									$.messager.alert("系统提示","<font size='2'>恭喜您，数据导入成功！</font>", "info");
+									$("#dg").datagrid("reload");
+									$("#importForm").dialog("close"); //关闭对话框
+								} else {
+									alert(2);
+									$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
+								}
+								
+								//把json格式的字符串转换成json对象
+								//var jsonObj = $.parseJSON(data);
+								
+								//返回服务器图片路径，把图片路径设置给img标签
+								//$("#imgSize1ImgSrc").attr("src",jsonObj.fullPath);
+								//数据库保存相对路径
+								//$("#imgSize1").val(jsonObj.relativePath);
+							}
+						};
+			$("#ifm").ajaxSubmit(option);
+		}
 		
 	</script>
 	<body>
@@ -611,9 +635,17 @@
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-user_delete',plain:true" href="javascript:removeUser();">批量删除</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-enabled',plain:true" href="javascript:enabledBatchs();">批量启用</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-disabled',plain:true" href="javascript:disabledBatchs();">批量禁用</a>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-print',plain:true" href="javascript:print();">打印文档</a>
+				<!-- <a class="easyui-linkbutton" data-options="iconCls:'icon-print',plain:true" href="javascript:print();">打印文档</a> -->
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-excel_upload',plain:true" href="javascript:importExcel();">导入数据表</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-page_excel',plain:true" href="javascript:page_excel();">导出Excel</a>
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新页面</a>
+				
+				
+				<!-- <form id="ifm" action="POST">
+					<input type='file' id='importFile' name='importFile' class="file" onchange='upload()' />
+				</form> -->
+				
+				
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<!-- <span>按条件查询：</span>&nbsp;&nbsp; -->
@@ -760,6 +792,26 @@
 					data-options="iconCls:'icon-ok',plain:true">保存</a>&nbsp;&nbsp;&nbsp;
 				<a href="javascript:closeUserDialog()" class="easyui-linkbutton"
 					data-options="iconCls:'icon-cancel',plain:true">关闭</a>
+			</div>
+		</div>
+		
+		<div id="importForm" class="easyui-dialog" style="width:400px; height:200px; padding:10px 20px" 
+			data-options="iconCls:'icon-excel_upload',closed:true,buttons:'#dlg-form'">
+			<form id="ifm" action="POST">
+				<font color="red">*</font><span>&nbsp;导入文件只能为Excel格式，同时注意以下几点：</span><br/>
+				<span>1：性别只能为男或女</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<span>2：状态只能为正常或禁用</span><br/>
+				<span>3：用户类型只能为系统管理员、项目管理员、系部管理员、评审专家、项目申报者五个类型</span><br/><br/>
+				<input type='file' id='importFile' name='importFile' class="file"/>
+			</form>
+		</div>
+		
+		<div id="dlg-form">
+			<div align="center">
+				<a href="javascript:saveImport()" class="easyui-linkbutton"
+					data-options="iconCls:'icon-ok',plain:true">确认导入</a>&nbsp;&nbsp;&nbsp;
+				<a href="javascript:closeImportDialog()" class="easyui-linkbutton"
+					data-options="iconCls:'icon-cancel',plain:true">关闭窗口</a>
 			</div>
 		</div>
 	</body>
