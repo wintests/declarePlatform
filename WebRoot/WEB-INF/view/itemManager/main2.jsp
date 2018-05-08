@@ -8,6 +8,14 @@
 	<%@include file="../head.jspf" %>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/main.css" />
 	<script type="text/javascript" src="${pageContext.request.contextPath }/js/main.js"></script>
+	<style type="text/css">
+		a:hover{
+			text-decoration:underline;
+			font-weight:bold;
+			font-size: 14px;
+			color: #E96129;
+		}
+	</style>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			//1 分组可以点击，控制下面的列表项的显示或隐藏

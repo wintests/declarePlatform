@@ -40,7 +40,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</if>
 		<if test="str != null and str != ''">
-			AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%')
+			<!-- AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%') -->
+			AND (apply.item_name LIKE CONCAT('%', #{str}, '%') OR apply.item_user LIKE CONCAT('%', #{str}, '%'))
 		</if>
 		LIMIT #{start},#{pageSize}
 	</select>
@@ -68,7 +69,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</if>
 		<if test="str != null and str != ''">
-			AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%')
+			<!-- AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%') -->
+			AND (apply.item_name LIKE CONCAT('%', #{str}, '%') OR apply.item_user LIKE CONCAT('%', #{str}, '%'))
 		</if>
 	</select>
 	

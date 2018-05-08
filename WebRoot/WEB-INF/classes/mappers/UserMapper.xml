@@ -16,7 +16,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM user
 		<where>
 			<if test="str != null and str != ''">
-				AND (user_name LIKE '%${str}%' OR real_name LIKE '%${str}%')
+				<!-- AND (user_name LIKE '%${str}%' OR real_name LIKE '%${str}%') -->
+				AND (user_name LIKE CONCAT('%', #{str}, '%') OR real_name LIKE CONCAT('%', #{str}, '%'))
 			</if>
 			<if test="user != null">
 				<if test="user.user_type != null and user.user_type != ''">
@@ -40,7 +41,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT COUNT(*) FROM user
 		<where>
 			<if test="str != null and str != ''">
-				AND (user_name LIKE '%${str}%' OR real_name LIKE '%${str}%')
+				<!-- AND (user_name LIKE '%${str}%' OR real_name LIKE '%${str}%') -->
+				AND (user_name LIKE CONCAT('%', #{str}, '%') OR real_name LIKE CONCAT('%', #{str}, '%'))
 			</if>
 			<if test="user != null">
 				<if test="user.user_type != null and user.user_type != ''">

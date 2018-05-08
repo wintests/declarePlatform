@@ -1,17 +1,26 @@
 <%@page import="java.util.Calendar"%>
-<%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
+<c:set var="serverPath" value="http://192.168.0.50:9080/ssmFile"></c:set>
+<c:set var="mm" value="${list }"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>用户申报管理</title>
 	<%@include file="../head.jspf"%>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery.form.js"></script>
 	<style type="text/css">
 		a{
 			text-decoration:none;
+		}
+		
+		a:hover{
+			text-decoration:underline;
+			font-weight:bold;
+			font-size: 14px;
+			color: #E96129;
 		}
 		
 		#searchBox{
@@ -23,11 +32,11 @@
 		.datagrid-header-row td{
 			background-color:#E0ECFF;
 			font-weight:bold;
-			height : 25px;
+			height : 28px;
 		}
 		
 		.datagrid-btable tr{
-			height: 28px;
+			height: 31px;
 		}
 	</style>
 	
@@ -97,7 +106,7 @@
 		        },
 				columns : [ [ 
 					{field : 'item_id',title : '项目编号',align : 'center',width : 100, hidden : true}, 
-					{field : 'item_name',title : '项目名称',align : 'center', sortable : true, width : 100}, 
+					{field : 'item_name',title : '项目名称',align : 'center', sortable : true, width : 100, formatter : item_nameFormatter}, 
 					{field : 'item_type',title : '项目类别',align : 'center',width : 100},
 					{field : 'item_user',title : '项目申报人',align : 'center', sortable : true, width : 100},
 					{field : 'user_title',title : '申报人职称',align : 'center',width : 100},
@@ -110,6 +119,7 @@
 					{field : 'item_status',title : '当前状态',align : 'center',width : 100, formatter : item_statusFormatter}, 
 					{field : 'item_description',title : '项目描述',align : 'center',width : 100}, 
 					{field : 'history_flag',title : '时间标志',align : 'center',width : 100, hidden : true}, 
+					{field : 'path',title : '下载申报书',align : 'center',width : 100,formatter : pathFormatter}, 
 					{field : 'option',title : '操作',align : 'center',width : 100,formatter : optionFormatter}, 
 				] ],
 			});
@@ -390,6 +400,14 @@
 			}
 		}
 		
+		function pathFormatter(value, row, index) {
+			return "<a href='${serverPath}"+value+"' download='' target='_blank'>"+ "点击下载" + "</a>";
+		}
+		
+		function item_nameFormatter(value, row, index) {
+			return "<a href='${serverPath}" + row.path + "' target='_blank' color='blue'>"+ value + "</a>";
+		}
+		
 		function changeSubmit(index) {
 			//点击修改前需要将之前选中的行取消掉，然后才能得到当前选中行
 			$("#dg").datagrid("unselectAll");
@@ -429,6 +447,7 @@
 			$("#dg").datagrid("unselectAll");
 			$("#dg").datagrid("selectRow",index);
 			var row = $("#dg").datagrid("getSelected");
+			console.log(row);
 			//将时间格式化，因为当前数据的实际格式为JSON序列化的形式，而并非"yyyy-MM-dd"，只有格式化之后，数据才能够正确回填到form表格
 			row.item_starttime = dateFormatter(row.item_starttime);
 			row.item_deadline = dateFormatter(row.item_deadline);
@@ -487,6 +506,29 @@
 			        $('#type').combobox('select',"-----请选择项目类别-----");
 			    },
 			});
+		}
+		
+		function submitFileUpload() {
+			var option={
+					type:'POST',
+					url:'${pageContext.request.contextPath }/upload/uploadFile.do',
+					dataType:'text',
+					data:{
+						fileName : 'importFile'
+					},
+					success:function(data){
+						
+						//把json格式的字符串转换成json对象
+						var jsonObj = $.parseJSON(data);
+						
+						//返回服务器图片路径，把图片路径设置给img标签
+						$("#imgSrc").attr("src",jsonObj.fullPath);
+						//数据库保存相对路径
+						$("#filePath").val(jsonObj.relativePath);
+					}
+					
+				};
+			$("#fm").ajaxSubmit(option);
 		}
 		
 	</script>
@@ -594,6 +636,14 @@
 						<td>
 							<input type="text" id="item_starttime" name="item_starttime" class="easyui-datebox" required="true">&nbsp;
 						</td>
+					</tr>
+					<tr>
+						<td>附件路径</td>
+						<p><label></label>
+						<img id='imgSrc' src='${serverPath }/upload/20180508155041990887.jpg'  height="100" width="100" />
+						<input type='file' id='importFile' name='importFile' class="file" onchange='submitFileUpload()' /><span class="pos" id="importFileSpan">请上传图片的大小不超过3MB</span>
+				        <input type='hidden' id='filePath' name='path' value='' reg="^.+$" tip="亲！您忘记上传图片了。" />
+						</p>
 					</tr>
 					<tr>
 						<td>截止日期</td>

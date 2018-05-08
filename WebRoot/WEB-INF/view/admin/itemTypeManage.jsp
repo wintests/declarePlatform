@@ -11,6 +11,13 @@
 			text-decoration:none;
 		}
 		
+		a:hover{
+			text-decoration:underline;
+			font-weight:bold;
+			font-size: 14px;
+			color: #E96129;
+		}
+		
 		#searchBox{
 		    background: #fff8f8;
 		    font-size: 12px;
@@ -20,11 +27,11 @@
 		.datagrid-header-row td{
 			background-color:#E0ECFF;
 			font-weight:bold;
-			height : 25px;
+			height : 28px;
 		}
 		
 		.datagrid-btable tr{
-			height: 28px;
+			height: 31px;
 		}
 		
 	</style>

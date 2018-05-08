@@ -48,6 +48,7 @@ public class ApplyController {
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "rows", required = false) String rows,
 			@RequestParam(value = "str", required = false) String str,
+			@RequestParam(value = "item_user", required = false) String item_user,
 			Apply apply) {
 		/**
 		 * 传入的apply对象主要包括以下字段：

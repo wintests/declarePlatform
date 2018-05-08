@@ -11,14 +11,22 @@
 			text-decoration:none;
 		}
 		
-		.datagrid-header-row td{
+		a:hover{
+			text-decoration:underline;
 			font-weight:bold;
-			height : 25px;
+			font-size: 14px;
+			color: #E96129;
+		}
+		
+		.datagrid-header-row td{
+			background-color:#E0ECFF;
+			font-weight:bold;
+			height : 28px;
 		}
 		
 		.datagrid-btable tr{
-			height:35px; /*修改行高*/
-		},
+			height: 31px;	/*修改行高*/
+		}
 	</style>
 </head>
 	<script type="text/javascript">

@@ -10,7 +10,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM user
 		<where>
 			<if test="str != null and str != ''">
-				AND (user_name LIKE '%${str}%' OR real_name LIKE '%${str}%')
+				<!-- AND (user_name LIKE '%${str}%' OR real_name LIKE '%${str}%') -->
+				AND (user_name LIKE CONCAT('%', #{str}, '%') OR real_name LIKE CONCAT('%', #{str}, '%'))
 			</if>
 			<if test="user != null">
 				<if test="user.user_department != null and user.user_department != ''">
@@ -101,7 +102,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</if>
 		<if test="str != null and str != ''">
-			AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%')
+			<!-- AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%') -->
+			AND (apply.item_name LIKE CONCAT('%', #{str}, '%') OR apply.item_user LIKE CONCAT('%', #{str}, '%'))
 		</if>
 		LIMIT #{start},#{pageSize}
 	</select>

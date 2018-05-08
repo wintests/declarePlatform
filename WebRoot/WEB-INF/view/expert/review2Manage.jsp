@@ -13,6 +13,13 @@
 			text-decoration:none;
 		}
 		
+		a:hover{
+			text-decoration:underline;
+			font-weight:bold;
+			font-size: 14px;
+			color: #E96129;
+		}
+		
 		#searchBox{
 		    background: #fff8f8;
 		    font-size: 12px;

@@ -23,6 +23,7 @@ public class Apply implements Serializable {
 	private String item_status; // 当前状态
 	private String item_description; // 项目描述
 	private String history_flag; // 时间标志 (1: 当前正在申报；2: 历史申报记录)
+	private String path;	//附件路径
 
 	public Integer getItem_id() {
 		return item_id;
@@ -128,6 +129,14 @@ public class Apply implements Serializable {
 		this.history_flag = history_flag;
 	}
 
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
 	@Override
 	public String toString() {
 		return "Apply [item_id=" + item_id + ", item_name=" + item_name
@@ -137,7 +146,7 @@ public class Apply implements Serializable {
 				+ ", item_deadline=" + item_deadline + ", item_submit="
 				+ item_submit + ", apply_time=" + apply_time + ", item_status="
 				+ item_status + ", item_description=" + item_description
-				+ ", history_flag=" + history_flag + "]";
+				+ ", history_flag=" + history_flag + ", path=" + path + "]";
 	}
 
 }

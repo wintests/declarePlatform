@@ -30,9 +30,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</if>
 		<if test="str != null and str != ''">
-			AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%')
+			<!-- AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%') -->
+			AND (apply.item_name LIKE CONCAT('%', #{str}, '%') OR apply.item_user LIKE CONCAT('%', #{str}, '%'))
 		</if>
-		ORDER BY apply.apply_time ASC
 		LIMIT #{start},#{pageSize}
 	</select>
 	
@@ -60,7 +60,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</if>
 		<if test="str != null and str != ''">
-			AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%')
+			<!-- AND (apply.item_name LIKE '%${str}%' OR apply.item_user LIKE '%${str}%') -->
+			AND (apply.item_name LIKE CONCAT('%', #{str}, '%') OR apply.item_user LIKE CONCAT('%', #{str}, '%'))
 		</if>
 	</select>
 	
@@ -73,7 +74,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			apply_year = YEAR(NOW()),
 			item_starttime = #{item_starttime},
 			item_deadline = #{item_deadline},
-			item_description = #{item_description}
+			item_description = #{item_description},
+			path = #{path}
 		WHERE item_id = #{item_id}
 	</update>
 	
@@ -87,7 +89,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			item_starttime,
 			item_deadline,
 			item_description,
-			history_flag)
+			history_flag,
+			path)
 		VALUES(#{item_name},
 			#{item_type},
 			#{item_user},
@@ -96,7 +99,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{item_starttime},
 			#{item_deadline},
 			#{item_description},
-			#{history_flag})
+			#{history_flag},
+			#{path})
 	</insert>
 	
 	<delete id="deleteApplyById" parameterType="int">

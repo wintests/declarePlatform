@@ -14,7 +14,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM itemType
 		<where>
 			<if test="itemType_name != null and itemType_name != ''">
-				AND itemType_name LIKE '%${itemType_name}%'
+				<!-- AND itemType_name LIKE '%${itemType_name}%' -->
+				AND itemType_name LIKE CONCAT('%', #{itemType_name}, '%')
 			</if>
 		</where>
 		LIMIT #{start},#{pageSize}
@@ -24,7 +25,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT count(*) FROM itemType
 		<where>
 			<if test="itemType_name != null and itemType_name != ''">
-				AND itemType_name LIKE '%${itemType_name}%'
+				<!-- AND itemType_name LIKE '%${itemType_name}%' -->
+				AND itemType_name LIKE CONCAT('%', #{itemType_name}, '%')
 			</if>
 		</where>
 	</select>

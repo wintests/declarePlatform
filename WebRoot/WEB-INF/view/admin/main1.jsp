@@ -9,6 +9,14 @@
 	<%-- <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/default/easyui.css"> --%>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/main.css" />
 	<script type="text/javascript" src="${pageContext.request.contextPath }/js/main.js"></script>
+	<style type="text/css">
+		a:hover{
+			text-decoration:underline;
+			font-weight:bold;
+			font-size: 14px;
+			color: #E96129;
+		}
+	</style>
 </head>
 <body class="easyui-layout">
 	<div data-options="region:'north',title:'header',split:true,noheader:true," style="height:60px;background:#2D3E50;">
