@@ -1,5 +1,6 @@
 package com.qjz.declarePlatform.service.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,10 +71,28 @@ public class ApplyServiceImpl implements ApplyService {
 	@Transactional
 	public void addApply(Apply apply) {
 		//手动将history_flag设置为“1”,表示该项目为当前正在申报
+		if("2".equals(apply.getItem_submit())) {
+			Date apply_time = new Date();
+			apply.setApply_time(apply_time);
+		}
 		apply.setHistory_flag("1");
 		int i = applyDao.addApply(apply);
-		if(i == 0) {
-			throw new RuntimeException("添加项目申请失败，请重新操作！");
+		if(i != 0) {
+			if("2".equals(apply.getItem_submit())) {
+				int item_id = apply.getItem_id();
+				int j = review1Dao.addReview1(item_id);
+				String item_status = "1";
+				int k = applyDao.changeStatus(item_id, item_status);
+				if(j == 0 || k == 0) {
+					throw new RuntimeException("添加到系部审核列表失败，请重新操作！");
+				}
+				int m = itemTypeDao.addCount(item_id);
+				if(m == 0) {
+					throw new RuntimeException("更新项目数量失败，请重新操作！");
+				}
+			}
+		} else {
+			throw new RuntimeException("新增申报项目失败，请重新操作！");
 		}
 	}
 
@@ -103,18 +122,21 @@ public class ApplyServiceImpl implements ApplyService {
 	@Override
 	@Transactional
 	public void submitApply(Integer item_id, String item_submit) {
-		int i = applyDao.submitApply(item_id, item_submit);
-		if(i != 0) {
-			int j = review1Dao.addReview1(item_id);
-			String item_status = "1";
-			int k = applyDao.changeStatus(item_id, item_status);
-			if(j == 0 || k == 0) {
-				throw new RuntimeException("添加到系部审核列表失败，请重新操作！");
-			}
-			int m = itemTypeDao.addCount(item_id);
-			if(m == 0) {
-				throw new RuntimeException("更新项目数量失败，请重新操作！");
-			}
+		String config_flag = configDao.getConfigStatus();
+		if("1".equals(config_flag)) {
+			int i = applyDao.submitApply(item_id, item_submit);
+			if(i != 0) {
+				int j = review1Dao.addReview1(item_id);
+				String item_status = "1";
+				int k = applyDao.changeStatus(item_id, item_status);
+				if(j == 0 || k == 0) {
+					throw new RuntimeException("添加到系部审核列表失败，请重新操作！");
+				}
+				int m = itemTypeDao.addCount(item_id);
+				if(m == 0) {
+					throw new RuntimeException("更新项目数量失败，请重新操作！");
+				}
+			} 
 		} else {
 			throw new RuntimeException("提交项目申报书失败，请重新操作！");
 		}
@@ -128,22 +150,25 @@ public class ApplyServiceImpl implements ApplyService {
 		for (int i = 0; i < idArray.length; i++) {
 			ids[i] = Integer.parseInt(idArray[i]);
 		}
-		int i = applyDao.submitApplyBatchs(ids, item_submit);
-		if(i != 0) {
-			int j = review1Dao.addReview1Batchs(ids);
-			String item_status = "1";
-			for (Integer item_id : ids) {
-				applyDao.changeStatus(item_id, item_status);
-			}
-			if(j == 0) {
-				throw new RuntimeException("批量添加到系部审核列表失败，请重新操作！");
-			}
-			int k = itemTypeDao.addCountBatchs(ids);
-			if(k == 0) {
-				throw new RuntimeException("批量更新项目数量失败，请重新操作！");
-			}
+		String config_flag = configDao.getConfigStatus();
+		if("1".equals(config_flag)) {
+			int i = applyDao.submitApplyBatchs(ids, item_submit);
+			if(i != 0) {
+				int j = review1Dao.addReview1Batchs(ids);
+				String item_status = "1";
+				for (Integer item_id : ids) {
+					applyDao.changeStatus(item_id, item_status);
+				}
+				if(j == 0) {
+					throw new RuntimeException("批量添加到系部审核列表失败，请重新操作！");
+				}
+				int k = itemTypeDao.addCountBatchs(ids);
+				if(k == 0) {
+					throw new RuntimeException("批量更新项目数量失败，请重新操作！");
+				}
+			} 
 		} else {
-			throw new RuntimeException("批量提交项目申报书失败，请重新操作！");
+			throw new RuntimeException("批量提交申报书失败，请重新操作！");
 		}
 	}
 

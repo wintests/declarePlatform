@@ -19,4 +19,10 @@ public interface ConfigService {
 	 */
 	public Map<String, Object> show();
 
+	/**
+	 * 获得当前状态
+	 * @return
+	 */
+	public String getConfigStatus();
+
 }

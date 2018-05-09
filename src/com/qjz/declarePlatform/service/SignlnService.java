@@ -27,4 +27,10 @@ public interface SignlnService {
 	 */
 	public User getUserByName(String user_name);
 
+	/**
+	 * 获得config_flag
+	 * @return
+	 */
+	public String getConfigStatus();
+
 }

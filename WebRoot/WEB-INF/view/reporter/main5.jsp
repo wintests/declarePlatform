@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:set var="serverPath" value="http://192.168.0.50:9080/ssmFile"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,6 +9,7 @@
 <title>首页</title>
 	<%@include file="../head.jspf" %>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/main.css" />
+	<link rel="shortcut icon" href="#" />
 	<script type="text/javascript" src="${pageContext.request.contextPath }/js/main.js"></script>
 	<style type="text/css">
 		a:hover{
@@ -26,8 +28,16 @@
 				//$("#aa1").css("background-color","#FBEC88");
 				$(this).nextAll("div").children("a").toggle().parent().siblings("#aa").find("a").hide();
 			});
-			
 		});
+		
+		function prompt1() {
+			alert("当前阶段不可申报项目！");
+		}
+		
+		function prompt2() {
+			if('${config_flag}' != "1")
+				alert("温馨提示：当前阶段不能再提交任何项目申报！");
+		}
 	</script>
 </head>
 <body class="easyui-layout">
@@ -54,20 +64,30 @@
 	               data-options="plain:true,iconCls:'icon-modifyPassword'" style="width: 125px;padding:2px 8px 2px 5px;">修改密码</a>
 	        </div>
     		<div title="我的申报管理" data-options="iconCls:'icon-report_manage'" style="padding:10px">
-	            <a href="javascript:openTab('查看申报指南','${pageContext.request.contextPath }/apply/reporter/guide.do','icon-guide')" class="easyui-linkbutton"
+	            <%-- <a href="javascript:openTab('查看申报指南','${pageContext.request.contextPath }/apply/reporter/guide.do','icon-guide')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-guide'" style="width: 125px;padding:2px 8px 2px 5px;">查看申报指南</a> --%>
+	            <a href="${serverPath }/upload/20180508180520396572.pdf" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-guide'" style="width: 125px;padding:2px 8px 2px 5px;">查看申报指南</a>
+	            <a href="javascript:openTab('下载申报书模板','${pageContext.request.contextPath }/项目指南.pdf','icon-apply_template')" class="easyui-linkbutton"
+	               data-options="plain:true,iconCls:'icon-apply_template'" style="width: 125px;padding:2px 8px 2px 5px;">下载申报书模板</a>
 	            <div>
 				    <a id="aa1" class="easyui-linkbutton" 
 				    	data-options="plain:true,iconCls:'icon-manager'" style="width: 125px;padding:2px 8px 2px 5px;">我的当前申报</a>
 	            	<div id="aa" style="padding:0px 0px 0px 17px">
 			            <a href="javascript:openTab('待提交的项目','${pageContext.request.contextPath }/apply/reporter/applyManage.do?item_submit=1&history_flag=1','icon-review1_wait')" class="easyui-linkbutton"
-			               data-options="plain:true,iconCls:'icon-review1_wait'" style="width: 115px;padding:2px 8px 2px 5px;">待提交的项目</a>
+			               data-options="plain:true,iconCls:'icon-review1_wait'" onclick="prompt2()" style="width: 115px;padding:2px 8px 2px 5px;">待提交的项目</a>
 			            <a href="javascript:openTab('查看本次申报','${pageContext.request.contextPath }/apply/reporter/applyManage.do?item_submit=2&history_flag=1','icon-find')" class="easyui-linkbutton"
 			               data-options="plain:true,iconCls:'icon-find'" style="width: 115px;padding:2px 8px 2px 5px;">查看本次申报</a>
 	            	</div>
 	            </div>
-	            <a href="javascript:openTab('新增申报项目','${pageContext.request.contextPath }/apply/reporter/add.do','icon-report_add')" class="easyui-linkbutton"
-	               data-options="plain:true,iconCls:'icon-report_add'" style="width: 125px;padding:2px 8px 2px 5px;">新增申报项目</a>
+	            <c:if test="${config_flag == 1}">
+		            <a href="javascript:openTab('新增申报项目','${pageContext.request.contextPath }/apply/reporter/applyItem.do','icon-report_add')" class="easyui-linkbutton"
+		               data-options="plain:true,iconCls:'icon-report_add'" style="width: 125px;padding:2px 8px 2px 5px;">新增申报项目</a>
+	            </c:if>
+	            <c:if test="${config_flag != 1}">
+		            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="prompt1()"
+		               data-options="plain:true,iconCls:'icon-report_add'" style="width: 125px;padding:2px 8px 2px 5px;">新增申报项目</a>
+	            </c:if>
 	        </div>
 	        <div title="历史申报查询" data-options="iconCls:'icon-item_history'" style="padding:10px;">
 	            <a href="javascript:openTab('历史所有申报','${pageContext.request.contextPath }/apply/reporter/applyManage.do?history_flag=2','icon-list_all')" class="easyui-linkbutton"

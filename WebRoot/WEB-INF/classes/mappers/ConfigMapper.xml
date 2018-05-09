@@ -20,4 +20,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE config_id = #{config_id}
 	</update>
 	
+	<select id="getConfigStatus" resultType="java.lang.String">
+		SELECT config_flag FROM config
+		WHERE config_id = 1;
+	</select>
+	
 </mapper>

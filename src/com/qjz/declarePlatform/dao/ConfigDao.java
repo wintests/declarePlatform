@@ -25,4 +25,10 @@ public interface ConfigDao {
 	 */
 	public Long count();
 
+	/**
+	 * 获得当前状态
+	 * @return
+	 */
+	public String getConfigStatus();
+
 }

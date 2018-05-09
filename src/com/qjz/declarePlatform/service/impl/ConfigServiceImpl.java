@@ -50,4 +50,10 @@ public class ConfigServiceImpl implements ConfigService {
 		return map;
 	}
 
+	@Override
+	public String getConfigStatus() {
+		String config_flag = configDao.getConfigStatus();
+		return config_flag;
+	}
+
 }

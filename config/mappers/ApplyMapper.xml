@@ -79,7 +79,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE item_id = #{item_id}
 	</update>
 	
-	<insert id="addApply" parameterType="com.qjz.declarePlatform.domain.Apply">
+	<insert id="addApply" parameterType="com.qjz.declarePlatform.domain.Apply"
+			useGeneratedKeys="true" keyProperty="item_id">
 		INSERT INTO
 		apply(item_name,
 			item_type,
@@ -88,6 +89,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			apply_year,
 			item_starttime,
 			item_deadline,
+			item_submit,
+			apply_time,
 			item_description,
 			history_flag,
 			path)
@@ -98,6 +101,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			YEAR(NOW()),
 			#{item_starttime},
 			#{item_deadline},
+			#{item_submit},
+			#{apply_time},
 			#{item_description},
 			#{history_flag},
 			#{path})

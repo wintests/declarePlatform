@@ -69,6 +69,7 @@ public class SignlnController {
 			case 4:
 				return "expert/main4";
 			case 5:
+				request.setAttribute("config_flag", signlnService.getConfigStatus());
 				return "reporter/main5";
 			default:
 				return "redirect:login.do";

@@ -7,6 +7,7 @@
 <title>登录</title>
 	<%@include file="./head.jspf"%>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/login.css" />
+	<link rel="shortcut icon" href="#" />
 	<!-- 引入自己开发的 JS 文件  -->
 	<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/js/login.js"></script> --%>
 	

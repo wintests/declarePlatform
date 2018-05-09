@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,6 +35,14 @@ public class ConfigController {
 	@ResponseBody
 	public JsonResult updateConfig(Config config) {
 		configService.updateConfig(config);
+		return new JsonResult();
+	}
+	
+	@RequestMapping("/getConfigStatus")
+	@ResponseBody
+	public JsonResult getConfigStatus(Model model) {
+		String config_flag = configService.getConfigStatus();
+		model.addAttribute("config_flag", config_flag);
 		return new JsonResult();
 	}
 	

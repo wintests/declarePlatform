@@ -23,6 +23,12 @@ public class ApplyController {
 	private ApplyService applyService;
 	
 	//跳转到页面
+	@RequestMapping("/reporter/applyItem")
+	public String applyItem() {
+		return "reporter/applyItem";
+	}
+	
+	//跳转到页面
 	@RequestMapping("/reporter/applyManage")
 	public String applyManage(HttpServletRequest request, Apply apply) {
 		/**

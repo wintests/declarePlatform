@@ -517,10 +517,8 @@
 						fileName : 'importFile'
 					},
 					success:function(data){
-						
 						//把json格式的字符串转换成json对象
 						var jsonObj = $.parseJSON(data);
-						
 						//返回服务器图片路径，把图片路径设置给img标签
 						$("#imgSrc").attr("src",jsonObj.fullPath);
 						//数据库保存相对路径
