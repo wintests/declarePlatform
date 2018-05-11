@@ -66,9 +66,6 @@
 							});
 						},
 						success : function(data) {
-							//console.log(data);
-							//console.log(data.data);
-							//console.log(data.data.signln_valid);
 							$.messager.progress("close");
 							/*此处的data指数据库中受影响的行数*/
 							if(data.data != null) {

@@ -66,7 +66,7 @@
     		<div title="我的申报管理" data-options="iconCls:'icon-report_manage'" style="padding:10px">
 	            <%-- <a href="javascript:openTab('查看申报指南','${pageContext.request.contextPath }/apply/reporter/guide.do','icon-guide')" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-guide'" style="width: 125px;padding:2px 8px 2px 5px;">查看申报指南</a> --%>
-	            <a href="${serverPath }/upload/20180508180520396572.pdf" class="easyui-linkbutton"
+	            <a href="${serverPath }/upload/20180508180520396572.pdf" target='_blank' class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-guide'" style="width: 125px;padding:2px 8px 2px 5px;">查看申报指南</a>
 	            <a href="javascript:openTab('下载申报书模板','${pageContext.request.contextPath }/项目指南.pdf','icon-apply_template')" class="easyui-linkbutton"
 	               data-options="plain:true,iconCls:'icon-apply_template'" style="width: 125px;padding:2px 8px 2px 5px;">下载申报书模板</a>

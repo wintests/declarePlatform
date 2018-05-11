@@ -61,6 +61,11 @@ public class ApplyServiceImpl implements ApplyService {
 	@Override
 	@Transactional
 	public void updateApply(Apply apply) {
+		int length = apply.getItem_description().length();
+//		System.out.println("长度：" + length);
+		if(length >= 1024) {		//长度限制约400
+			throw new RuntimeException("项目描述已超字数限制，请重新操作！");
+		}
 		int i = applyDao.updateApply(apply);
 		if(i == 0) {
 			throw new RuntimeException("更新项目申报书失败，请重新操作！");
@@ -70,11 +75,16 @@ public class ApplyServiceImpl implements ApplyService {
 	@Override
 	@Transactional
 	public void addApply(Apply apply) {
-		//手动将history_flag设置为“1”,表示该项目为当前正在申报
+		int length = apply.getItem_description().length();
+//		System.out.println("长度：" + length);
+		if(length >= 1024) {		//长度限制约400
+			throw new RuntimeException("项目描述已超字数限制，请重新操作！");
+		}
 		if("2".equals(apply.getItem_submit())) {
 			Date apply_time = new Date();
 			apply.setApply_time(apply_time);
 		}
+		//手动将history_flag设置为“1”,表示该项目为当前正在申报
 		apply.setHistory_flag("1");
 		int i = applyDao.addApply(apply);
 		if(i != 0) {
@@ -184,6 +194,14 @@ public class ApplyServiceImpl implements ApplyService {
 					throw new RuntimeException("项目标记为历史记录失败，请重新操作！");
 				}
 			}
+		}
+	}
+
+	@Override
+	public void reUploadPath(Integer item_id, String path) {
+		int i = applyDao.reUploadPath(item_id, path);
+		if(i == 0) {
+			throw new RuntimeException("上传申报书失败，请重新操作！");
 		}
 	}
 

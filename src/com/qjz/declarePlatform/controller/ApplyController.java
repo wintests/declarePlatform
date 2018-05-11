@@ -54,7 +54,6 @@ public class ApplyController {
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "rows", required = false) String rows,
 			@RequestParam(value = "str", required = false) String str,
-			@RequestParam(value = "item_user", required = false) String item_user,
 			Apply apply) {
 		/**
 		 * 传入的apply对象主要包括以下字段：
@@ -79,6 +78,7 @@ public class ApplyController {
 	@RequestMapping("/updateApply")
 	@ResponseBody
 	public JsonResult updateApply(Apply apply) {
+		//System.out.println(apply);
 		applyService.updateApply(apply);
 		return new JsonResult();
 	}
@@ -128,6 +128,16 @@ public class ApplyController {
 	@ResponseBody
 	public JsonResult setHistory() {
 		applyService.setHistory();
+		return new JsonResult();
+	}
+	
+	//（重新）上传项目申报书
+	@RequestMapping("/reUploadPath")
+	@ResponseBody
+	public JsonResult reUploadPath(Integer item_id, String path) {
+		//System.out.println("item_id:" + item_id);
+		//System.out.println("path:" + path);
+		applyService.reUploadPath(item_id, path);
 		return new JsonResult();
 	}
 

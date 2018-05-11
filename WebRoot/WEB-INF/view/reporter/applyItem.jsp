@@ -203,25 +203,25 @@
 		</form>
 	</div>
 
-<%-- 实例化编辑器 --%>
-<script type="text/javascript">
-	var ue = UE.getEditor('editor');
-	/* ue.addListener("ready", function(){
-		//通过UE自己封装的ajax请求数据
-		UE.ajax.request("${pageContext.request.contextPath}/admin/blogger/findBlogger.do",
-				{
-					method: "POST",
-					async: false,
-					data: {},
-					onsuccess: function(result) { //
-						result = eval("(" + result.responseText + ")");
-						$("#nickname").val(result.nickname);
-						$("#sign").val(result.sign);
-						UE.getEditor('item_description').setContent(result.item_description);
-					}
-				});
-	}); */
-</script>
+	<%-- 实例化编辑器 --%>
+	<script type="text/javascript">
+		var ue = UE.getEditor('editor');
+		/* ue.addListener("ready", function(){
+			//通过UE自己封装的ajax请求数据
+			UE.ajax.request("${pageContext.request.contextPath}/admin/blogger/findBlogger.do",
+					{
+						method: "POST",
+						async: false,
+						data: {},
+						onsuccess: function(result) { //
+							result = eval("(" + result.responseText + ")");
+							$("#nickname").val(result.nickname);
+							$("#sign").val(result.sign);
+							UE.getEditor('item_description').setContent(result.item_description);
+						}
+					});
+		}); */
+	</script>
 
 </body>
 </html>

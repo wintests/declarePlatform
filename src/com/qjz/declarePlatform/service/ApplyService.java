@@ -62,4 +62,11 @@ public interface ApplyService {
 	 */
 	public void setHistory();
 
+	/**
+	 * （重新）上传项目申报书
+	 * @param path 
+	 * @param item_id 
+	 */
+	public void reUploadPath(Integer item_id, String path);
+
 }

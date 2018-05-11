@@ -11,6 +11,9 @@
 <title>用户申报管理</title>
 	<%@include file="../head.jspf"%>
 	<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery.form.js"></script>
+	<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/ueditor1_4_3_3/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/ueditor1_4_3_3/ueditor.all.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/ueditor1_4_3_3/lang/zh-cn/zh-cn.js"></script>
 	<style type="text/css">
 		a{
 			text-decoration:none;
@@ -55,6 +58,7 @@
 				loadMsg : 'loading...',
 				//水平自动展开，如果设置此属性，则不会有水平滚动条，演示冻结列时，该参数不要设置
 				fitColumns : true,
+				fit : true,
 				//数据多的时候不换行
 				nowrap : true,
 				//设置分页
@@ -97,8 +101,9 @@
 	            			//$("#dg").datagrid("hideColumn", "item_submit");
 	            			if(array2.length != 0) {
 	            				$("#dg").datagrid("hideColumn", "option");
-	            				$("#addApply").hide();
+	            				/* $("#addApply").hide(); */
 	            			}
+	            			$("#dg").datagrid("hideColumn", "option");
 	            		}
 		            } else {
 		            	$.messager.alert("提示框","<font size='2'>未查询到相关数据！</font>", "info");
@@ -119,20 +124,11 @@
 					{field : 'item_status',title : '当前状态',align : 'center',width : 100, formatter : item_statusFormatter}, 
 					{field : 'item_description',title : '项目描述',align : 'center',width : 100}, 
 					{field : 'history_flag',title : '时间标志',align : 'center',width : 100, hidden : true}, 
-					{field : 'path',title : '下载申报书',align : 'center',width : 100,formatter : pathFormatter}, 
+					{field : 'path',title : '项目申报书',align : 'center',width : 100,formatter : pathFormatter}, 
 					{field : 'option',title : '操作',align : 'center',width : 100,formatter : optionFormatter}, 
 				] ],
 			});
 		});
-		
-		function addApply() { //回调函数
-			//document.getElementById("user_name").disabled = false;
-			$("#fm").form("reset");
-			//打开对话框并且设置标题
-			$("#dlg").dialog("open").dialog("setTitle", "新增申报项目书");
-			//将url设置为添加
-			url = "${pageContext.request.contextPath }/apply/addApply.do";
-		}
 		
 		function editApply() {
 			//获取选中要修改的行
@@ -148,15 +144,44 @@
 			}
 			//获取选中行
 			var row = selectedRows[0];
-			console.log(row)
 			row.item_starttime = dateFormatter(row.item_starttime);
 			row.item_deadline = dateFormatter(row.item_deadline);
 			//打开对话框并且设置标题
-			$("#dlg").dialog("open").dialog("setTitle", "编辑项目申报书");
+			$("#dlg").dialog("open").dialog("setTitle", "编辑项目申报信息");
 			//将数组回显对话框中
 			$("#fm").form("load", row);//会自动识别name属性，将row中对应的数据，填充到form表单对应的name属性中
 			//document.getElementById("user_name").disabled = true;
 			url = "${pageContext.request.contextPath }/apply/updateApply.do";
+		}
+		
+		//定义全局url，用于修改和添加操作
+		var url;
+		// 添加或者修改
+		function saveDialog() {
+			$("#fm").form("submit", {
+				url : url,
+				onSubmit : function() {
+					var item_description = UE.getEditor("editor").getContent();
+					//alert($("#item_description").val());
+					//alert(item_description);
+					$("#item_description").val(item_description); //将UEditor编辑器中的内容放到隐藏域中提交到后台
+					//alert($("#item_description").val());
+					return $(this).form("validate");
+				}, //进行验证，通过才让提交
+				success : function(data) {
+					var data = JSON.parse(data);
+					if (data.state) {
+						$.messager.alert("系统提示", "<font size='2'>恭喜您，数据保存成功！</font>", "info");
+						$("#fm").form("reset");
+						$("#dlg").dialog("close"); //关闭对话框
+						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
+						$("#dg").datagrid("reload"); //刷新一下
+					} else {
+						$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
+						return;
+					}
+				}
+			});
 		}
 		
 		function removeApply() {
@@ -277,31 +302,6 @@
 			$("#type").combobox("setValue", "-----请选择项目类别-----");
 			$("#searchBox").val("");
 		}
-
-		//定义全局url，用于修改和添加操作
-		var url;
-		// 添加或者修改用户
-		function saveDialog() {
-			$("#fm").form("submit", {
-				url : url,
-				onSubmit : function() {
-					return $(this).form("validate");
-				}, //进行验证，通过才让提交
-				success : function(data) {
-					var data = JSON.parse(data);
-					if (data.state) {
-						$.messager.alert("系统提示", "<font size='2'>恭喜您，数据保存成功！</font>", "info");
-						$("#fm").form("reset");
-						$("#dlg").dialog("close"); //关闭对话框
-						$("#dg").datagrid("unselectAll");	//关闭对话框时取消所选择的行记录
-						$("#dg").datagrid("reload"); //刷新一下
-					} else {
-						$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
-						return;
-					}
-				}
-			});
-		}
 	
 		function closeDialog() {
 			$("#fm").form("reset");
@@ -395,13 +395,42 @@
 				$("#submitBatchs").hide();
 				$("#removeApply").hide();
 				return [
-		            "<a href='javascript:void(0);' onclick='modify(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png'/>查看详细</a>&nbsp;&nbsp;&nbsp;",  
+		            "<a href='javascript:void(0);' onclick='look(" + index + ")'><img src='${pageContext.request.contextPath }/jquery-easyui-1.3.4/themes/icons/pencil.png'/>查看详细</a>&nbsp;&nbsp;&nbsp;",  
 		        ].join("");
 			}
 		}
 		
 		function pathFormatter(value, row, index) {
-			return "<a href='${serverPath}"+value+"' download='' target='_blank'>"+ "点击下载" + "</a>";
+			var array1 = [];
+			var array2 = [];
+			if(row.item_submit === "1") {
+				array1.push(row.item_submit);
+				if(row.path) {
+					array2.push(row.path);
+				}
+			}
+			if(array1.length != 0) {
+				if(array2.length != 0) {
+					return [
+			            "<a href='${serverPath}"+value+"' target='_blank'>"+ "查看详细" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",  
+			            "<a href='javascript:importItemFile("+index+");'>"+ "重新上传" + "</a>",
+			        ].join("");
+				}
+				return "<a href='javascript:importItemFile("+index+");'>"+ "立即上传" + "</a>";
+			} else {
+				return "<a href='${serverPath}"+value+"' download='' target='_blank'>"+ "点击下载" + "</a>";
+			}
+		}
+		
+		function importItemFile(index) {
+			$("#ifm").form("reset");
+			//上传前需要将之前选中的行取消掉，然后才能得到当前选中行
+			$("#dg").datagrid("unselectAll");
+			$("#dg").datagrid("selectRow",index);
+			var row = $("#dg").datagrid("getSelected");
+			//打开对话框并且设置标题
+			$("#importForm").dialog("open").dialog("setTitle", "上传项目申报书");
+			$("#ifm").form("load", row);
 		}
 		
 		function item_nameFormatter(value, row, index) {
@@ -447,14 +476,17 @@
 			$("#dg").datagrid("unselectAll");
 			$("#dg").datagrid("selectRow",index);
 			var row = $("#dg").datagrid("getSelected");
-			console.log(row);
+			//console.log(row);
 			//将时间格式化，因为当前数据的实际格式为JSON序列化的形式，而并非"yyyy-MM-dd"，只有格式化之后，数据才能够正确回填到form表格
 			row.item_starttime = dateFormatter(row.item_starttime);
 			row.item_deadline = dateFormatter(row.item_deadline);
 			if(row) {
-				$("#dlg").dialog("open").dialog("setTitle", "编辑项目申报书");
+				$("#dlg").dialog("open").dialog("setTitle", "编辑项目申报信息");
+				var ue = UE.getEditor('editor');
+			    ue.ready(function() {  
+			        ue.setContent(row.item_description, false);  
+			    });
 				$("#fm").form("load", row);
-				//document.getElementById("user_name").disabled = true;
 				url = "${pageContext.request.contextPath }/apply/updateApply.do";
 			}
 		};
@@ -509,24 +541,49 @@
 		}
 		
 		function submitFileUpload() {
+			//alert(1);
 			var option={
-					type:'POST',
-					url:'${pageContext.request.contextPath }/upload/uploadFile.do',
-					dataType:'text',
-					data:{
+					type : 'POST',
+					url : '${pageContext.request.contextPath }/upload/uploadFile.do',
+					dataType : 'text',
+					data : {
 						fileName : 'importFile'
 					},
 					success:function(data){
 						//把json格式的字符串转换成json对象
-						var jsonObj = $.parseJSON(data);
-						//返回服务器图片路径，把图片路径设置给img标签
-						$("#imgSrc").attr("src",jsonObj.fullPath);
+						var data = $.parseJSON(data);
 						//数据库保存相对路径
-						$("#filePath").val(jsonObj.relativePath);
+						$("#filePath").val(data.relativePath);
 					}
-					
 				};
-			$("#fm").ajaxSubmit(option);
+			$("#ifm").ajaxSubmit(option);
+		}
+		
+		function saveImportPath() {
+			$("#ifm").form("submit", {
+				url : '${pageContext.request.contextPath }/apply/reUploadPath.do',
+				onSubmit : function() {
+					return $(this).form("validate");
+				}, //进行验证，通过才让提交
+				success : function(data) {
+					var data = JSON.parse(data);
+					if (data.state) {
+						alert(1);
+						$.messager.alert("系统提示","<font size='2'>恭喜您，上传文件成功！</font>", "info");
+						$("#ifm").form("reset");
+						$("#dg").datagrid("reload");
+						$("#importForm").dialog("close"); //关闭对话框
+					} else {
+						alert(2);
+						$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
+					}
+				}
+			});
+		}
+		
+		function closeImportDialog() {
+			$("#ifm").form("reset");
+			$("#importForm").dialog("close"); //关闭对话框
 		}
 		
 	</script>
@@ -542,7 +599,7 @@
 		<div id="toolbar" style="padding:5px;">
 			<!-- 工具栏 -->
 			<div>
-				<a id="addApply" class="easyui-linkbutton" data-options="iconCls:'icon-item_add',plain:true" href="javascript:addApply();">新增申报</a>
+				<!-- <a id="addApply" class="easyui-linkbutton" data-options="iconCls:'icon-item_add',plain:true" href="javascript:addApply();">新增申报</a> -->
 				<a id="editApply" class="easyui-linkbutton" data-options="iconCls:'icon-item_edit',plain:true" href="javascript:editApply();">修改项目申报书</a>
 				<a id="removeApply" class="easyui-linkbutton" data-options="iconCls:'icon-item_delete',plain:true" href="javascript:removeApply();">批量删除</a>
 				<a id="submitBatchs" class="easyui-linkbutton" data-options="iconCls:'icon-enabled',plain:true" href="javascript:submitBatchs();">批量提交</a>
@@ -580,10 +637,27 @@
 		
 		<table id="dg"></table>
 		
-		<div id="dlg" class="easyui-dialog" style="width:500px; height:480px; padding:10px 20px" data-options="iconCls:'icon-save',closed:true,collapsible:true,minimizable:true,maximizable:true,resizable:true,buttons:'#dlg-buttons'">
+		<div id="dlg" class="easyui-dialog" style="width:900px; height:600px; padding:10px 20px" data-options="iconCls:'icon-save',closed:true,collapsible:true,minimizable:true,maximizable:true,resizable:true,buttons:'#dlg-buttons'">
 			<form id="fm" method="POST">
 				<input type="hidden" id="item_id" name="item_id"/>
 				<table cellspacing="8px">
+					<tr>
+						<td>项目申报人</td>
+						<td>
+							<span>${user.user_name }</span>&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>职称</td>
+						<td>
+							<span>${user.user_title }</span>&nbsp;
+						</td>
+					<tr>
+						<td>所属系部</td>
+						<td>
+							<span>${user.user_department }</span>&nbsp;
+						</td>
+					</tr>
 					<tr>
 						<td>项目名称</td>
 						<td>
@@ -599,49 +673,10 @@
 						</td>
 					</tr>
 					<tr>
-						<td>项目申报人</td>
-						<td>
-							<input type="text" id="item_user" name="item_user" value="${user.user_name }">&nbsp;
-						</td>
-					</tr>
-					<tr>
-						<td>职称</td>
-						<td>
-							<select id="user_title" name="user_title" class="easyui-combobox" style="width:100px;">
-								<option value="">-----请选择-----</option>
-								<option value="教授">教授</option>
-								<option value="副教授">副教授</option>
-								<option value="研究员">研究员</option>
-								<option value="副研究员">副研究员</option>
-								<option value="讲师">讲师</option>
-								<option value="助教">助教</option>
-							</select> &nbsp;
-					</td>
-					<tr>
-						<td>所属系部</td>
-						<td>
-							<select id="user_department" name="user_department" class="easyui-combobox" style="width:100px;">
-								<option value="">-----请选择-----</option>
-								<option value="计算机系">计算机系</option>
-								<option value="软件工程系">软件工程系</option>
-								<option value="信息安全系">信息安全系</option>
-								<option value="网络工程系">网络工程系</option>
-							</select> &nbsp;
-						</td>
-					</tr>
-					<tr>
 						<td>起始日期</td>
 						<td>
 							<input type="text" id="item_starttime" name="item_starttime" class="easyui-datebox" required="true">&nbsp;
 						</td>
-					</tr>
-					<tr>
-						<td>附件路径</td>
-						<p><label></label>
-						<img id='imgSrc' src='${serverPath }/upload/20180508155041990887.jpg'  height="100" width="100" />
-						<input type='file' id='importFile' name='importFile' class="file" onchange='submitFileUpload()' /><span class="pos" id="importFileSpan">请上传图片的大小不超过3MB</span>
-				        <input type='hidden' id='filePath' name='path' value='' reg="^.+$" tip="亲！您忘记上传图片了。" />
-						</p>
 					</tr>
 					<tr>
 						<td>截止日期</td>
@@ -651,8 +686,13 @@
 					</tr>
 					<tr>
 						<td>项目描述</td>
-						<td>
+						<!-- <td>
 							<input type="text" id="item_description" name="item_description" class="easyui-textbox" required="true">&nbsp;
+						</td> -->
+						<td>
+							<!-- 加载编辑器的容器 -->
+							<script id="editor" type="text/plain" style="width:700px; height:150px;"></script>
+							<input type="hidden" id="item_description" name="item_description"> <%-- UEditor不能作为表单的一部分提交，所以用这种隐藏域的方式 --%>
 						</td>
 					</tr>
 				</table>
@@ -667,5 +707,29 @@
 					data-options="iconCls:'icon-cancel',plain:true">关闭</a>
 			</div>
 		</div>
+		
+		<div id="importForm" class="easyui-dialog" style="width:400px; height:200px; padding:10px 20px" 
+			data-options="iconCls:'icon-excel_upload',closed:true,buttons:'#dlg-form'">
+			<form id="ifm" action="POST">
+				<input type="hidden" id="itemId" name="item_id"/>
+				<font color="red">*</font><span>&nbsp;请在上传前按要求认真填写项目申报书：</span><br/><br/>
+				<input type='file' id='importFile' name='importFile' class="file" onchange="submitFileUpload();"/>
+		        <input type='hidden' id='filePath' name='path' value='' />
+			</form>
+		</div>
+		
+		<div id="dlg-form">
+			<div align="center">
+				<a href="javascript:saveImportPath()" class="easyui-linkbutton"
+					data-options="iconCls:'icon-ok',plain:true">确认导入</a>&nbsp;&nbsp;&nbsp;
+				<a href="javascript:closeImportDialog()" class="easyui-linkbutton"
+					data-options="iconCls:'icon-cancel',plain:true">关闭窗口</a>
+			</div>
+		</div>
+		
+		<%-- 实例化编辑器 --%>
+		<script type="text/javascript">
+			var ue = UE.getEditor('editor');
+		</script>
 	</body>
 </html>

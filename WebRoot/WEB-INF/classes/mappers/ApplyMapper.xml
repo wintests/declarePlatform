@@ -69,13 +69,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		UPDATE apply
 		SET item_name = #{item_name},
 			item_type = #{item_type},
-			item_user = #{item_user},
-			user_department = #{user_department},
 			apply_year = YEAR(NOW()),
 			item_starttime = #{item_starttime},
 			item_deadline = #{item_deadline},
-			item_description = #{item_description},
-			path = #{path}
+			item_description = #{item_description}
 		WHERE item_id = #{item_id}
 	</update>
 	
@@ -149,6 +146,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SET history_flag = '2'
 		WHERE item_submit = '2'
 		AND item_status IN ('5', '6')
+	</update>
+	
+	<update id="reUploadPath">
+		UPDATE apply
+		SET path = #{path}
+		WHERE item_id = #{item_id}
 	</update>
 	
 </mapper>

@@ -325,7 +325,7 @@
 	
 		<div id="toolbar" style="padding:5px;">
 			<!-- 工具栏 -->
-			<div>
+			<div style="width:280%">
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:reload();">刷新页面</a>&nbsp;
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-print',plain:true" href="javascript:print();">打印文档</a>&nbsp;
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-page_excel',plain:true" href="javascript:page_excel();">导出Excel</a>&nbsp;

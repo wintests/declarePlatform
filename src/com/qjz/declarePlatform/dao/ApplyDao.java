@@ -84,4 +84,11 @@ public interface ApplyDao {
 	 */
 	public int setHistory();
 
+	/**
+	 * （重新）上传项目申报书
+	 * @param path 
+	 * @param item_id 
+	 */
+	public int reUploadPath(@Param("item_id")Integer item_id, @Param("path")String path);
+
 }

@@ -616,7 +616,7 @@
 									$("#dg").datagrid("reload");
 									$("#importForm").dialog("close"); //关闭对话框
 								} else {
-									alert(2);
+									//alert(2);
 									$.messager.alert("系统提示", "<font size='2'>" + data.message + "</font>", "error");
 								}
 								
